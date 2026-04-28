@@ -1,0 +1,27 @@
+name: Notify prompt_library
+
+# On every push to main, fire a repository_dispatch at
+# Lullabot/prompt_library so it bumps its _skills-vendor submodule
+# and rebuilds the site with the new content.
+#
+# Requires a PERSONAL_ACCESS_TOKEN secret with `repo` scope on
+# prompt_library (same token is used in prompt_library's slack workflow).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger prompt_library bump
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          SHA: ${{ github.sha }}
+        run: |
+          gh api repos/Lullabot/prompt_library/dispatches \
+            -f event_type=skills-updated \
+            -f "client_payload[source_sha]=${SHA}" \
+            -f "client_payload[source_repo]=${GITHUB_REPOSITORY}"
