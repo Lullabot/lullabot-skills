@@ -24,9 +24,15 @@ jobs:
       - name: Trigger prompt_library bump
         env:
           GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          SHARED_SECRET: ${{ secrets.SKILLS_DISPATCH_SECRET }}
           SHA: ${{ github.sha }}
         run: |
+          if [ -z "$SHARED_SECRET" ]; then
+            echo "::error::SKILLS_DISPATCH_SECRET is not configured."
+            exit 1
+          fi
           gh api repos/Lullabot/prompt_library/dispatches \
             -f event_type=skills-updated \
+            -f "client_payload[secret]=${SHARED_SECRET}" \
             -f "client_payload[source_sha]=${SHA}" \
             -f "client_payload[source_repo]=${GITHUB_REPOSITORY}"
