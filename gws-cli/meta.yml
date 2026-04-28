@@ -1,0 +1,21 @@
+title: "Google Workspace CLI (gws)"
+discipline: development
+date: "2026-03-23"
+version: "1.1.0"
+lastUpdated: "2026-04-14"
+changelog:
+  - version: "1.1.0"
+    date: "2026-04-14"
+    summary: "Add Gmail +send --draft helper for saving messages as drafts instead of sending"
+  - version: "1.0.0"
+    date: "2026-03-23"
+    summary: "Initial version"
+tags:
+  - google-workspace
+  - gmail
+  - google-calendar
+  - google-drive
+  - google-sheets
+  - cli
+  - productivity
+  - automation

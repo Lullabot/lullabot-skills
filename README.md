@@ -35,10 +35,38 @@ Claude Code will pick up every skill automatically on the next session.
 - **tugboat-cli** — Manage Tugboat preview environments via the `tugboat` CLI.
 <!-- skills-end -->
 
+## Skill structure
+
+Each skill lives in its own folder with two required files:
+
+```text
+<skill-name>/
+  SKILL.md      # Claude Code skill definition (name + description frontmatter, then markdown body)
+  meta.yml      # Lullabot prompt-library metadata
+  …             # optional: scripts/, references/, assets/, etc.
+```
+
+`meta.yml` carries the metadata the [prompt library](https://github.com/Lullabot/prompt_library) site needs to categorize and render the skill — Claude Code ignores it at runtime.
+
+```yaml
+title: "Cloudflare Tunnel"
+discipline: development          # one of: development, content-strategy, design,
+                                 # project-management, quality-assurance, sales-marketing
+date: "2025-01-22"               # original publication date
+tags: [cloudflare, tunnels, networking]
+# Optional version tracking:
+version: "1.1.0"
+lastUpdated: "2026-04-14"
+changelog:
+  - version: "1.1.0"
+    date: "2026-04-14"
+    summary: "What changed"
+```
+
 ## Contributing
 
-Skills are authored and reviewed in the [prompt_library](https://github.com/Lullabot/prompt_library) repo, then synced here. Open issues and PRs against the prompt library — changes flow downstream to this repo.
+This repo is the source of truth for skill content. Edits made here flow downstream to the prompt library site automatically on push to `main`. Open PRs directly against this repo.
 
 ## License
 
-See `LICENSE`.
+MIT — see `LICENSE`.
