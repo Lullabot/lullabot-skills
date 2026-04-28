@@ -1,0 +1,16 @@
+title: DDEV xhgui Analyze
+discipline: development
+date: '2026-04-17'
+version: 1.0.0
+lastUpdated: '2026-04-17'
+changelog:
+  - version: 1.0.0
+    date: '2026-04-17'
+    summary: Initial submission
+tags:
+  - ddev
+  - xhgui
+  - xhprof
+  - performance
+  - profiling
+  - php

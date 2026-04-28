@@ -24,11 +24,13 @@ Claude Code will pick up every skill automatically on the next session.
 
 <!-- skills-start -->
 - **cloudflare-tunnel** — Expose a local dev server via Cloudflare Tunnel.
+- **ddev-xhgui-analyze** — Analyze xhprof/xhgui profile runs from a DDEV environment.
 - **github-wiki** — Read and edit GitHub wikis.
 - **gws-cli** — Drive Google Workspace (Gmail, Calendar, Drive, Sheets, Docs) from the CLI.
 - **htmx-expert** — htmx patterns, attributes, and hypermedia-driven app guidance.
 - **humanizer** — Strip AI-writing tells from text.
 - **nano-banana-prompt** — Craft prompts for Gemini Nano Banana image generation.
+- **pencil-designer** — Work with Pencil design files via the Pencil MCP tools.
 - **resolve-composer-conflicts** — Resolve `composer.lock` merge conflicts cleanly.
 - **seo-expert** — SEO audits and prioritized recommendations.
 - **slack-markdown-formatter** — Format messages for Slack's mrkdwn dialect.
