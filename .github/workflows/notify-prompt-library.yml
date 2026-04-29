@@ -4,11 +4,14 @@ name: Notify prompt_library
 # Lullabot/prompt_library so it bumps its _skills-vendor submodule
 # and rebuilds the site with the new content.
 #
-# Requires a PERSONAL_ACCESS_TOKEN secret authorized to call
-# repository_dispatch on Lullabot/prompt_library. Prefer a
-# fine-grained PAT scoped only to that repo with the minimal
-# permissions needed (Contents: read, Metadata: read), or a
-# GitHub App token. Avoid classic PATs with full `repo` scope.
+# Requires two secrets:
+#   SKILLS_BUMP_TOKEN     — fine-grained PAT with Contents: write on
+#                           Lullabot/prompt_library (used to call the
+#                           dispatches API). Same value as the secret
+#                           on the prompt_library side.
+#   SKILLS_DISPATCH_SECRET — shared secret echoed in client_payload so
+#                           the receiver workflow can verify the
+#                           dispatch came from this flow.
 
 on:
   push:
@@ -23,7 +26,7 @@ jobs:
     steps:
       - name: Trigger prompt_library bump
         env:
-          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.SKILLS_BUMP_TOKEN }}
           SHARED_SECRET: ${{ secrets.SKILLS_DISPATCH_SECRET }}
           SHA: ${{ github.sha }}
         run: |
