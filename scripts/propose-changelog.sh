@@ -5,9 +5,9 @@
 # the changes you're about to commit (or the most recent commit).
 #
 # How it works:
-#   1. Detect which skill folders have changes.
-#   2. For each, show a diff summary and ask GitHub Models (via `gh models`)
-#      for a one-line user-facing summary — or "SKIP" for cosmetic-only changes.
+#   1. Detect which skill folders have changes (including deletes/renames).
+#   2. For each, ask GitHub Models (via `gh models`) for a one-line
+#      user-facing summary — or "SKIP" for cosmetic-only changes.
 #   3. Print the trailer line(s). Paste into your commit message.
 #
 # Usage:
@@ -16,15 +16,23 @@
 #   scripts/propose-changelog.sh --range R    # analyze a custom range (e.g. main..HEAD)
 #
 # Requirements:
+#   - Bash 4+ (macOS ships 3.2 by default — `brew install bash`)
 #   - `gh` CLI authenticated (gh auth login)
 #   - `gh models` extension (gh extension install github/gh-models)
 #
 # Falls back gracefully:
 #   - No changes detected? Prints a no-op note and exits 0.
-#   - `gh models` unavailable? Prints the diff summary and a stub trailer
-#     for the author to fill in manually. Exits 0.
+#   - `gh models` unavailable? Prints a stub trailer line for the
+#     author to fill in manually. Exits 0.
 
 set -euo pipefail
+
+# Bash 4+ required (mapfile, declare -A). macOS ships 3.2 — bail early.
+if [ "${BASH_VERSINFO[0]:-0}" -lt 4 ]; then
+  echo "propose-changelog.sh requires Bash 4+ (you have ${BASH_VERSION})." >&2
+  echo "On macOS:  brew install bash  &&  /opt/homebrew/bin/bash $0 \"\$@\"" >&2
+  exit 1
+fi
 
 MODEL="${PROPOSE_CHANGELOG_MODEL:-gpt-4o-mini}"
 MODE="staged"
@@ -46,39 +54,61 @@ done
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
+# Diff-derived path lists. --name-status carries a status code so we can
+# pick up deletes (D) and renames (R) — important so a commit that
+# removes a skill still triggers a trailer-prompt.
 case "$MODE" in
   staged)
-    DIFF_CMD=(git diff --cached)
-    NAME_CMD=(git diff --cached --name-only)
+    STATUS_CMD=(git diff --cached --name-status --find-renames)
+    DIFF_BASE=(git diff --cached)
     LABEL="staged changes"
     ;;
   last)
-    DIFF_CMD=(git show HEAD)
-    NAME_CMD=(git show HEAD --name-only --format=)
+    STATUS_CMD=(git show HEAD --name-status --format= --find-renames)
+    DIFF_BASE=(git diff HEAD~1 HEAD)
     LABEL="HEAD ($(git log -1 --pretty=format:%h))"
     ;;
   range)
     if [ -z "$RANGE" ]; then echo "--range requires an argument" >&2; exit 2; fi
-    DIFF_CMD=(git diff "$RANGE")
-    NAME_CMD=(git diff "$RANGE" --name-only)
+    STATUS_CMD=(git diff "$RANGE" --name-status --find-renames)
+    DIFF_BASE=(git diff "$RANGE")
     LABEL="range $RANGE"
     ;;
 esac
 
-# Detect skill folders that changed (top-level dir of changed paths,
-# filtered to those that actually look like skills).
-mapfile -t CHANGED_FILES < <("${NAME_CMD[@]}")
+# Detect skill folders that changed.
+# A folder counts as a skill if either:
+#   (a) it currently contains a SKILL.md, OR
+#   (b) the change deletes/renames it (so SKILL.md is gone in the working tree)
+mapfile -t CHANGED_ENTRIES < <("${STATUS_CMD[@]}")
 declare -A SKILLS_TOUCHED=()
-for f in "${CHANGED_FILES[@]}"; do
-  [ -z "$f" ] && continue
-  top="${f%%/*}"
-  case "$top" in
-    .|..|"") continue ;;
-    .github|scripts|node_modules|_*) continue ;;
+for entry in "${CHANGED_ENTRIES[@]}"; do
+  [ -z "$entry" ] && continue
+  IFS=$'\t' read -r status path1 path2 <<< "$entry"
+  [ -z "${status:-}" ] && continue
+
+  paths=()
+  [ -n "${path1:-}" ] && paths+=("$path1")
+  case "$status" in
+    R*|C*) [ -n "${path2:-}" ] && paths+=("$path2") ;;
   esac
-  if [ -f "$top/SKILL.md" ]; then
-    SKILLS_TOUCHED["$top"]=1
-  fi
+
+  for f in "${paths[@]}"; do
+    [ -z "$f" ] && continue
+    top="${f%%/*}"
+    case "$top" in
+      .|..|"") continue ;;
+      .github|scripts|node_modules|_*) continue ;;
+    esac
+    # Either the skill is on disk now, OR this change removed/renamed it.
+    if [ -f "$top/SKILL.md" ]; then
+      SKILLS_TOUCHED["$top"]=1
+    else
+      case "$status" in
+        D|R*) SKILLS_TOUCHED["$top"]=1 ;;
+      esac
+    fi
+  done
 done
 
 if [ "${#SKILLS_TOUCHED[@]}" -eq 0 ]; then
@@ -86,11 +116,13 @@ if [ "${#SKILLS_TOUCHED[@]}" -eq 0 ]; then
   exit 0
 fi
 
+# Sorted, stable iteration order so output is reproducible across shells.
+mapfile -t SORTED_SKILLS < <(printf '%s\n' "${!SKILLS_TOUCHED[@]}" | sort)
+
 echo "Skill folders changed in $LABEL:"
-for s in "${!SKILLS_TOUCHED[@]}"; do echo "  - $s"; done
+for s in "${SORTED_SKILLS[@]}"; do echo "  - $s"; done
 echo
 
-# Detect whether `gh models` is available
 HAS_GH_MODELS=0
 if command -v gh >/dev/null 2>&1 && gh models --help >/dev/null 2>&1; then
   HAS_GH_MODELS=1
@@ -120,14 +152,11 @@ Examples:
 Respond with only the line, no quotes, no markdown.'
 
 multi_skill="false"
-[ "${#SKILLS_TOUCHED[@]}" -gt 1 ] && multi_skill="true"
+[ "${#SORTED_SKILLS[@]}" -gt 1 ] && multi_skill="true"
 
-for skill in "${!SKILLS_TOUCHED[@]}"; do
+for skill in "${SORTED_SKILLS[@]}"; do
   echo "—— $skill ——"
-  diff_body="$(git diff $([ "$MODE" = "staged" ] && echo --cached || true) \
-                $([ "$MODE" = "last" ]   && echo HEAD~1 HEAD       || true) \
-                $([ "$MODE" = "range" ]  && echo "$RANGE"          || true) \
-                -- "$skill/" 2>/dev/null || true)"
+  diff_body="$("${DIFF_BASE[@]}" -- "$skill/" 2>/dev/null || true)"
 
   if [ -z "$diff_body" ]; then
     echo "  (no diff for $skill — skipping)"
@@ -144,11 +173,11 @@ for skill in "${!SKILLS_TOUCHED[@]}"; do
     summary=""
   fi
 
-  if [ -z "$summary" ] || [ "$summary" = "SKIP" ]; then
-    if [ "$summary" = "SKIP" ]; then
-      echo "  Model says: no user-facing change worth listing. (No trailer.)"
-      continue
-    fi
+  if [ "$summary" = "SKIP" ]; then
+    echo "  Model says: no user-facing change worth listing. (No trailer.)"
+    continue
+  fi
+  if [ -z "$summary" ]; then
     summary="<your one-line user-facing summary here>"
   fi
 
