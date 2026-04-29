@@ -1,0 +1,41 @@
+name: Notify prompt_library
+
+# On every push to main, fire a repository_dispatch at
+# Lullabot/prompt_library so it bumps its _skills-vendor submodule
+# and rebuilds the site with the new content.
+#
+# Requires two secrets:
+#   SKILLS_BUMP_TOKEN     — fine-grained PAT with Contents: write on
+#                           Lullabot/prompt_library (used to call the
+#                           dispatches API). Same value as the secret
+#                           on the prompt_library side.
+#   SKILLS_DISPATCH_SECRET — shared secret echoed in client_payload so
+#                           the receiver workflow can verify the
+#                           dispatch came from this flow.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger prompt_library bump
+        env:
+          GH_TOKEN: ${{ secrets.SKILLS_BUMP_TOKEN }}
+          SHARED_SECRET: ${{ secrets.SKILLS_DISPATCH_SECRET }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ -z "$SHARED_SECRET" ]; then
+            echo "::error::SKILLS_DISPATCH_SECRET is not configured."
+            exit 1
+          fi
+          gh api repos/Lullabot/prompt_library/dispatches \
+            -f event_type=skills-updated \
+            -f "client_payload[secret]=${SHARED_SECRET}" \
+            -f "client_payload[source_sha]=${SHA}" \
+            -f "client_payload[source_repo]=${GITHUB_REPOSITORY}"
