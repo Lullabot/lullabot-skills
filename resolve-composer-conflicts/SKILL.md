@@ -1,4 +1,5 @@
 ---
+name: resolve-composer-conflicts
 description: Resolve composer.lock merge conflicts when merging main into the current branch.
 ---
 # Resolve composer.lock Merge Conflicts
