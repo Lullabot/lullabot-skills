@@ -1,6 +1,10 @@
 ---
 name: github-wiki
-description: "This skill should be used when creating, editing, or managing GitHub wiki pages. Use when writing wiki content, creating internal links between wiki pages, adding images, updating sidebar navigation, or working with .wiki.git repositories. Triggers on 'wiki', 'wiki page', 'update the wiki', 'add to wiki', or when working in a *.wiki directory or *.wiki.git repository."
+description: This skill should be used when creating, editing, or managing 
+GitHub wiki pages. Use when writing wiki content, creating internal links between 
+wiki pages, adding images, updating sidebar navigation, or working with .wiki.git 
+repositories. Triggers on "wiki", "wiki page", "update the wiki", "add to wiki", 
+or when working in a *.wiki directory or *.wiki.git repository.
 ---
 
 # GitHub Wiki
@@ -30,6 +34,9 @@ WRONG:    [[page-name|Display Text]]
 When the order is reversed, links silently resolve to non-existent pages
 and render as red/broken links with no error message.
 
+For the full link syntax reference including resolution rules, image
+handling, and special pages, read `references/gollum-link-syntax.md`.
+
 ## Working with Wiki Repositories
 
 ### Locating the Wiki Repo
@@ -39,6 +46,10 @@ Wiki repositories are cloned separately from the main repo:
 ```bash
 git clone https://github.com/OWNER/REPO.wiki.git
 ```
+
+Within a project, the wiki repo is typically at a path like
+`code/REPO.wiki/` or similar. Check the project's CLAUDE.md or
+memory files for the exact location.
 
 ### Pushing Changes
 

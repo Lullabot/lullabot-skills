@@ -1,6 +1,6 @@
 ---
 name: gws-cli
-description: "This skill should be used when users need to interact with Google Workspace services (Gmail, Calendar, Drive, Sheets, Docs, Tasks, Chat, etc.) from the command line. Use when users ask to send/read email, check calendar, upload files, read spreadsheets, manage tasks, or perform any Google Workspace operation. Triggers on 'check my email', 'send email', 'calendar', 'agenda', 'upload to drive', 'read spreadsheet', 'google workspace', 'gws', or any request involving Gmail, Google Calendar, Google Drive, Google Sheets, Google Docs, or Google Tasks."
+description: This skill should be used when users need to interact with Google Workspace services (Gmail, Calendar, Drive, Sheets, Docs, Tasks, Chat, etc.) from the command line. Use when users ask to send/read email, check calendar, upload files, read spreadsheets, manage tasks, or perform any Google Workspace operation. Triggers on "check my email", "send email", "calendar", "agenda", "upload to drive", "read spreadsheet", "google workspace", "gws", or any request involving Gmail, Google Calendar, Google Drive, Google Sheets, Google Docs, or Google Tasks.
 ---
 
 # Google Workspace CLI (gws)

@@ -38,7 +38,7 @@ Pencil exposes design tools via the Model Context Protocol (MCP). The MCP server
 - Explore the design hierarchy
 
 ### batch_design(operations)
-**When to use**: To make design changes -- insert, copy, update, replace, move, delete, or generate images.
+**When to use**: To make design changes — insert, copy, update, replace, move, delete, or generate images.
 **Max operations**: Aim for 25 operations per call maximum.
 
 **Operation syntax** (each line is one operation):
@@ -100,10 +100,10 @@ G("nodeId", "ai", "A beautiful sunset over mountains")
 ## Built-in Design Libraries
 
 Four pre-configured libraries available:
-- **Shadcn UI** -- Modern component library
-- **Halo** -- Design system for UI development
-- **Lunaris** -- Design library
-- **Nitro** -- Design framework
+- **Shadcn UI** — Modern component library
+- **Halo** — Design system for UI development
+- **Lunaris** — Design library
+- **Nitro** — Design framework
 
 Access via the Assets panel in the layers sidebar.
 
