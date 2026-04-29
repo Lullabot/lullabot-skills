@@ -69,6 +69,8 @@ changelog:
 
 This repo is the source of truth for skill content. Edits made here flow downstream to the prompt library site automatically on push to `main`. Open PRs directly against this repo.
 
+**Before committing, run `scripts/propose-changelog.sh`.** It uses GitHub Models to suggest a `User-Facing-Change:` trailer line for your commit message, which the public site renders as a per-skill changelog entry. Cosmetic / internal commits skip the trailer. See `AGENTS.md` for the full convention.
+
 ## License
 
 MIT — see `LICENSE`.
