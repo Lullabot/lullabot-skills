@@ -30,6 +30,7 @@ Claude Code will pick up every skill automatically on the next session.
 - **htmx-expert** — htmx patterns, attributes, and hypermedia-driven app guidance.
 - **humanizer** — Strip AI-writing tells from text.
 - **nano-banana-prompt** — Craft prompts for Gemini Nano Banana image generation.
+- **noko-log-time** — Analyze Claude Code sessions and log time entries to Noko.
 - **pencil-designer** — Work with Pencil design files via the Pencil MCP tools.
 - **resolve-composer-conflicts** — Resolve `composer.lock` merge conflicts cleanly.
 - **seo-expert** — SEO audits and prioritized recommendations.
