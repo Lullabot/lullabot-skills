@@ -1,10 +1,6 @@
 ---
 name: github-wiki
-description: This skill should be used when creating, editing, or managing 
-GitHub wiki pages. Use when writing wiki content, creating internal links between 
-wiki pages, adding images, updating sidebar navigation, or working with .wiki.git 
-repositories. Triggers on "wiki", "wiki page", "update the wiki", "add to wiki", 
-or when working in a *.wiki directory or *.wiki.git repository.
+description: This skill should be used when creating, editing, or managing GitHub wiki pages. Use when writing wiki content, creating internal links between wiki pages, adding images, updating sidebar navigation, or working with .wiki.git repositories. Triggers on "wiki", "wiki page", "update the wiki", "add to wiki", or when working in a *.wiki directory or *.wiki.git repository.
 ---
 
 # GitHub Wiki
