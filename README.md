@@ -27,6 +27,7 @@ Claude Code will pick up every skill automatically on the next session.
 - **ddev-xhgui-analyze** — Analyze xhprof/xhgui profile runs from a DDEV environment.
 - **github-wiki** — Read and edit GitHub wikis.
 - **gws-cli** — Drive Google Workspace (Gmail, Calendar, Drive, Sheets, Docs) from the CLI.
+- **hemingway** — Apply editing principles to make writing clear, direct, and powerful.
 - **htmx-expert** — htmx patterns, attributes, and hypermedia-driven app guidance.
 - **humanizer** — Strip AI-writing tells from text.
 - **nano-banana-prompt** — Craft prompts for Gemini Nano Banana image generation.
