@@ -1,7 +1,7 @@
 ---
 name: content-inventory
 description: >
-  Run Lullabot's content inventory tool to transform Screaming Frog CSV exports
+  Transform transform Screaming Frog CSV exports
   into client-ready audit spreadsheets (CSV or Excel). Use when the user needs to:
   (1) run a content audit or content inventory from Screaming Frog data,
   (2) understand what Screaming Frog exports are needed for an audit,
