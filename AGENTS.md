@@ -82,6 +82,14 @@ When in doubt, run the helper script — its prompt is calibrated to recognize t
 
 ## Validating changes locally before pushing
 
+Validate the skill bundle structure:
+
+```bash
+node scripts/validate-skills.js
+```
+
+This checks that each top-level skill directory has `SKILL.md` and `meta.yml`, that `SKILL.md` declares `name` and `description`, that the declared `name` matches the directory name, and that `meta.yml` has valid prompt-library metadata.
+
 If the prompt_library checkout is available as a sibling directory, you can preview the rendered page:
 
 ```bash
