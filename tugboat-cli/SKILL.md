@@ -96,6 +96,47 @@ tugboat shell <id> command="drush status"  # Run a command
 tugboat output <service-id>
 ```
 
+### Uploading a File Into a Preview (e.g. an HTML report)
+
+There is **no `tugboat cp`/upload command**, and two non-obvious traps make naive
+approaches fail silently:
+
+1. **`tugboat shell ... command=` does NOT forward stdin.** `cat localfile | tugboat shell <id> command="cat > dest"` produces an *empty* file — the pipe is ignored.
+2. **A plain string `command=` is split on whitespace and exec'd directly — it is NOT run through a shell.** So `command="echo hi > /tmp/x"` passes `>` and `/tmp/x` as literal args to `echo`; redirects and pipes never happen.
+
+**The working pattern: pass `command=` a JSON array of argv** (`["bash","-c","<script>"]`).
+A JSON array is honored verbatim, so the script string runs through a real shell with
+pipes/redirects intact. Carry the file content as base64 inside that script:
+
+```bash
+# 1. Find the default service ID and the docroot.
+tugboat ls services preview=<preview-id>          # default service = the one with the preview URL
+# Docroot is typically $TUGBOAT_ROOT/web (Drupal). $TUGBOAT_ROOT is usually /var/lib/tugboat.
+# Confirm: tugboat shell <service-id> command="ls /var/lib/tugboat/web/index.php"
+
+# 2. Build a JSON-array payload that base64-decodes the file into the docroot.
+python3 - <<'PY'
+import base64, json
+src  = "report.html"                               # local file to upload
+dest = "/var/lib/tugboat/web/report.html"          # path inside the preview docroot
+b64 = base64.b64encode(open(src, "rb").read()).decode()
+script = f"printf %s '{b64}' | base64 -d > '{dest}' && ls -l '{dest}'"
+open("/tmp/tb-cmd.json", "w").write(json.dumps(["bash", "-c", script]))
+print("b64 bytes:", len(b64))
+PY
+
+# 3. Hand the JSON array to tugboat shell via command substitution.
+tugboat shell <service-id> command="$(cat /tmp/tb-cmd.json)"
+
+# 4. The file is now served at the preview URL root, e.g.
+#    https://pr<NN>-<hash>.tugboatqa.com/report.html
+rm -f /tmp/tb-cmd.json
+```
+
+**Re-uploading:** preview files placed this way live outside git, so a `tugboat rebuild`
+(or a fresh build) wipes them — just re-run the steps above to restore the file. Use
+`printf %s` (not `echo`) so no trailing newline corrupts binary payloads.
+
 ### Listing and Filtering Resources
 
 ```bash
