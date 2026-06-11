@@ -1,7 +1,6 @@
 ---
 name: acli-jira
 description: This skill should be used when the user asks to "get Jira issue", "view Jira ticket", "search Jira", "create Jira issue", "update Jira ticket", "transition issue status", "add comment to Jira", or mentions acli, Jira workitems, JQL queries, or Jira sprints. Provides guidance for using the Atlassian CLI (acli) to interact with Jira Cloud.
-version: 1.0.0
 ---
 
 # Atlassian CLI (acli) for Jira
@@ -10,13 +9,32 @@ This skill provides guidance for using the `acli` command-line tool to interact 
 
 ## Overview
 
-The Atlassian CLI (`acli`) enables command-line access to Jira Cloud. Use it to view, search, create, edit, and transition work items (issues) without leaving the terminal.
+The Atlassian CLI (`acli`) enables command-line access to Jira Cloud. Use it to view, search, create, edit, and transition work items without leaving the terminal.
+
+> Jira calls issues **work items**, and so does `acli` (the commands are `acli jira workitem ...`). This skill uses "work item" throughout to match the tool.
+
+## Prerequisites
+
+Before any command below will work, `acli` must be installed and authenticated:
+
+```bash
+# Verify acli is installed
+acli --version
+
+# Authenticate against your Jira Cloud site (interactive; opens a browser)
+acli jira auth login
+
+# Confirm the active session
+acli jira auth status
+```
+
+If a command fails with an authentication or permission error, re-run `acli jira auth login`. Don't assume the environment is already set up — check `acli jira auth status` first when in doubt.
 
 ## Common Operations
 
 ### View a Work Item
 
-Retrieve details about a specific issue:
+Retrieve details about a specific work item:
 
 ```bash
 # Basic view (key, type, summary, status, assignee, description)
@@ -37,7 +55,7 @@ acli jira workitem view KEY-123 --web
 
 ### Search Work Items
 
-Find issues using JQL (Jira Query Language):
+Find work items using JQL (Jira Query Language):
 
 ```bash
 # Search by project
@@ -49,7 +67,7 @@ acli jira workitem search --jql "project = TEAM" --fields "key,summary,assignee,
 # Search assigned to current user
 acli jira workitem search --jql "assignee = currentUser() AND status != Done"
 
-# Get count of matching issues
+# Get count of matching work items
 acli jira workitem search --jql "project = TEAM AND status = 'In Progress'" --count
 
 # Paginate through all results
@@ -67,7 +85,7 @@ acli jira workitem search --jql "project = TEAM" --json
 
 ### Create Work Items
 
-Create new issues:
+Create new work items:
 
 ```bash
 # Basic creation
@@ -98,7 +116,7 @@ acli jira workitem create --project "TEAM" --type "Subtask" \
 
 ### Edit Work Items
 
-Modify existing issues:
+Modify existing work items:
 
 ```bash
 # Edit summary
@@ -119,7 +137,7 @@ acli jira workitem edit --key "KEY-123" --remove-assignee
 # Add labels
 acli jira workitem edit --key "KEY-123" --labels "urgent,blocker"
 
-# Edit multiple issues
+# Edit multiple work items
 acli jira workitem edit --key "KEY-1,KEY-2,KEY-3" --assignee "@me"
 
 # Bulk edit with JQL (requires confirmation)
@@ -128,22 +146,31 @@ acli jira workitem edit --jql "project = TEAM AND status = Open" --assignee "@me
 
 ### Transition Work Items
 
-Change issue status:
+Change work item status.
+
+**Status names are not universal.** Each Jira project defines its own workflow, so the valid statuses and the transitions available from the *current* status vary by project (and by the work item's current state). Don't assume `"In Progress"` or `"Done"` exist — discover the valid options for the specific work item first:
 
 ```bash
-# Transition single issue
+# See the current status and the transitions available from it
+acli jira workitem view KEY-123 --fields status
+acli jira workitem transition --key "KEY-123" --list
+```
+
+Then transition using a status name that the `--list` output actually offers:
+
+```bash
+# Transition single work item
 acli jira workitem transition --key "KEY-123" --status "In Progress"
 
-# Transition to Done
-acli jira workitem transition --key "KEY-123" --status "Done"
-
-# Transition multiple issues
+# Transition multiple work items
 acli jira workitem transition --key "KEY-1,KEY-2" --status "In Review" --yes
 
 # Bulk transition with JQL
 acli jira workitem transition --jql "project = TEAM AND assignee = currentUser()" \
   --status "Done" --yes
 ```
+
+If a transition is rejected, it usually means that status isn't reachable from the work item's current state — re-check `--list`.
 
 ### Comments
 
@@ -176,20 +203,41 @@ acli jira workitem assign --key "KEY-123" --assignee "@me"
 acli jira workitem assign --key "KEY-1,KEY-2" --assignee "@me"
 ```
 
+## Bulk and Destructive Operations
+
+`--yes` skips the confirmation prompt, and a `--jql` selector can match far more work items than expected. Deletes are irreversible. Before running any bulk edit, transition, or delete:
+
+1. **Preview the scope first.** Run the same JQL through `search --count` (or `search` itself) to see exactly how many work items — and which ones — will be affected:
+
+   ```bash
+   acli jira workitem search --jql "project = TEAM AND status = Open" --count
+   ```
+
+2. **Confirm the count is what you expect** before re-running the command with `--yes`. If the number is surprising, tighten the JQL.
+
+3. **For deletes, confirm with the user** and prefer `archive` over `delete` when the goal is just to get work items out of the way:
+
+   ```bash
+   acli jira workitem archive --key "KEY-123"   # reversible
+   acli jira workitem delete --key "KEY-123" --yes   # permanent
+   ```
+
+Use `--ignore-errors` on bulk runs only when partial completion is acceptable; otherwise let the command stop on the first failure so problems surface immediately.
+
 ## JQL Quick Reference
 
 Common JQL patterns for searching:
 
 | Query | Description |
 |-------|-------------|
-| `project = TEAM` | Issues in project TEAM |
+| `project = TEAM` | Work items in project TEAM |
 | `assignee = currentUser()` | Assigned to me |
-| `status = "In Progress"` | Issues in progress |
+| `status = "In Progress"` | Work items in progress |
 | `status != Done` | Not completed |
 | `created >= -7d` | Created in last 7 days |
 | `updated >= -1d` | Updated in last day |
-| `priority = High` | High priority issues |
-| `labels = bug` | Issues with bug label |
+| `priority = High` | High priority work items |
+| `labels = bug` | Work items with bug label |
 | `sprint in openSprints()` | In current sprint |
 | `ORDER BY created DESC` | Sort by newest first |
 

@@ -2,6 +2,21 @@
 
 Complete reference for all acli Jira commands.
 
+## Contents
+
+- **Top-Level Structure** — the `acli jira` command tree
+- **workitem Commands** — view, search, create, edit, transition, assign, comment, attachment, link, clone, archive/unarchive, delete
+- **project Commands** — list, view, create
+- **sprint Commands** — view, list-workitems, create, update
+- **board Commands** — list, view
+- **filter Commands** — list, view
+- **field Commands** — list
+- **JQL Reference** — operators, functions, date shortcuts, common queries
+- **Error Handling** — bulk operations and `--ignore-errors`
+- **JSON Output Parsing** — using `--json` with `jq`
+
+> Authentication (`acli jira auth login`) is a prerequisite for every command here — see the Prerequisites section in `SKILL.md`.
+
 ## Top-Level Structure
 
 ```
