@@ -64,55 +64,76 @@ function fail(errors) {
   process.exit(1);
 }
 
-const errors = [];
-const entries = fs.readdirSync(ROOT, { withFileTypes: true });
-const skillDirs = entries
-  .filter((entry) => entry.isDirectory() && !SKIP_DIRS.has(entry.name))
-  .map((entry) => entry.name)
-  .sort();
-
-for (const skillName of skillDirs) {
-  const skillDir = path.join(ROOT, skillName);
-  const skillMdPath = path.join(skillDir, 'SKILL.md');
-  const metaPath = path.join(skillDir, 'meta.yml');
-
-  if (!fs.existsSync(skillMdPath)) {
-    errors.push(`${skillName}/ is missing SKILL.md`);
-    continue;
-  }
-  if (!fs.existsSync(metaPath)) {
-    errors.push(`${skillName}/ is missing meta.yml`);
-    continue;
-  }
-
-  try {
-    const frontmatter = parseFrontmatter(skillMdPath);
-    if (!frontmatter.name) {
-      errors.push(`${skillName}/SKILL.md is missing frontmatter name`);
-    } else if (frontmatter.name !== skillName) {
-      errors.push(`${skillName}/SKILL.md name "${frontmatter.name}" must match directory name "${skillName}"`);
-    }
-    if (!frontmatter.description) {
-      errors.push(`${skillName}/SKILL.md is missing frontmatter description`);
-    }
-  } catch (error) {
-    errors.push(error.message);
-  }
-
-  try {
-    const meta = parseSimpleYaml(readFile(metaPath), metaPath);
-    if (!meta.title) errors.push(`${skillName}/meta.yml is missing title`);
-    if (!meta.date) errors.push(`${skillName}/meta.yml is missing date`);
-    if (!meta.discipline) {
-      errors.push(`${skillName}/meta.yml is missing discipline`);
-    } else if (!VALID_DISCIPLINES.has(meta.discipline)) {
-      errors.push(`${skillName}/meta.yml discipline "${meta.discipline}" is invalid`);
-    }
-  } catch (error) {
-    errors.push(error.message);
-  }
+function listSkillDirs() {
+  return fs
+    .readdirSync(ROOT, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && !SKIP_DIRS.has(entry.name))
+    .map((entry) => entry.name)
+    .sort();
 }
 
-if (errors.length > 0) fail(errors);
+function validateAll() {
+  const errors = [];
+  const skillDirs = listSkillDirs();
 
-console.log(`Validated ${skillDirs.length} skill(s).`);
+  for (const skillName of skillDirs) {
+    const skillDir = path.join(ROOT, skillName);
+    const skillMdPath = path.join(skillDir, 'SKILL.md');
+    const metaPath = path.join(skillDir, 'meta.yml');
+
+    if (!fs.existsSync(skillMdPath)) {
+      errors.push(`${skillName}/ is missing SKILL.md`);
+      continue;
+    }
+    if (!fs.existsSync(metaPath)) {
+      errors.push(`${skillName}/ is missing meta.yml`);
+      continue;
+    }
+
+    try {
+      const frontmatter = parseFrontmatter(skillMdPath);
+      if (!frontmatter.name) {
+        errors.push(`${skillName}/SKILL.md is missing frontmatter name`);
+      } else if (frontmatter.name !== skillName) {
+        errors.push(`${skillName}/SKILL.md name "${frontmatter.name}" must match directory name "${skillName}"`);
+      }
+      if (!frontmatter.description) {
+        errors.push(`${skillName}/SKILL.md is missing frontmatter description`);
+      }
+    } catch (error) {
+      errors.push(error.message);
+    }
+
+    try {
+      const meta = parseSimpleYaml(readFile(metaPath), metaPath);
+      if (!meta.title) errors.push(`${skillName}/meta.yml is missing title`);
+      if (!meta.date) errors.push(`${skillName}/meta.yml is missing date`);
+      if (!meta.discipline) {
+        errors.push(`${skillName}/meta.yml is missing discipline`);
+      } else if (!VALID_DISCIPLINES.has(meta.discipline)) {
+        errors.push(`${skillName}/meta.yml discipline "${meta.discipline}" is invalid`);
+      }
+    } catch (error) {
+      errors.push(error.message);
+    }
+  }
+
+  return { errors, count: skillDirs.length };
+}
+
+module.exports = {
+  ROOT,
+  SKIP_DIRS,
+  VALID_DISCIPLINES,
+  readFile,
+  parseFrontmatter,
+  parseSimpleYaml,
+  listSkillDirs,
+  validateAll,
+};
+
+if (require.main === module) {
+  const { errors, count } = validateAll();
+  if (errors.length > 0) fail(errors);
+  console.log(`Validated ${count} skill(s).`);
+}
