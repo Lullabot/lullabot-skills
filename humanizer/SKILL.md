@@ -424,7 +424,7 @@ Keep the intensifier only when it draws a true contrast ("not a styling nit, a l
 > On encouraging local use: opt-in tools get forgotten.
 > "Run it locally" feels like one decision but it's really two.
 
-Note the related "that's the X doing the thing the Y can't" construction. It restates a point you already made in a self-congratulatory frame. Cut it and let the example carry it.
+Note the related "that's the X doing the thing Y can't" construction. It restates a point you already made in a self-congratulatory frame. Cut it and let the example carry it.
 
 ### 27. Cute metaphors and anthropomorphized objects
 
@@ -438,7 +438,7 @@ Note the related "that's the X doing the thing the Y can't" construction. It res
 
 **After:**
 > There are two tools, and they split cleanly.
-> The deterministic script belongs in CI: it's free and can't fail the build.
+> The deterministic script belongs in CI: it's cheap and produces the same result every time.
 
 ---
 
