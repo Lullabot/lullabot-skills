@@ -105,7 +105,7 @@ non-blocking by design — it suggests, it never fails a commit.
 
   Reports mechanical findings (body length, `name`/`description` rules, Windows-style paths, nested references, missing tables of contents) as suggestions/issues and **always exits 0**.
 - **Deeper review:** the `reviewing-skills` skill adds the judgment the script can't — description specificity, conciseness, progressive disclosure, concrete examples — and produces a prioritized report. It triggers when you're authoring or reviewing a skill in Claude Code.
-- **CI:** the `.github/workflows/skill-review.yml` workflow runs `review-skill.js` automatically on any PR that touches a skill and posts the findings as a single sticky comment. It is advisory and never sets a failing status. The deeper `reviewing-skills` pass stays local — CI only runs the deterministic checker. (PRs from forks get a read-only token, so the comment is skipped for them.)
+- **CI:** the `.github/workflows/skill-review.yml` workflow runs `scripts/review-skill.js` automatically on any PR that touches a skill and posts the findings as a single sticky comment. It is advisory and never sets a failing status. The deeper `reviewing-skills` pass stays local — CI only runs the deterministic checker. (PRs from forks get a read-only token, so the comment is skipped for them.)
 - **Monthly sync:** the rubric carries a `last_synced` date. `scripts/review-skill.js` warns once it's >30 days old; run `scripts/sync-best-practices.sh` (reports age + URL reachability), then ask the `reviewing-skills` skill to run its refresh mode (WebFetches the doc, proposes rubric edits, bumps `last_synced`).
 
 If the prompt_library checkout is available as a sibling directory, you can preview the rendered page:

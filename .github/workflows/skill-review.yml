@@ -90,7 +90,11 @@ jobs:
           cat review-comment.md
 
       - name: Post or update sticky comment
-        if: steps.changed.outputs.has_skills == 'true'
+        # Same-repo PRs only: fork PRs get a read-only GITHUB_TOKEN, so the
+        # comment API would 403. continue-on-error guarantees that even an
+        # unexpected API failure never turns this advisory check into a gate.
+        if: steps.changed.outputs.has_skills == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.pull_request.number }}
