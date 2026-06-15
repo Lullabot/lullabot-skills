@@ -18,7 +18,7 @@ The Atlassian CLI (`acli`) enables command-line access to Jira Cloud. Use it to 
 Before any command below will work, `acli` must be installed and authenticated:
 
 ```bash
-# Verify acli is installed
+# Verify acli is installed -- and that it's Atlassian's, not Acquia's (see below)
 acli --version
 
 # Authenticate against your Jira Cloud site (interactive; opens a browser)
@@ -28,7 +28,20 @@ acli jira auth login
 acli jira auth status
 ```
 
-If a command fails with an authentication or permission error, re-run `acli jira auth login`. Don't assume the environment is already set up — check `acli jira auth status` first when in doubt.
+If a command fails with an authentication or permission error, re-run `acli jira auth login`. Don't assume the environment is already set up; check `acli jira auth status` first when in doubt.
+
+### Heads-up: `acli` is also the Acquia CLI
+
+The Atlassian CLI and the [Acquia CLI](https://docs.acquia.com/acquia-cli) both install a binary named `acli`. On Acquia-hosted Drupal projects the Acquia one is common, so it may already be first on your `PATH`. When it is, `acli jira ...` runs Acquia's tool instead, which has no `jira` command, and you get a confusing error.
+
+Check which one you have before relying on this skill:
+
+```bash
+acli --version    # Atlassian's reports "Atlassian CLI"; Acquia's reports "Acquia CLI"
+acli jira --help  # if "jira" is unknown, the Acquia acli is shadowing Atlassian's on PATH
+```
+
+If `acli jira` reports an unknown command, the Acquia CLI is first on your `PATH`. Call Atlassian's binary by its full path, or reorder `PATH` so Atlassian's `acli` wins.
 
 ## Common Operations
 

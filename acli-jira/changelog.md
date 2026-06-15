@@ -3,6 +3,15 @@
 Notable changes to the **Atlassian CLI (acli) for Jira** skill. Reviewed against
 Anthropic's [Agent Skills best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
 
+## 2026-06-15 — `acli` binary collision warning
+
+### Added
+- **Disambiguation note for the Acquia CLI.** Both the Atlassian CLI and the
+  Acquia CLI ship a binary named `acli`, and on Acquia-hosted Drupal projects
+  the Acquia one is often first on `PATH`. The Prerequisites section now tells
+  Claude how to confirm which `acli` it has (`acli --version` / `acli jira
+  --help`) and how to recover when the Acquia binary shadows Atlassian's.
+
 ## 2026-06-11 — Best-practices review pass
 
 A structural and content review of the initial skill. No commands were removed;
