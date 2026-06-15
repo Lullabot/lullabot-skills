@@ -1,0 +1,114 @@
+name: Skill best-practice review
+
+# Advisory, non-blocking. On PRs that touch a skill, run the deterministic
+# scripts/review-skill.js checker and post its findings as a single sticky
+# comment that updates in place on each push.
+#
+# This NEVER fails the build: review-skill.js always exits 0 and no step here
+# gates the merge. It is the deterministic half of the advisory layer added in
+# PR #19. The judgment half — the `reviewing-skills` skill — stays local and
+# model-invocable by design and is not run in CI.
+#
+# Runs as `pull_request` (not pull_request_target) on purpose: PRs from forks
+# get a read-only token, so the comment step is skipped for them. That is an
+# acceptable tradeoff — this layer is advisory, and we will not execute PR code
+# from a fork with write permissions.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: skill-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Identify changed skills
+        id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # A "changed skill" is a top-level directory that (a) has a file
+          # changed in this PR and (b) still contains a SKILL.md.
+          mapfile -t changed_dirs < <(
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" \
+              | awk -F/ 'NF > 1 { print $1 }' \
+              | sort -u
+          )
+          : > changed-skills.txt
+          for d in "${changed_dirs[@]}"; do
+            if [ -f "$d/SKILL.md" ]; then
+              echo "$d" >> changed-skills.txt
+            fi
+          done
+          if [ -s changed-skills.txt ]; then
+            echo "has_skills=true" >> "$GITHUB_OUTPUT"
+            echo "Changed skills:"; cat changed-skills.txt
+          else
+            echo "has_skills=false" >> "$GITHUB_OUTPUT"
+            echo "No skill directories changed in this PR."
+          fi
+
+      - name: Run review-skill.js
+        if: steps.changed.outputs.has_skills == 'true'
+        run: |
+          {
+            echo "<!-- skill-review-comment -->"
+            echo "## Skill best-practice review (advisory)"
+            echo
+            echo "Deterministic checks from \`scripts/review-skill.js\`. **Advisory only — this never blocks the merge.** For the deeper, judgment-based pass (description specificity, conciseness, progressive disclosure, concrete examples), run the \`reviewing-skills\` skill locally in Claude Code."
+            echo
+            while IFS= read -r skill; do
+              [ -z "$skill" ] && continue
+              echo "<details><summary><code>${skill}</code></summary>"
+              echo
+              echo '```'
+              node scripts/review-skill.js "$skill" 2>&1 || true
+              echo '```'
+              echo
+              echo "</details>"
+            done < changed-skills.txt
+          } > review-comment.md
+          echo "----- comment body -----"
+          cat review-comment.md
+
+      - name: Post or update sticky comment
+        # Same-repo PRs only: fork PRs get a read-only GITHUB_TOKEN, so the
+        # comment API would 403. continue-on-error guarantees that even an
+        # unexpected API failure never turns this advisory check into a gate.
+        if: steps.changed.outputs.has_skills == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          marker="<!-- skill-review-comment -->"
+          existing="$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq ".[] | select(.body | contains(\"$marker\")) | .id" | head -1)"
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" \
+              -F body=@review-comment.md >/dev/null
+            echo "Updated sticky comment $existing."
+          else
+            gh api "repos/$REPO/issues/$PR/comments" \
+              -F body=@review-comment.md >/dev/null
+            echo "Created sticky comment."
+          fi

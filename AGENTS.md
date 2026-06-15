@@ -90,6 +90,24 @@ node scripts/validate-skills.js
 
 This checks that each top-level skill directory has `SKILL.md` and `meta.yml`, that `SKILL.md` declares `name` and `description`, that the declared `name` matches the directory name, and that `meta.yml` has valid prompt-library metadata.
 
+## Skill authoring best practices
+
+Separate from the validator above (which is a **hard gate**), this repo carries an
+**advisory** layer that surfaces Anthropic's skill-authoring best practices. It is
+non-blocking by design — it suggests, it never fails a commit.
+
+- **Rubric:** [`reviewing-skills/references/skill-best-practices.md`](reviewing-skills/references/skill-best-practices.md) — a vendored, version-pinned copy of the [upstream best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
+- **Quick check (run before adding or changing a skill):**
+
+  ```bash
+  node scripts/review-skill.js <skill-dir>   # or omit the arg to review every skill
+  ```
+
+  Reports mechanical findings (body length, `name`/`description` rules, Windows-style paths, nested references, missing tables of contents) as suggestions/issues and **always exits 0**.
+- **Deeper review:** the `reviewing-skills` skill adds the judgment the script can't — description specificity, conciseness, progressive disclosure, concrete examples — and produces a prioritized report. It triggers when you're authoring or reviewing a skill in Claude Code.
+- **CI:** the `.github/workflows/skill-review.yml` workflow runs `scripts/review-skill.js` automatically on any PR that touches a skill and posts the findings as a single sticky comment. It is advisory and never sets a failing status. The deeper `reviewing-skills` pass stays local — CI only runs the deterministic checker. (PRs from forks get a read-only token, so the comment is skipped for them.)
+- **Monthly sync:** the rubric carries a `last_synced` date. `scripts/review-skill.js` warns once it's >30 days old; run `scripts/sync-best-practices.sh` (reports age + URL reachability), then ask the `reviewing-skills` skill to run its refresh mode (WebFetches the doc, proposes rubric edits, bumps `last_synced`).
+
 If the prompt_library checkout is available as a sibling directory, you can preview the rendered page:
 
 ```bash
