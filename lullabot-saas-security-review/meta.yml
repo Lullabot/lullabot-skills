@@ -1,5 +1,7 @@
 title: "Lullabot SaaS Security Review"
-discipline: admin
+discipline:
+  - admin
+  - development
 date: "2026-06-19"
 tags:
   - internal-operations
