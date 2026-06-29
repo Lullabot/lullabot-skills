@@ -1,0 +1,12 @@
+title: Drupal Demo Recorder
+discipline: development
+date: '2026-06-29'
+version: 1.0.0
+lastUpdated: '2026-06-29'
+changelog:
+  - version: 1.0.0
+    date: '2026-06-29'
+    summary: Initial submission
+tags:
+  - ddev
+  - playwright
