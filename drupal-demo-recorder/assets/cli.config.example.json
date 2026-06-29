@@ -1,0 +1,16 @@
+{
+  "_comment": "Example .playwright/cli.config.json for e0ipso/ddev-playwright-cli. Place at the DDEV project root in .playwright/cli.config.json. 1920x1080 gives a desktop-oriented 1080p frame; ignoreHTTPSErrors avoids the DDEV self-signed cert blocking navigation.",
+  "browser": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "channel": "chromium"
+    },
+    "contextOptions": {
+      "ignoreHTTPSErrors": true,
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      }
+    }
+  }
+}
