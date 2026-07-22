@@ -1,7 +1,7 @@
 ---
 name: humanizer
 version: 2.3.0
-description: 'Remove signs of AI-generated writing from text. Use when editing or reviewing text to make it sound more natural and human-written. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, anthropomorphized objects, and chatbot-voice cliches such as "no X, no Y" chains, "sit with that", and "the punchline is".'
+description: 'Remove signs of AI-generated writing from text. Use when editing or reviewing text to make it sound more natural and human-written. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, anthropomorphized objects, and chatbot-voice clichés such as "no X, no Y" chains, "sit with that", and "the punchline is".'
 allowed-tools:
   - Read
   - Write
