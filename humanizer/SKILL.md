@@ -1,7 +1,7 @@
 ---
 name: humanizer
-version: 2.2.0
-description: 'Remove signs of AI-generated writing from text. Use when editing or reviewing text to make it sound more natural and human-written. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, and anthropomorphized objects.'
+version: 2.3.0
+description: 'Remove signs of AI-generated writing from text. Use when editing or reviewing text to make it sound more natural and human-written. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, anthropomorphized objects, and chatbot-voice clichés such as "no X, no Y" chains, "sit with that", and "the punchline is".'
 allowed-tools:
   - Read
   - Write
@@ -227,15 +227,35 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ## STYLE PATTERNS
 
-### 13. Em Dash Overuse
+### 13. Em Dash Overuse (HIGH PRIORITY)
 
-**Problem:** LLMs use em dashes (—) more than humans, mimicking "punchy" sales writing.
+**IMPORTANT: This is one of the most persistent AI tells. Every em dash (—) in the output must be consciously justified or replaced.** Most of the time, a comma, period, colon, or parentheses works better. Em dashes should be rare in the final output. More than one in a short message usually means AI artifacts are still in there.
+
+**Problem:** LLMs default to em dashes constantly, using them for asides, lists, emphasis, parentheticals, and clause separation. Humans use them sparingly. A text with 3+ em dashes in a few paragraphs reads as AI-generated.
+
+**Rule:** Replace every em dash with the simplest alternative:
+- Aside or parenthetical → comma or parentheses
+- Emphasis or contrast → period (start a new sentence)
+- List intro → colon
+- Only keep an em dash if removing it makes the sentence genuinely worse AND no other punctuation works
 
 **Before:**
 > The term is primarily promoted by Dutch institutions—not by the people themselves. You don't say "Netherlands, Europe" as an address—yet this mislabeling continues—even in official documents.
 
 **After:**
 > The term is primarily promoted by Dutch institutions, not by the people themselves. You don't say "Netherlands, Europe" as an address, yet this mislabeling continues in official documents.
+
+**More examples:**
+
+> She's been moving fast — 10-15 pages a day — and the reviewer suggested...
+
+Rewrite as:
+> She's been moving fast (10-15 pages a day), and the reviewer suggested...
+
+> The launch slipped by about a month — the old CMS is being retired.
+
+Rewrite as:
+> The launch slipped by about a month. The old CMS is being retired.
 
 ---
 
@@ -433,20 +453,50 @@ Note the related "that's the X doing the thing Y can't" construction. It restate
 > There are two tools, and they split cleanly.
 > The deterministic script belongs in CI: it's cheap and produces the same result every time.
 
+### 28. Chatbot-voice clichés
+
+**Words to watch:** No X, no Y, no Z; Didn't flinch, didn't blink; That's the whole point/game/thing; X is the entire point/game/business model; The entire pitch is; Don't call it X, call it Y; Sit with that; You already know the answer; The improvement is real, and it's not subtle; The punchline is; That loss is worth naming; That's not nothing
+
+**Problem:** A dozen constructions show up so often in chat replies that they read as a signature. Most are closing-line tics: the model has finished the substance and reaches for a beat of manufactured gravity. Several also break the rules above (the "no X, no Y" chain is the rule of three wearing a negation; "the improvement is real" is the emphatic "real" from #25). They cluster, so finding one usually means finding four.
+
+**The twelve, and what to do instead:**
+
+- **"No X, no Y, no Z"** chains. Say what the thing does. "No signups, no downloads, no hassle" becomes "Paste your text and go."
+- **"Didn't flinch, didn't blink, didn't reach for the red pen."** Same chain with a negated verb. Keep one clause, drop the rhythm.
+- **"That's the whole point / the whole game / the whole thing."** Almost always deletable. If the point needs stating, state it.
+- **"X is the entire point / the entire business model."** Flipped twin of the above, including "The entire pitch is one sentence." Cut "entire."
+- **"Don't call it a rewrite. Call it a rescue."** The negate-then-restate. Just use the second word.
+- **"Sit with that."** Also "sit with the discomfort," "sit with it for a moment." Instructing the reader how to feel. Delete.
+- **"You already know the answer."** Flattery dressed as insight. If they know, don't say it. If they don't, say the thing.
+- **"The improvement is real, and it's not subtle."** See #25. "The improvement is real" adds nothing to "it improved."
+- **"The punchline is..."** Also "The punchline:" and "The punchline?" A close cousin of #26, announcing the move before making it. Deliver the line.
+- **"That loss is worth naming."** Therapist voice. Name it or don't.
+- **"That's not nothing."** Also "which is not nothing." A hedge pretending to be a concession. Give the actual size.
+- **Stacking any of the above.** Two in one paragraph is a tell even when each is individually defensible.
+
+**Before:**
+> No meetings, no status reports, no overhead. Don't call it a process change, call it a reset. The time savings are real, and they're not subtle. Sit with that for a moment. The punchline is that nobody asked for it. That's not nothing.
+
+**After:**
+> The team dropped the weekly status meeting and the written report that went with it. That's about three hours a week back, and nobody has asked for either one since.
+
+**How to check:** Simon Willison's [LLM cliché highlighter](https://tools.simonwillison.net/llm-cliche-highlighter) flags all twelve in pasted text or at a URL. Useful as a second pass once the patterns above are handled.
+
 ---
 
 ## Process
 
 1. Read the input text carefully
 2. Identify all instances of the patterns above
-3. Rewrite each problematic section
-4. Ensure the revised text:
+3. **Do an explicit em dash pass:** Find every `—` in the text and replace it with a comma, period, colon, or parentheses. Only keep an em dash if no alternative works.
+4. Rewrite each problematic section
+5. Ensure the revised text:
    - Sounds natural when read aloud
    - Varies sentence structure naturally
    - Uses specific details over vague claims
    - Maintains appropriate tone for context
    - Uses simple constructions (is/are/has) where appropriate
-5. Present the humanized version
+6. Present the humanized version
 
 ## Output Format
 
