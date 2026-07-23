@@ -99,6 +99,27 @@ gws gmail +forward --message-id <ID> --to dave@example.com
 gws gmail +forward --message-id <ID> --to dave@example.com --body 'FYI see below'
 ```
 
+### Plain-text wrapping gotcha (draft looks unwrapped, sent looks hard-wrapped)
+
+By default (any body you don't send with `--html`), `gws` builds email bodies as `Content-Type: text/plain` and stores each paragraph as a single logical line, wrapped only with quoted-printable *soft* breaks (a `=` at end of line, which every client strips and reflows). So a gws-created draft renders unwrapped everywhere gws touches it, and gws's own `+send` and `+reply` put it on the wire the same way -- unwrapped. gws does NOT insert real newlines into your paragraphs.
+
+The hard wrapping people see comes from **Gmail's web compose, not gws**. A `text/plain` message opens in Gmail's plain-text compose mode, and Gmail hard-wraps outgoing plain text at ~70 columns *at send time*. So the common pattern is: draft with `gws ... --draft`, open it in the Gmail web UI to review or add Cc, then hit Send -- and Gmail rewrites `Count me in` into `Count` + newline + `me in` with genuine newlines. The draft never changed; the Gmail Send step rewraps it.
+
+You can verify this by comparing raw MIME:
+
+```bash
+gws gmail users messages get --params '{"userId": "me", "id": "<ID>", "format": "raw"}'
+```
+
+A gws draft and a gws direct-send both show soft breaks (`much lon=` then `ger` on the next line), while a message sent through the Gmail UI shows hard breaks (`Count` then `me in`, with no trailing `=`).
+
+Two ways to avoid the wrap:
+
+- **Send straight from gws** (`gws gmail +send` / `+reply` with `--cc`/`--to`/`--bcc`), skipping the Gmail Send button entirely. gws transmits the body unwrapped. You lose the in-Gmail review step.
+- **Build the draft as HTML** (`--html`, using real `<p>...</p>`/`<br>` tags, NOT markdown). An HTML message opens in Gmail's rich-text mode, which doesn't do the plain-text column wrap, so you keep the "review and add Cc in Gmail before sending" workflow without the hard wrap.
+
+There is no clean way to keep composing plain text in Gmail *and* avoid the wrap: the wrap is Gmail's behavior, not gws's.
+
 ### Raw API
 
 **Search/list messages:**
@@ -319,3 +340,4 @@ gws gmail users messages list --params '{"userId": "me"}' --page-all --page-limi
 6. **Use `--format table`** when output is for human reading
 7. **Pipe JSON to `jq`** for filtering: `gws gmail +triage --format json | jq '.[].subject'`
 8. **Times must be RFC 3339/ISO 8601** for calendar operations (e.g., `2026-06-17T09:00:00-07:00`)
+9. **Gmail plain-text bodies get hard-wrapped by Gmail's web Send**, not by gws (see "Plain-text wrapping gotcha"). To keep paragraphs unwrapped, either send directly with `gws gmail +send`/`+reply` or draft as `--html`.
