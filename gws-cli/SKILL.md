@@ -101,11 +101,17 @@ gws gmail +forward --message-id <ID> --to dave@example.com --body 'FYI see below
 
 ### Plain-text wrapping gotcha (draft looks unwrapped, sent looks hard-wrapped)
 
-`gws` builds email bodies as `Content-Type: text/plain` and stores each paragraph as a single logical line, wrapped only with quoted-printable *soft* breaks (a `=` at end of line, which every client strips and reflows). So a gws-created draft renders unwrapped everywhere gws touches it, and gws's own `+send` and `+reply` put it on the wire the same way -- unwrapped. gws does NOT insert real newlines into your paragraphs.
+By default (any body you don't send with `--html`), `gws` builds email bodies as `Content-Type: text/plain` and stores each paragraph as a single logical line, wrapped only with quoted-printable *soft* breaks (a `=` at end of line, which every client strips and reflows). So a gws-created draft renders unwrapped everywhere gws touches it, and gws's own `+send` and `+reply` put it on the wire the same way -- unwrapped. gws does NOT insert real newlines into your paragraphs.
 
 The hard wrapping people see comes from **Gmail's web compose, not gws**. A `text/plain` message opens in Gmail's plain-text compose mode, and Gmail hard-wraps outgoing plain text at ~70 columns *at send time*. So the common pattern is: draft with `gws ... --draft`, open it in the Gmail web UI to review or add Cc, then hit Send -- and Gmail rewrites `Count me in` into `Count` + newline + `me in` with genuine newlines. The draft never changed; the Gmail Send step rewraps it.
 
-You can verify this by comparing raw MIME (`gws gmail users messages get --params '{"userId":"me","id":"<ID>","format":"raw"}'`): a gws draft and a gws direct-send both show soft breaks (`much lon=` then `ger` on the next line), while a message sent through the Gmail UI shows hard breaks (`Count` then `me in`, with no trailing `=`).
+You can verify this by comparing raw MIME:
+
+```bash
+gws gmail users messages get --params '{"userId": "me", "id": "<ID>", "format": "raw"}'
+```
+
+A gws draft and a gws direct-send both show soft breaks (`much lon=` then `ger` on the next line), while a message sent through the Gmail UI shows hard breaks (`Count` then `me in`, with no trailing `=`).
 
 Two ways to avoid the wrap:
 
