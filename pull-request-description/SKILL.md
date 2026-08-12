@@ -24,7 +24,8 @@ Lullabot's [A Quick Guide for Code Reviews](https://www.lullabot.com/articles/a-
 3. **Check for a template.** If `.github/PULL_REQUEST_TEMPLATE.md` (or `.gitlab/merge_request_templates/`) exists, fill that structure instead of imposing your own. Never delete a template's sections to make room for prose.
 4. **Match the house style.** Skim two or three recently merged PRs in the repo. A repo with terse three-line descriptions does not want an essay.
 5. **Draft, then cut.** Aim for roughly 200 to 400 words in the body. Longer descriptions get skimmed, which defeats the point.
-6. **Self-review the diff as if you were the reviewer.** Leave inline comments on anything surprising: a workaround, a decision that looks wrong without context, a deliberately out-of-scope chunk.
+6. **Keep the register plain.** A description is a work order, not a pitch. No scene-setting, no restating the ticket at length, no adjectives doing work the diff already does. If a sentence would survive being deleted, delete it.
+7. **Self-review the diff as if you were the reviewer.** Leave inline comments on anything surprising: a workaround, a decision that looks wrong without context, a deliberately out-of-scope chunk.
 
 ## Template
 
@@ -107,6 +108,7 @@ Drupal.org inverts the usual weighting: the **issue summary** is the canonical r
 - **Silent scope expansion.** An unmentioned refactor buried in a bug fix is the fastest way to lose a reviewer's trust.
 - **A checked template with empty answers.** "Tested: yes" tells a reviewer nothing they can repeat.
 - **Fifteen-checkbox templates.** They get rubber-stamped. Keep repo templates short enough that people fill them in honestly.
+- **Padding.** Preamble about the importance of the area, a paragraph restating the ticket, or a closing line summarizing what the reader just read. Each one costs the reviewer time and adds nothing.
 
 ## Before you post
 
@@ -118,7 +120,8 @@ Drupal.org inverts the usual weighting: the **issue summary** is the canonical r
 - No credentials, internal URLs, or customer data in the body or screenshots.
 - In a client repo: no other client's name anywhere in the description, commits, or screenshots.
 - No invented time estimates. Describe the work, not how long you imagine review will take.
-- Run the `humanizer` skill over the text if it will be read by a client. Then grep for `—` and `–`; a hit means the pass isn't finished.
+- Nothing flowery. Every sentence carries information a reviewer needs.
+- Run the `humanizer` skill over the description. Then grep for `—` and `–`; a hit means the pass isn't finished.
 
 ## Sources
 
