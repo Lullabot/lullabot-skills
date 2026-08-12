@@ -72,6 +72,8 @@ if it's intermittent.>
 
 Attach the evidence: screenshot, screen recording, error message, relevant log extract. Apache's [bug writing guide](https://infra.apache.org/bug-writing-guide.html) reduces a useful report to two properties, reproducible and specific. Everything above serves one of those two.
 
+Keep the register plain throughout. An issue is a work order, so no scene-setting about why the area matters, no paragraph restating the title, no adjectives standing in for detail. "Significantly degraded user experience" tells a developer nothing; "the submit button is unreachable by keyboard" tells them where to start. Specificity is the only thing that shortens the ticket without losing anything.
+
 ## Acceptance criteria
 
 This is the part most often missing and the part that decides whether the issue can be closed.
@@ -130,6 +132,7 @@ Also: file in the correct project and component, set version to the current deve
 - **Requirements that live only in comments.** Decisions reached in a thread belong in the description. Comments are where reasoning happens; the description is what people read.
 - **Rewriting an in-progress ticket.** A substantial requirements change is a new ticket, not an edit to one that's already being worked.
 - **Screenshots of text.** Paste the error, so it's searchable.
+- **Padding.** A preamble about the importance of the area, or a closing line summarizing what the reader just read. Both cost triage time and add nothing.
 - **Copying a client's words verbatim without translating them.** "It's broken" needs to become a described behavior before it's fileable.
 
 ## Before you submit
@@ -142,7 +145,8 @@ Also: file in the correct project and component, set version to the current deve
 - Related issues linked, duplicates searched.
 - No credentials, personal data, or customer records in the body or the screenshots.
 - In a client repo: no other client named anywhere in the issue.
-- If the client will read it, run the `humanizer` skill over the text, then grep for `—` and `–`.
+- Nothing flowery. Every sentence carries information the assignee or triager needs.
+- Run the `humanizer` skill over the text, then grep for `—` and `–`.
 
 ## Sources
 
