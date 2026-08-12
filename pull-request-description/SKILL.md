@@ -71,7 +71,7 @@ Rules that hold everywhere:
 - Describe the change, not the symptom. "Prevent nav bar from bouncing on scroll" beats "Navigation is wonky."
 - Prefix `[WIP]` or open as a draft when it isn't ready for review, and say what feedback you want.
 
-Branch names follow the Lullabot ADR [`[ticket-id]--[short-description]`](https://architecture.lullabot.com/adr/20220920-git-branch-naming/) — double dash, no forward slashes. Use `NOTICKET--` or `HOTFIX--` when no ticket exists.
+Branch names follow the Lullabot ADR [`[ticket-id]--[short-description]`](https://architecture.lullabot.com/adr/20220920-git-branch-naming/) — double dash, no forward slashes. When no ticket exists the ADR substitutes a prefix in the ticket-id slot, keeping the separator: `NOTICKET--fix-jumping-nav`, `0--fix-jumping-nav`, or `HOTFIX--remove-has-krumo` for urgent fixes.
 
 ## Scope
 
