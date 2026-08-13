@@ -34,6 +34,7 @@ Claude Code will pick up every skill automatically on the next session.
 - **issue-writing** — Write issues, tickets, and bug reports someone else can act on.
 - **nano-banana-prompt** — Craft prompts for Gemini Nano Banana image generation.
 - **pencil-designer** — Work with Pencil design files via the Pencil MCP tools.
+- **pull-request-description** — Write PR/MR descriptions and titles a reviewer can act on.
 - **resolve-composer-conflicts** — Resolve `composer.lock` merge conflicts cleanly.
 - **seo-expert** — SEO audits and prioritized recommendations.
 - **slack-markdown-formatter** — Format messages for Slack's mrkdwn dialect.
