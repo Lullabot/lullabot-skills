@@ -25,6 +25,7 @@ Claude Code will pick up every skill automatically on the next session.
 <!-- skills-start -->
 - **cloudflare-tunnel** — Expose a local dev server via Cloudflare Tunnel.
 - **ddev-xhgui-analyze** — Analyze xhprof/xhgui profile runs from a DDEV environment.
+- **github-attachments** — Upload screenshots and files to GitHub so they render in issues, PRs, and comments.
 - **github-wiki** — Read and edit GitHub wikis.
 - **gws-cli** — Drive Google Workspace (Gmail, Calendar, Drive, Sheets, Docs) from the CLI.
 - **hemingway-editor** — Apply editing principles to make writing clear, direct, and powerful.
