@@ -7,18 +7,18 @@ description: Upload images, screenshots, videos, and other files to GitHub so th
 
 GitHub's public API has no endpoint for issue or PR attachments. The web UI uploads through `uploads.github.com/user-attachments/assets`, which is undocumented but works with a normal `gh auth token`. Source: [Ben Sheldon, "Programmatically upload attachments to GitHub issues, pull requests, comments"](https://island94.org/2026/08/programmatically-upload-attachments-to-github-issues-pull-requests-comments).
 
-Because it is unofficial, it can change or disappear without notice. If a call starts returning 404 or 422 where it used to work, check whether the endpoint moved before spending time debugging your own arguments.
+Because it is unofficial, it can change or disappear without notice. If a call starts returning 404 or 422 where it used to work and the troubleshooting below does not explain it, stop. Tell the user the endpoint looks like it has changed and let them decide what to do. Do not spend a session reverse-engineering a replacement.
 
 ## Upload
 
 Use the bundled helper (`<skill-dir>/scripts/gh-upload-attachment.sh`):
 
 ```bash
-bash <skill-dir>/scripts/gh-upload-attachment.sh screenshot.png --markdown
-# ![screenshot.png](https://github.com/user-attachments/assets/1ccd36c3-...)
+bash <skill-dir>/scripts/gh-upload-attachment.sh screenshot.png --markdown --alt="Checkout form with the ZIP field overlapping the submit button"
+# ![Checkout form with the ZIP field overlapping the submit button](https://github.com/user-attachments/assets/1ccd36c3-...)
 ```
 
-Arguments: the file path, then optionally `owner/repo` (defaults to the current directory's GitHub remote) and one of `--markdown` or `--html`. With no format flag it prints the bare URL.
+Arguments: the file path, then optionally `owner/repo` (defaults to the current directory's GitHub remote), `--alt="..."`, and one of `--markdown` or `--html`. With no format flag it prints the bare URL. Always pass `--alt`; without it the helper falls back to the filename, which tells a screen reader nothing. The helper URL-encodes the filename and MIME type and HTML-escapes the alt string, so awkward filenames and quotes in the alt text are safe.
 
 The raw call, if you need to do it inline:
 
@@ -82,7 +82,7 @@ Set `content_type` to the file's real MIME type. The helper reads it with `file 
 
 ## Troubleshooting
 
-- **401** — `gh auth token` returned nothing or an expired token. Run `gh auth status`.
+- **401** — `gh auth token` returned nothing or an expired token. Run `gh auth status`. Any source gh recognizes works here, including a `GH_TOKEN` or `GITHUB_TOKEN` exported by a secret manager such as `op run`, since `gh auth token` prints the environment token when one is set.
 - **404 on the `repos/` lookup** — wrong `owner/repo`, or the token cannot see a private repo. Confirm with `gh repo view owner/name`.
 - **422** — usually a missing or mismatched `content_type`, or a file over the size limit.
 - **The URL renders as a link instead of an image** — the markdown is missing the leading `!`, or the content type was uploaded as something other than an image type.
