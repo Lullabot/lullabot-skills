@@ -22,7 +22,7 @@ Because the endpoint is unofficial, it can change or disappear without notice. I
 
 Check the version first: `gh --version`. Below 2.99.0, skip to the direct upload below.
 
-`--attach` is repeatable and takes an optional alt string after a `#`. Quote the argument, or the shell eats everything from the `#` as a comment.
+`--attach` is repeatable and takes an optional alt string after a `#`. Quote the whole argument. The `#` itself is safe unquoted, since it only opens a comment at the start of a word, but an unquoted alt string with spaces in it splits into separate arguments and gh sees only the first word.
 
 ```bash
 gh issue comment 123 --repo owner/name \
