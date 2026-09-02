@@ -13,7 +13,7 @@ There are two routes, and which one you use depends on the gh version and on wha
 
 - `gh --version` is below 2.99.0, or the target is GitHub Enterprise Server.
 - The content is a release note or a wiki page, which `--attach` does not support.
-- You need the image somewhere specific in the body, sized with `<img width>`, or laid out in a before/after table. `--attach` hands the placement to gh; the endpoint hands you a URL.
+- You need `<img width>` sizing or a before/after table. `--attach` rewrites a markdown reference in the body but the help does not document the same for an HTML `<img>` tag, so the endpoint is the safe route when the markup matters.
 - The file is not an image or video (PDF, plain text, zip).
 
 Because the endpoint is unofficial, it can change or disappear without notice. If a call starts returning 404 or 422 where it used to work and the troubleshooting below does not explain it, stop. Tell the user the endpoint looks like it has changed and let them decide what to do. Do not spend a session reverse-engineering a replacement.
@@ -34,9 +34,23 @@ gh pr create --title "..." --body-file body.md \
   --attach './after.png#Sidebar after the fix'
 ```
 
-It works on `gh issue create`, `gh issue edit`, `gh issue comment`, `gh pr create`, `gh pr edit`, and `gh pr comment`. Supported types are PNG, JPEG, GIF, WebP, SVG, MP4, MOV, and WebM. You need write access to the repo, and the token `gh auth login` already gave you.
+It works on `gh issue create`, `gh issue edit`, `gh issue comment`, `gh pr create`, `gh pr edit`, and `gh pr comment`. Supported types are PNG, JPEG, GIF, WebP, SVG, MP4, MOV, and WebM. You need write access to the repo, and the token `gh auth login` already gave you. Up to 50 files per command.
 
-gh handles the upload and the embed markdown, so you do not control where in the body each image lands. If the placement matters, use the direct upload instead and write the markdown yourself.
+**You do control placement.** Reference the local path in the body and gh rewrites that reference to point at the uploaded asset. Anything you attach without referencing it gets appended to the end instead.
+
+```bash
+gh issue create --repo owner/name --title "Checkout layout breaks on mobile" \
+  --body 'Steps to reproduce are below.
+
+![Checkout form with the ZIP field overlapping the submit button](./checkout.png)
+
+The overlap starts at 375px.' \
+  --attach ./checkout.png
+```
+
+Alt text comes from whichever source is more specific: a reference already in the body keeps the alt text written there, otherwise the `#` suffix on the flag supplies it, otherwise gh falls back to the filename. Video renders as a player and takes no alt text at all.
+
+If some attachments upload and others fail, gh still creates the issue or comment with the ones that worked, prints the URL to stdout, and exits non-zero. A script that treats a non-zero exit as "nothing happened" will be wrong here.
 
 ## Upload directly (fallback)
 
