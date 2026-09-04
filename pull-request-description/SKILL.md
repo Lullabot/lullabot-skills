@@ -117,6 +117,7 @@ Drupal.org inverts the usual weighting: the **issue summary** is the canonical r
 - Verification steps are numbered and specific enough for someone else's machine.
 - Anything out of scope is named, with a follow-up link.
 - Screenshots for visual changes.
+- To embed before/after screenshots, use the `github-attachments` skill to upload them and get the markdown.
 - No credentials, internal URLs, or customer data in the body or screenshots.
 - In a client repo: no other client's name anywhere in the description, commits, or screenshots.
 - No invented time estimates. Describe the work, not how long you imagine review will take.
