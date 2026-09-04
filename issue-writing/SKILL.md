@@ -1,18 +1,25 @@
 ---
 name: issue-writing
-description: Write issues, tickets, and bug reports someone else can pick up and work without asking follow-up questions. Use when filing a GitHub issue or Jira ticket, reporting a bug, writing a feature request or task, filling in an ISSUE_TEMPLATE, filing a Drupal.org issue, or grooming vague tickets in a backlog. Covers titles, descriptions, acceptance criteria, reproduction steps, and labeling.
+description: Draft concise, verified issues, tickets, and bug reports that maintainers can triage and discuss. Use when filing a GitHub issue or Jira ticket, reporting a bug, writing a feature request or task, filling in an ISSUE_TEMPLATE, filing a Drupal.org issue, or grooming vague tickets in a backlog. Covers titles, descriptions, acceptance criteria, reproduction steps, and labeling.
 ---
 
 # Writing Issues
 
-An issue is a request to someone else, often someone who joins the project months from now. It has to survive without you in the room. That means it states the problem, defines what "done" looks like, and gives whoever picks it up everything they need to start.
+An issue is a compact request and decision record for someone else, often someone who joins the project months from now. It has to survive without you in the room. State the problem, define the desired outcome, and include enough verified context to triage it and begin the right discussion. Make unresolved questions explicit instead of guessing.
+
+## Own the submission
+
+You are responsible for every issue you submit. Treat AI-generated text as a draft, not as evidence or a substitute for understanding. Verify every factual claim, rewrite the issue in your own words, and make sure you can explain each proposed decision. Never excuse an error or unsupported choice by saying that AI wrote it.
+
+When assisting someone who will submit under their name, present a draft for their review unless they explicitly asked you to file it. Surface unresolved facts and decisions; do not hide them behind polished language.
 
 ## Before you file
 
-1. **Search first.** Open and closed issues, both. Drupal's [issue etiquette](https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/issue-etiquette) puts this first for a reason: adding to an existing issue beats splitting the discussion across two. Link related issues either way.
-2. **Confirm it's current.** Reproduce on the latest release or the current development branch before reporting. Fixed-in-dev is a common outcome.
-3. **Use the repo's template.** If `.github/ISSUE_TEMPLATE/` exists, pick the right one and fill every field. Templates exist because maintainers got tired of asking the same questions.
-4. **One issue per issue.** Two unrelated problems in one ticket means one of them gets forgotten when the other is fixed.
+1. **Read the contribution rules.** Check `CONTRIBUTING`, the repository's AI-use policy, and its security-reporting process before drafting.
+2. **Search first.** Open and closed issues, both. Drupal's [issue etiquette](https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/issue-etiquette) puts this first for a reason: adding to an existing issue beats splitting the discussion across two. Link related issues either way.
+3. **Confirm it's current.** Reproduce on the latest release or the current development branch before reporting. Fixed-in-dev is a common outcome.
+4. **Use the repo's template.** If `.github/ISSUE_TEMPLATE/` exists, pick the right one and complete every applicable required field. Use `TBD` or explain what is unknown when the project allows it; never invent an answer to complete the form.
+5. **One issue per issue.** Two unrelated problems in one ticket means one of them gets forgotten when the other is fixed.
 
 ## Titles
 
@@ -33,14 +40,18 @@ Write the title as the action to take, so it completes the sentence "This ticket
 The Art of Jira framework, which travels well to GitHub:
 
 ```markdown
-## Overview
+## Problem
 
-<Why this exists. The user or business problem, in one or two sentences.>
+<The observed behavior and why it matters, in one or two sentences.>
+
+## Desired outcome
+
+<The observable result, without prescribing implementation unnecessarily.>
 
 ## Request
 
-<What specifically needs to happen. Enough detail that a developer who joined
-last week can start.>
+<Optional. Include only when investigated or discussed. Explain the reasoning,
+constraints, and important tradeoffs. Mark unresolved decisions clearly.>
 
 ## Acceptance criteria
 
@@ -70,16 +81,20 @@ For bugs, replace Request with:
 if it's intermittent.>
 ```
 
-Attach the evidence: screenshot, screen recording, error message, relevant log extract. Apache's [bug writing guide](https://infra.apache.org/bug-writing-guide.html) reduces a useful report to two properties, reproducible and specific. Everything above serves one of those two.
+Attach the evidence: screenshot, screen recording, error message, relevant log extract. To embed an image programmatically, use the `github-attachments` skill — it uploads the file and gives you the markdown to paste into the body. Apache's [bug writing guide](https://infra.apache.org/bug-writing-guide.html) reduces a useful report to two properties, reproducible and specific. Everything above serves one of those two.
 
-Keep the register plain throughout. An issue is a work order, so no scene-setting about why the area matters, no paragraph restating the title, no adjectives standing in for detail. "Significantly degraded user experience" tells a developer nothing; "the submit button is unreachable by keyboard" tells them where to start. Specificity is the only thing that shortens the ticket without losing anything.
+Separate observed facts, inferences, proposals, and unresolved questions. Verify package, API, version, configuration, and dependency claims against authoritative project sources. If proposing a dependency, confirm that it exists, is maintained, and fits the project. Consider security and privacy implications before recommending an approach. Never present generated or inferred details as observations.
+
+Keep the register plain throughout. Write for the maintainer's first read: include only what helps them understand, reproduce, triage, or decide the issue. Avoid scene-setting about why the area matters, paragraphs that restate the title, speculative implementation detail, and adjectives standing in for evidence. "Significantly degraded user experience" tells a developer nothing; "the submit button is unreachable by keyboard" tells them where to start.
+
+When lengthy material is genuinely useful, summarize its relevant conclusion in the issue and attach the full logs, generated analysis, or other artifact. Sanitize attachments for secrets and personal or customer data. Do not paste a full AI response into the issue merely because it is available.
 
 ## Acceptance criteria
 
 This is the part most often missing and the part that decides whether the issue can be closed.
 
 - Write conditions someone other than the author can verify. "Menu works correctly" is not a criterion. "Sub-menu items are reachable by keyboard and announce their expanded state" is.
-- Cover the non-obvious dimensions the request implies: responsive behavior, accessibility, permissions and roles, empty and error states, migration of existing content.
+- Cover non-obvious dimensions that the request actually implies or the stakeholders confirmed: responsive behavior, accessibility, permissions and roles, empty and error states, migration of existing content. Do not silently expand scope.
 - Say what's out of scope when a reader could reasonably assume it's included.
 - No time estimates. Estimating belongs to whoever does the work, not to whoever writes the ticket.
 
@@ -122,7 +137,7 @@ Also: file in the correct project and component, set version to the current deve
 - **Show your work.** [opensource.guide](https://opensource.guide/how-to-contribute/) puts it as: it's fine not to know things, but show that you tried. "I'm not sure how to implement X, I checked the docs and didn't find a mention" gets help. "How do I X?" often doesn't.
 - **Context beats urgency.** "X doesn't happen when I do Y" is actionable. "X is broken! Please fix it" is not.
 - **Keep it short.** Maintainers are volunteers with more requests than time.
-- **Ask before large feature work.** File the issue, get agreement on the approach, then write the code.
+- **Agree before large feature work.** Reach agreement on the problem and approach before writing substantial code.
 - **Skip the editorializing.** Apache's guide names this directly: commentary on how the software got shipped this way costs you the reader you were trying to recruit.
 
 ## Anti-patterns
@@ -134,6 +149,8 @@ Also: file in the correct project and component, set version to the current deve
 - **Screenshots of text.** Paste the error, so it's searchable.
 - **Padding.** A preamble about the importance of the area, or a closing line summarizing what the reader just read. Both cost triage time and add nothing.
 - **Copying a client's words verbatim without translating them.** "It's broken" needs to become a described behavior before it's fileable.
+- **Submitting generated prose verbatim.** A polished draft can still contain false claims, excess detail, or decisions the submitter does not understand.
+- **Unverified implementation advice.** Do not propose a package, API, refactor, or security-sensitive approach because generated text made it sound plausible.
 
 ## Before you submit
 
@@ -143,10 +160,14 @@ Also: file in the correct project and component, set version to the current deve
 - Bugs carry steps, expected, actual, environment, and evidence.
 - Type, labels, and priority set per this repo's conventions.
 - Related issues linked, duplicates searched.
+- I rewrote the draft in my own words and can explain every claim, criterion, and proposed decision.
+- Observations, inferences, proposals, and unresolved questions are clearly distinguished.
+- Dependencies, versions, APIs, and security implications mentioned here were verified.
 - No credentials, personal data, or customer records in the body or the screenshots.
 - In a client repo: no other client named anywhere in the issue.
-- Nothing flowery. Every sentence carries information the assignee or triager needs.
-- Run the `humanizer` skill over the text, then grep for `—` and `–`.
+- Every sentence helps the maintainer understand, reproduce, triage, or decide the issue.
+- Supporting detail is attached only when it materially helps.
+- Read the final draft yourself. Remove anything you have not verified and confirm that you can defend what remains.
 
 ## Sources
 
