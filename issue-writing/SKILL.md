@@ -48,7 +48,7 @@ The Art of Jira framework, which travels well to GitHub:
 
 <The observable result, without prescribing implementation unnecessarily.>
 
-## Proposed approach
+## Request
 
 <Optional. Include only when investigated or discussed. Explain the reasoning,
 constraints, and important tradeoffs. Mark unresolved decisions clearly.>
