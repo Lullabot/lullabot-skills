@@ -1,5 +1,5 @@
 <!-- source: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices -->
-<!-- last_synced: 2026-06-11 -->
+<!-- last_synced: 2026-09-22 -->
 
 # Skill authoring best practices (rubric)
 
@@ -17,6 +17,7 @@ refresh mode) and bump `last_synced`.
 - [Workflows and feedback loops](#workflows-and-feedback-loops)
 - [Content guidelines](#content-guidelines)
 - [Scripts and executable code](#scripts-and-executable-code)
+- [Evaluation and iteration](#evaluation-and-iteration)
 - [Quick checklist](#quick-checklist)
 
 ## Frontmatter rules
@@ -77,6 +78,8 @@ refresh mode) and bump `last_synced`.
   script or a reference doc Claude reads and compares against.
 - For open-ended, error-prone batch work, use **plan → validate → execute**: have Claude
   write a structured plan file, validate it with a script, then execute.
+- **Match template strictness to the output.** Say "ALWAYS use this exact structure" for data formats and API responses; offer "a sensible default, adapt as needed" when judgment helps.
+- **Route decision points explicitly** ("Creating new content? Follow the creation workflow. Editing? Follow the editing workflow."). When a workflow grows large, move it into its own file and tell Claude which file to read for which task.
 
 ## Content guidelines
 
@@ -100,8 +103,18 @@ refresh mode) and bump `last_synced`.
   vs. "See `analyze_form.py` for the algorithm" (read as reference). Prefer execution for
   deterministic operations.
 - **Declare dependencies.** Don't assume packages are installed; list required packages and
-  the install command. Note that the Claude API runtime has no network access.
+  the install command. claude.ai can install from npm and PyPI at runtime; the Claude API
+  runtime has no network access and no runtime package installation.
+- **Make validation output specific.** A validator that says "Field 'signature_date' not found. Available fields: customer_name, order_total, signature_date_signed" lets Claude fix the problem; "invalid input" doesn't.
+- **Prefer bundled utility scripts** for deterministic operations. They're more reliable than generated code, and only their output costs context.
 - Use **fully qualified MCP tool names** (`ServerName:tool_name`) to avoid "tool not found".
+
+## Evaluation and iteration
+
+- **Build evaluations before writing extensive docs.** Run Claude on representative tasks without the skill, note where it fails, write at least three scenarios that cover those gaps, and measure a baseline. Then write only enough instruction to pass them.
+- **Test with every model you plan to use.** Haiku may need more guidance than Opus; Opus may find the same text over-explained.
+- **Iterate from observed use.** Give the skill to a fresh Claude instance on real tasks and watch where it struggles. Take specifics back to the authoring session.
+- **Watch how Claude navigates the skill.** Unexpected read order, missed links, one file read over and over (maybe it belongs in SKILL.md), or a bundled file never opened (maybe unnecessary or poorly signaled) all point at structure problems.
 
 ## Quick checklist
 
@@ -114,3 +127,5 @@ refresh mode) and bump `last_synced`.
 - [ ] Consistent terminology; examples are concrete.
 - [ ] Workflows have clear steps; quality-critical tasks have a feedback loop.
 - [ ] Scripts handle errors, document constants, declare dependencies.
+- [ ] Critical operations have validation/verification steps.
+- [ ] At least three evaluations exist; tested with each target model and on real usage.
