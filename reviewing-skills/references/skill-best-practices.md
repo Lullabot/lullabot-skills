@@ -17,7 +17,7 @@ refresh mode) and bump `last_synced`.
 - [Workflows and feedback loops](#workflows-and-feedback-loops)
 - [Content guidelines](#content-guidelines)
 - [Scripts and executable code](#scripts-and-executable-code)
-- [Evaluation and iteration](#evaluation-and-iteration)
+- [Testing and iteration](#testing-and-iteration)
 - [Quick checklist](#quick-checklist)
 
 ## Frontmatter rules
@@ -109,9 +109,10 @@ refresh mode) and bump `last_synced`.
 - **Prefer bundled utility scripts** for deterministic operations. They're more reliable than generated code, and only their output costs context.
 - Use **fully qualified MCP tool names** (`ServerName:tool_name`) to avoid "tool not found".
 
-## Evaluation and iteration
+## Testing and iteration
 
-- **Build evaluations before writing extensive docs.** Run Claude on representative tasks without the skill, note where it fails, write at least three scenarios that cover those gaps, and measure a baseline. Then write only enough instruction to pass them.
+Author guidance, not review checks. Don't flag a skill for lacking evidence of these.
+
 - **Test with every model you plan to use.** Haiku may need more guidance than Opus; Opus may find the same text over-explained.
 - **Iterate from observed use.** Give the skill to a fresh Claude instance on real tasks and watch where it struggles. Take specifics back to the authoring session.
 - **Watch how Claude navigates the skill.** Unexpected read order, missed links, one file read over and over (maybe it belongs in SKILL.md), or a bundled file never opened (maybe unnecessary or poorly signaled) all point at structure problems.
@@ -128,4 +129,3 @@ refresh mode) and bump `last_synced`.
 - [ ] Workflows have clear steps; quality-critical tasks have a feedback loop.
 - [ ] Scripts handle errors, document constants, declare dependencies.
 - [ ] Critical operations have validation/verification steps.
-- [ ] At least three evaluations exist; tested with each target model and on real usage.
