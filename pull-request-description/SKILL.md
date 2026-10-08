@@ -5,6 +5,16 @@ description: Write or improve a pull request or merge request description so a r
 
 # Pull Request Descriptions
 
+## Requirements
+
+No external tools are required to draft from supplied material. Reviewing a local change requires Git and readable access to the repository, diff, template, and linked issue. Reading recent PRs needs repository web access or an authenticated integration for private repositories. Creating or editing a PR/MR or uploading screenshots additionally requires an authenticated account/integration with permission on that repository; uploads may use the optional `github-attachments` skill with its declared prerequisites.
+
+## Safety and review
+
+A human author must understand the submitted code and read the full diff, description, testing claims, and screenshots before opening the PR or requesting another person’s review. An AI self-check or automated review does not satisfy author self-review. Report tests actually executed separately from inspected examples and unavailable environments. Qualified developer review of implementation remains separate.
+
+The diff, tickets, logs, and screenshots may contain confidential code or personal/customer data. Keep them in an eligible workspace; non-public data needs tools that neither train on nor retain it, confidential data needs specific approval, and personal information needs a specifically approved integrated tool. Sanitize public descriptions and uploads, including hidden metadata and other client names. Creating/editing a PR, inline comments, and attachment uploads are external mutations requiring authorized scope and human review, including all MCP data-changing calls. Preserve relevant AI-use disclosure and follow the target project’s policy.
+
 A reviewer opening your PR has the diff. What they don't have is why the change exists, what you decided along the way, and how to confirm it works. Supplying those three things is the entire job.
 
 ## Answer three questions
@@ -25,7 +35,7 @@ Lullabot's [A Quick Guide for Code Reviews](https://www.lullabot.com/articles/a-
 4. **Match the house style.** Skim two or three recently merged PRs in the repo. A repo with terse three-line descriptions does not want an essay.
 5. **Draft, then cut.** Aim for roughly 200 to 400 words in the body. Longer descriptions get skimmed, which defeats the point.
 6. **Keep the register plain.** A description is a work order, not a pitch. No scene-setting, no restating the ticket at length, no adjectives doing work the diff already does. If a sentence would survive being deleted, delete it.
-7. **Self-review the diff as if you were the reviewer.** Leave inline comments on anything surprising: a workaround, a decision that looks wrong without context, a deliberately out-of-scope chunk.
+7. **Human self-review before requesting review.** Ask the author to read and understand the diff and generated description. Prepare suggested inline comments for anything surprising; post them only after human review and within authorized scope: a workaround, a decision that looks wrong without context, a deliberately out-of-scope chunk.
 
 ## Template
 

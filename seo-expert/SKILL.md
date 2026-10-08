@@ -5,6 +5,16 @@ description: "This skill should be used when users need SEO audits, website opti
 
 # SEO Expert (with GEO Optimization)
 
+## Requirements
+
+Python 3 for the bundled HTML/JSON analyzers; these use the standard library. Run companion paths from this skill directory or use absolute paths. Network checks need Bash, curl, and the usual Unix utilities; the sitemap script also needs `bc`, with `xmllint` (libxml2) optional for XML validation. Lighthouse audits need the Lighthouse CLI, its supported Node.js runtime, and Chrome/Chromium. PDF reports need the Python `markdown` and `reportlab` packages. Full-site crawling additionally needs a separately provisioned, reviewed LibreCrawl checkout at `tools/LibreCrawl`, its initialized virtual environment, and a readable custom JSON configuration or the referenced tier templates. Those crawler resources and tier templates are not bundled here; do not claim a ready-to-run full crawl or install them automatically. Use existing HTML/JSON inputs when services are unavailable.
+
+## Safety and review
+
+Audit only authorized sites, with agreed URL scope, rate limits, and read-only credentials when needed. Network requests expose URLs to the target service; crawls and local HTML/JSON/PDF outputs can retain tokens, private pages, and author information. Classify inputs and recipients before any AI/service transfer: non-public data requires tools that neither train on nor retain it, confidential data requires specific approval, and personal information requires a specifically approved integrated tool. Never use public models for private crawl data. Verify dependency identity before authorized installation; outside secure sandboxes a human must understand scripts and commands, and all MCP data-changing operations require human review.
+
+A human SEO/content expert must validate findings, sources, calculations, audience needs, and relevant AI disclosures before sending reports or proposing production changes. Keep final strategy, KPIs, budget, and publishing decisions with humans. Script scores and fixed GEO percentages/thresholds are heuristics, not proof of quality, authority, or guaranteed rankings/citations; verify current search-engine guidance before presenting them as evidence. Do not fabricate author credentials, dates, testimonials, statistics, or schema claims. Treat report effort/ROI suggestions as unvalidated estimates. Substantially AI-written sales/marketing deliverables are restricted to rare fully disclosed cases. Use approved client-owned accounts for client content work where applicable.
+
 ## Overview
 
 This skill enables comprehensive SEO and GEO (Generative Engine Optimization) auditing for websites. It analyzes traditional SEO factors plus AI-readiness: content structure for AI citations, schema markup for AI extraction, readability for conversational queries, and question-based formatting.
@@ -32,7 +42,7 @@ To conduct a comprehensive SEO + GEO audit:
    - Run `scripts/check_sitemap.sh [url]` to validate XML sitemap
 
 2. **Analyze page structure and meta data**:
-   - Use WebFetch to retrieve the target page HTML
+   - Use an available web retrieval tool to retrieve authorized target page HTML
    - Run `scripts/extract_meta.py [html_file]` to extract meta tags AND validate GEO-critical schema (FAQ, HowTo, Article)
    - Run `scripts/analyze_headings.py [html_file]` to check heading hierarchy AND question-based headers for GEO
 
@@ -67,7 +77,7 @@ To conduct a comprehensive SEO + GEO audit:
 - **E-E-A-T Analysis**: Run `scripts/analyze_eeat.py [html_file]` for comprehensive trust signal detection
 - Detects author bylines with credentials (PhD, MD, CPA, etc.)
 - Counts external authoritative links (.gov, .edu, established orgs)
-- Verifies publish/modified dates in meta, schema, and visible content
+- Detects publish/modified date strings in meta, schema, and visible content; a human verifies their truth
 - Finds blockquotes and expert attributions
 - Checks trust signals (ISO, HIPAA, privacy policy, author bios)
 - Scores each E-E-A-T dimension out of 25 for a 0-100 total
@@ -144,7 +154,8 @@ Structure audit reports with:
 - `check_bluf.py` - BLUF (Bottom Line Up Front) validation
 - `analyze_headings.py` - Question-based header detection (target: 30%+)
 - `extract_meta.py` - GEO schema validation (FAQ, HowTo, Article)
-- `analyze_eeat.py` - E-E-A-T signal detection (0-100 score)
+- `analyze_eeat.py` - E-E-A-T signal detection (0-100 heuristic score)
+- `generate_report_pdf.py` - Combine an audit Markdown file and desktop/mobile Lighthouse JSON into a local PDF (`--audit`, `--desktop`, `--mobile`, `--output`)
 
 ### references/
 

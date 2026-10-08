@@ -4,6 +4,16 @@ description: Resolve composer.lock merge conflicts when merging main into the cu
 ---
 # Resolve composer.lock Merge Conflicts
 
+## Requirements
+
+Git, a working PHP/Composer environment, and a repository containing `composer.json` and `composer.lock`. The examples use an initialized, running DDEV project (`ddev composer`); use plain `composer` only when the project documents an equivalent PHP/extensions environment. The target `main` branch must be available locally. Package replay may need network access and private registry credentials supplied through the project’s secure configuration. Write access to the working tree is required; committing is a separate authorized step.
+
+## Safety and review
+
+Before commands run outside a secure sandbox, a human must read and understand them, including Composer plugins/scripts and upstream dependency identity. A DDEV container alone is not evidence of secure isolation. Review the merge target, existing local changes, package operations, and credential/network exposure; package replay can install code and change files beyond the lock file. Use a disposable environment where possible and least privilege; never expose registry credentials or private package information to public models.
+
+Preserve unrelated work and explain the exact lock-file replacement before applying it. Stage only verified files. A human must inspect the resulting manifest/lock diff, run the project’s appropriate checks, and approve the result before committing, sharing, or handing generated changes to a reviewer. This skill does not authorize a push. Record relevant AI assistance and unavailable checks. MCP repository mutations, if used instead of Git, also require human review.
+
 You are resolving composer.lock merge conflicts following the Lullabot guide:
 https://www.lullabot.com/articles/easy-guide-resolving-composerlock-conflicts
 
@@ -35,6 +45,8 @@ Note all added, removed, or changed packages. You'll need to replay these change
 
 ## Step 4: Accept main's composer.lock
 
+Confirm this is a normal merge of `main` into the current branch, not a rebase or a reversed merge. During that normal merge, `--theirs` is main’s version. Stop and inspect the merge stages if the operation differs; do not discard branch changes by guessing.
+
 ```bash
 git checkout --theirs -- composer.lock
 ```
@@ -54,7 +66,9 @@ Based on the diff from Step 3, re-run the original composer commands to apply th
 
 This regenerates `composer.lock` with the correct `content-hash`.
 
-## Step 7: Stage and commit
+## Step 7: Review, stage, and commit
+
+Run `ddev composer validate` (or the project’s equivalent) and inspect the resulting manifest/lock diff. A human must review the result before committing; commit only when requested or already authorized. Report unresolved checks rather than treating regeneration as validation.
 
 ```bash
 git add composer.json composer.lock

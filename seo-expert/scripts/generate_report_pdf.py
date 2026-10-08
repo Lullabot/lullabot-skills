@@ -40,7 +40,7 @@ from reportlab.platypus import (
 REPORT_DIR = Path(__file__).resolve().parent
 
 # Default file paths (can be overridden via CLI)
-DEFAULT_SEO_AUDIT = REPORT_DIR / "seo-audit-agr-georgia-gov.md"
+DEFAULT_SEO_AUDIT = REPORT_DIR / "seo-audit.md"
 DEFAULT_LIGHTHOUSE_DESKTOP = REPORT_DIR / "lighthouse-desktop.json"
 DEFAULT_LIGHTHOUSE_MOBILE = REPORT_DIR / "lighthouse-mobile.json"
 DEFAULT_OUTPUT_PDF = REPORT_DIR / "combined-seo-and-lighthouse-report.pdf"

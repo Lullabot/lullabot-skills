@@ -1,5 +1,7 @@
 # GEO (Generative Engine Optimization) Best Practices
 
+The numerical GEO claims and suggested targets below are historical heuristics, not verified current measurements or guarantees. Before quoting them in a deliverable, verify the original source, date, sample, and applicability. Include only real, supported author credentials, quotations, dates, and statistics; a human content expert decides the final strategy.
+
 ## Overview
 
 GEO is the practice of optimizing content to appear in AI-powered search results and citations across ChatGPT, Google AI Overviews, Perplexity, Gemini, and other generative AI platforms.

@@ -54,7 +54,7 @@ Word in *bold* here
 **Common mistakes:**
 ```
 No*space*works - ❌ Won't render as bold
-*Nospaceatstart-❌
+*Missing closing marker-❌
 ```
 
 ### Italic Text
@@ -577,6 +577,8 @@ in *italic* text  # Separate words
 ## Testing and Validation
 
 ### Testing Messages
+
+Use synthetic/public content for external previews. A human must review the text, channel, recipients, and mention scope before any test message or notification; a private channel still shares content. Formatting alone does not authorize posting.
 
 1. **Use Slack App tester:**
    - Block Kit Builder preview

@@ -5,6 +5,16 @@ description: This skill should be used when working with Pencil design files (.p
 
 # Pencil Designer
 
+## Requirements
+
+Pencil editor with a working Pencil MCP connection exposing document, node, variable, layout, and screenshot tools, plus permission to access the intended design document. Use the actual server-qualified tool names exposed by the environment; names below describe operations rather than a particular agent’s tool namespace. Image generation, external images, Figma import, and code generation are optional capabilities requiring their own enabled services/accounts and approved data handling. No particular agent or installation directory is required.
+
+## Safety and review
+
+Before MCP document creation, batch edits, deletion/replacement, variable changes, imports, exports, or library conversion, a human must review the intended operations, target file/nodes, and scope. Save a recoverable copy before destructive changes or irreversible `.lib.pen` conversion. Use least privilege; generated code must be understood and reviewed by a qualified developer before delivery, and unreviewed commands/code require human inspection outside secure sandboxes.
+
+Design text, images, screenshots, and imported files may contain client or personal data. Local MCP access does not establish that image generation or AI chat stays local. Check each actual service destination: non-public information requires tools that neither train on nor retain it, confidential information requires specific approval, and personal information requires a specifically approved integrated tool. Do not send ineligible assets through image generation, external image URLs, Figma import, or code generation. Use original style descriptions and licensed assets rather than specific artist imitation or protected IP. A human designer must refine and review brand, accessibility, originality, and relevant AI disclosures before sharing or exporting deliverables.
+
 This skill provides comprehensive guidance for working with Pencil — a vector design tool that integrates directly into development environments. Pencil bridges design and development by operating within IDEs, enabling designers and developers to collaborate using familiar version control workflows.
 
 ## When to Use This Skill
@@ -19,7 +29,7 @@ This skill provides comprehensive guidance for working with Pencil — a vector 
 
 ## Critical Rules
 
-1. **NEVER use Read, Grep, or cat to read `.pen` files** — contents are encrypted and only accessible via Pencil MCP tools
+1. **Use Pencil MCP tools to inspect the active document** so editor state and node identities stay consistent. Treat the format reference as documentation, not permission to bypass the editor.
 2. **Always start with `get_editor_state()`** to understand the current context before making changes
 3. **Use `get_screenshot`** periodically to validate design changes visually
 4. **Limit `batch_design` to ~25 operations per call** to avoid overwhelming the system
@@ -167,7 +177,7 @@ Variables can have theme-conditional values for light/dark mode or other theme a
 
 ### Custom Libraries
 1. Create a `.pen` file with components
-2. Turn it into a library (creates `.lib.pen` suffix — irreversible)
+2. Have a human review the conversion and save a recoverable copy, then turn it into a library (creates `.lib.pen` suffix — irreversible)
 3. Import into other `.pen` files via the Libraries panel
 
 ### Built-in Icon Libraries

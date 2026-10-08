@@ -4,7 +4,7 @@
 
 Pencil exposes design tools via the Model Context Protocol (MCP). The MCP server runs locally and allows AI agents to read, modify, and generate designs in `.pen` files programmatically.
 
-**Critical Rule**: The contents of `.pen` files are encrypted and can only be accessed via Pencil MCP tools. NEVER use `Read`, `Grep`, or `cat` to read `.pen` file contents.
+**Critical Rule**: Inspect the active document through Pencil MCP tools to keep editor state and node identities consistent. Tool examples are illustrative; resolve the server-qualified names available in the environment. A human must review document-changing operations and their scope before execution.
 
 ## Tool Reference
 

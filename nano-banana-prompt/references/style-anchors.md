@@ -1,66 +1,66 @@
 # Nano Banana Style Anchors Reference
 
-Quick lookup for prestige anchoring phrases organized by genre/style.
+Describe visual properties, not specific artists, studios, or protected franchises. These phrases guide original work; a human designer still checks rights, brand, accessibility, and final assets.
 
 ## Fantasy Art
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Dark Fantasy | "Beksinski meets dark fantasy, nightmare logic" |
-| Epic Fantasy | "Alan Lee, John Howe, Tolkien illustration" |
-| Sword & Sorcery | "Frank Frazetta, Boris Vallejo" |
-| Fairy Tale | "Arthur Rackham, Brian Froud" |
-| Gothic | "Gustave Doré, Victorian gothic illustration" |
+| Dark Fantasy | "surreal ruins, weathered textures, nightmare logic" |
+| Epic Fantasy | "detailed watercolor landscapes, misty mountains, epic scale" |
+| Sword & Sorcery | "dynamic anatomy, bold silhouettes, dramatic chiaroscuro" |
+| Fairy Tale | "delicate ink lines, muted watercolor, whimsical natural forms" |
+| Gothic | "intricate engraving, dramatic gothic shadows" |
 
 ## Science Fiction
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Hard Sci-Fi | "Syd Mead, industrial design, NASA concept art" |
-| Cyberpunk | "Blade Runner aesthetic, neon noir" |
-| Space Opera | "Chris Foss, retro-futurism" |
-| Alien | "H.R. Giger, biomechanical horror" |
-| Mecha | "Studio Sunrise, Gundam mechanical design" |
+| Hard Sci-Fi | "functional industrial forms, precise technical detail" |
+| Cyberpunk | "rainy urban streets, saturated neon, deep shadows" |
+| Space Opera | "bold geometric spacecraft, saturated retro-futurism" |
+| Alien | "organic machinery, ribbed textures, claustrophobic lighting" |
+| Mecha | "articulated armored machines, clear mechanical joints" |
 
 ## Horror
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Cosmic Horror | "Lovecraftian, incomprehensible geometry" |
-| Body Horror | "Junji Ito, biological wrongness" |
-| Gothic Horror | "Bernie Wrightson, Frankenstein illustrations" |
-| Psychological | "Francis Bacon, distorted figures" |
+| Cosmic Horror | "cosmic scale, incomprehensible geometry" |
+| Body Horror | "detailed monochrome ink, unsettling organic shapes" |
+| Gothic Horror | "dense crosshatching, crumbling architecture, stark shadows" |
+| Psychological | "distorted figures, blurred edges, restrained palette" |
 | Folk Horror | "Pagan imagery, unsettling pastoral" |
 
 ## Illustration Styles
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Classic Book | "N.C. Wyeth, Howard Pyle, golden age illustration" |
-| Modern Fantasy | "Michael Whelan, cover art quality" |
-| Graphic Novel | "Dave McKean, painted comics" |
-| Ink Work | "Franklin Booth, precise crosshatching" |
-| Woodcut | "Albrecht Dürer, Renaissance woodcut" |
+| Classic Book | "painterly narrative composition, rich earth tones" |
+| Modern Fantasy | "luminous color, layered depth, clear narrative focus" |
+| Graphic Novel | "mixed-media textures, expressive panels, painted surfaces" |
+| Ink Work | "precise crosshatching, fine ink linework" |
+| Woodcut | "dense carved hatching, bold black-and-white values" |
 
 ## Concept Art
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Film Production | "Weta Workshop, ILM concept department" |
-| Game Design | "ArtStation trending, AAA game concept" |
-| Character Design | "Disney character design, appeal and silhouette" |
-| Environment | "Craig Mullins, digital matte painting" |
-| Creature Design | "Terryl Whitlatch, anatomically plausible" |
+| Film Production | "cinematic concept art, readable materials and scale" |
+| Game Design | "polished game concept art, clear silhouettes" |
+| Character Design | "expressive original character, appealing silhouette" |
+| Environment | "atmospheric digital matte painting, broad value shapes" |
+| Creature Design | "anatomically plausible creature, functional anatomy" |
 
 ## Photography Styles
 
 | Style | Anchor Phrase |
 |-------|---------------|
-| Portrait | "Annie Leibovitz, Vanity Fair cover quality" |
-| Documentary | "Pulitzer Prize winning photograph" |
-| Fashion | "Vogue editorial, high fashion lighting" |
-| Nature | "National Geographic, wildlife photography" |
-| Street | "Henri Cartier-Bresson, decisive moment" |
+| Portrait | "soft directional portrait lighting, composed background" |
+| Documentary | "candid documentary photograph, natural light" |
+| Fashion | "editorial fashion photograph, sculpted studio lighting" |
+| Nature | "detailed wildlife photograph, natural habitat" |
+| Street | "candid street photograph, decisive moment" |
 
 ## Color Palettes
 
@@ -100,7 +100,7 @@ Quick lookup for prestige anchoring phrases organized by genre/style.
 | Medieval | "Illuminated manuscript, gold leaf accents" |
 | Renaissance | "Chiaroscuro, classical composition" |
 | Victorian | "Pre-Raphaelite, ornate detail" |
-| Art Nouveau | "Alphonse Mucha, organic flowing lines" |
+| Art Nouveau | "organic flowing lines, ornamental floral borders" |
 | Art Deco | "Geometric elegance, streamlined forms" |
 | Mid-Century | "Retro illustration, limited color printing" |
 | 1980s | "Synthwave, VHS aesthetic" |

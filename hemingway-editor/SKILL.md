@@ -5,6 +5,16 @@ description: Apply Hemingway-style editing principles to make writing clearer, m
 
 # Hemingway editor
 
+## Requirements
+
+No external tools, packages, authentication, shell access, or services are required. Supply the text or writing brief and its intended audience; editing happens in the current conversation.
+
+## Safety and review
+
+Keep source text in the current approved workspace and avoid external transfers. Classify drafts before supplying them to an AI tool: non-public information requires a tool that neither trains on nor retains it; confidential information requires specific approval; personal information requires a specifically approved tool integrated where it is stored. Stop if eligibility is unknown.
+
+A human author must verify meaning, facts, nuance, tone, and audience fit before sharing or publishing the revision. Do not invent facts or impersonate an author’s experiences. Humans retain editorial and final delivery decisions. Preserve relevant AI-use disclosures and project/client preferences. Sales or marketing deliverables must not be substantially AI-created; rare exceptions require full disclosure.
+
 Use these principles as a guide — not a rigid checklist — when editing existing text or writing new content. They apply especially to articles, briefs, and UX writing, where clarity and directness matter most.
 
 ## Core principles

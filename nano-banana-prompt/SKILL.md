@@ -5,6 +5,16 @@ description: This skill should be used when users need to create detailed, effec
 
 # Nano Banana Prompt Generator
 
+## Requirements
+
+No external tools, packages, authentication, or services are required to draft a prompt. Supply the subject, intended use, format, and any eligible references. Generating or editing an actual image is a separate optional step requiring an available Gemini image service, an appropriately approved account, and permission to submit its inputs. Confirm current model availability and supported parameters with the service rather than assuming a fixed product version.
+
+## Safety and review
+
+Prompts are drafts for human design review. Describe media, composition, texture, palette, and lighting; avoid replicating a specific artist’s style or protected intellectual property. Use only references the user is entitled to submit. Editing must not erase attribution or rights information to misrepresent ownership. A human designer refines final assets for originality, brand, accessibility, and intended use before delivery.
+
+Prompt drafting requires no external transfer. Before submitting prompts or reference images to Gemini or another service, classify all text, faces, metadata, and client assets and verify the destination’s approval, retention, and training settings. Non-public information needs tools that neither train on nor retain it; confidential information needs specific approval; personal information needs a specifically approved integrated tool. Stop when eligibility is unknown. A human must review the prompt and any service-changing operation before submission and review resulting assets before sharing. Document relevant AI use and respect client disclosure and account-ownership preferences.
+
 ## Overview
 
 Nano Banana is Google's autoregressive image generation model (also known as Gemini 2.5 Flash Image, and the Pro version as Gemini 3 Pro Image). This skill generates optimized prompts that leverage Nano Banana's unique capabilities: strong prompt adherence, character consistency, and nuanced control through structured formatting.
@@ -74,17 +84,17 @@ Specify multiple light sources for depth:
 - Accent: [Rim light, highlights, glows]
 ```
 
-### 5. Use Prestige Anchoring
+### 5. Describe Observable Style
 
-Reference acclaimed artists or prestigious descriptors to improve quality:
+Use medium, texture, palette, composition, and lighting descriptions rather than specific artists or protected franchises. For additional descriptive phrases, read [references/style-anchors.md](references/style-anchors.md).
 
-| Category | Effective Anchors |
-|----------|-------------------|
-| Dark Fantasy | "Beksinski meets industrial horror" |
-| Illustration | "Bernie Wrightson, Gustave Doré" |
-| Photo Quality | "Pulitzer Prize winning photograph" |
-| Concept Art | "Art station trending, Weta Workshop" |
-| Portrait | "Annie Leibovitz lighting" |
+| Category | Descriptive Anchors |
+|----------|---------------------|
+| Dark Fantasy | "surreal ruins, weathered textures, ominous silhouettes" |
+| Illustration | "high-contrast ink, dense crosshatching, expressive contours" |
+| Photo Quality | "candid documentary composition, natural light, fine detail" |
+| Concept Art | "clear silhouette, readable materials, atmospheric perspective" |
+| Portrait | "soft directional key light, subtle rim light, restrained palette" |
 
 ### 6. Include Negative Constraints
 
@@ -125,7 +135,7 @@ Use this template structure for all Nano Banana prompts:
 [Setting, background, atmospheric details]
 
 ## Art Style
-[Specific aesthetic, artist references, medium]
+[Specific aesthetic, medium, texture, palette]
 
 ## Lighting
 - Primary: [Main light]
@@ -160,7 +170,7 @@ Collect from user or determine from context:
 | Style | Realistic, stylized, illustrated, photographic? |
 | Format | Portrait, landscape, square? Color or B&W? |
 | Mood | What emotion or atmosphere? |
-| References | Any existing art style or artist to match? |
+| References | Any authorized references or medium, texture, and palette preferences? |
 
 ### Step 2: Analyze Source Material
 
@@ -192,7 +202,7 @@ Check the prompt against these criteria:
 | Specificity | Are measurements, colors, materials explicit? |
 | Enforcement | Are critical elements marked with MUST/ONLY? |
 | Exclusions | Is there a DO NOT section? |
-| Style Anchor | Is there a prestige reference? |
+| Style Anchor | Is the style described without imitating a specific artist or protected IP? |
 | Technical Specs | Are format, camera, lighting specified? |
 | Clarity | Could another AI parse this unambiguously? |
 
@@ -207,7 +217,7 @@ Add these specifications:
 
 ## Art Style
 - High contrast black and white ink illustration
-- Style: [Artist reference] (e.g., Bernie Wrightson, Frank Miller)
+- Style: expressive ink contours with dense crosshatching
 - Heavy blacks for shadows
 - Pure whites for highlights
 - Crosshatching for texture and gradation
@@ -248,7 +258,7 @@ Every generated prompt must:
 2. **Include Format Specs** - Orientation, color mode, purpose
 3. **Specify Subject Clearly** - Main focus with physical details
 4. **Enforce Critical Elements** - MUST/DO NOT sections present
-5. **Anchor Style** - Artist reference or prestige descriptor
+5. **Describe Style** - Medium, texture, palette, and composition
 6. **Layer Lighting** - At least 2 light sources described
 7. **Define Composition** - Camera, framing, focal point
 8. **Exclude Unwanted Elements** - Clear DO NOT section

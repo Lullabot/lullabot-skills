@@ -52,22 +52,19 @@ fi
 if [ ! -d "$CRAWLER_DIR" ]; then
     echo "Error: LibreCrawl not found at $CRAWLER_DIR"
     echo ""
-    echo "Please initialize the submodule:"
-    echo "  cd $SKILL_DIR"
-    echo "  git submodule update --init --recursive"
+    echo "This bundle does not include LibreCrawl. Provision a reviewed upstream checkout"
+    echo "and its dependencies separately; see this skill’s Requirements."
     exit 1
 fi
 
-# Check if virtual environment exists, create if not
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Setting up LibreCrawl virtual environment..."
-    python3 -m venv "$VENV_DIR"
-    source "$VENV_DIR/bin/activate"
-    pip install -q -r "$CRAWLER_DIR/requirements.txt"
-    echo "✓ Virtual environment created"
-else
-    source "$VENV_DIR/bin/activate"
+# Provision dependencies separately after upstream and environment review.
+# Crawling must never silently install executable dependencies.
+if [ ! -f "$VENV_DIR/bin/activate" ]; then
+    echo "Error: LibreCrawl virtual environment is not provisioned at $VENV_DIR"
+    echo "Have a human verify the upstream checkout and dependencies before authorized setup."
+    exit 1
 fi
+source "$VENV_DIR/bin/activate"
 
 # Determine config file path
 if [ -f "$CONFIG" ]; then
