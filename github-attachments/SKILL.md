@@ -5,6 +5,19 @@ description: Upload images, screenshots, videos, and other files to GitHub so th
 
 # Attaching files to GitHub content
 
+## Requirements
+
+Authenticated GitHub CLI (`gh`) with access to the intended repository; supported `--attach` commands require gh 2.99.0+. The fallback helper needs Bash, `gh`, `jq`, `curl` with `--fail-with-body`, `file`, and standard Unix utilities. Both routes require network access and permission to upload and, separately, create/edit the target content. No MCP server is required.
+
+Resolve `SKILL_DIR` to the absolute directory containing the loaded `SKILL.md`, using the skill location supplied by the agent or locating this file. Set it explicitly (for example, `SKILL_DIR="/path/to/installed/github-attachments"`); do not derive it from the project working directory. Run project-relative commands from the working project and use `"$SKILL_DIR/..."` for companions.
+
+## Safety and review
+
+Upload is a persistent external write, and publishing an issue/PR/comment is a separate write. A human reviews the exact files (including pixels, metadata, archives, and SVG content), intended repository, body, recipients, and accessible-by-URL exposure before either step. Use public or sanitized assets only; a private repository does not protect an attachment URL. Never upload secrets or private client data merely to obtain a link. Use a token limited to the intended repository and do not print it or enable shell tracing. On partial upload failure inspect the created content before retrying to avoid duplicate posts. Review alt text and the final rendered body before sharing.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
 There are two routes, and which one you use depends on the gh version and on what the file has to do.
 
 **`gh --attach`** is the supported route, added in [GitHub CLI 2.99.0](https://github.blog/changelog/2026-09-01-github-cli-media-in-issues-pull-requests-and-comments/) (September 2026). Use it whenever it covers the job: an image or video going onto an issue, a PR, or a comment. It is not available on GitHub Enterprise Server as of that release.
@@ -57,7 +70,7 @@ If some attachments upload and others fail, gh still creates the issue or commen
 Use the bundled helper (`<skill-dir>/scripts/gh-upload-attachment.sh`):
 
 ```bash
-bash <skill-dir>/scripts/gh-upload-attachment.sh screenshot.png --markdown --alt="Checkout form with the ZIP field overlapping the submit button"
+bash "$SKILL_DIR/scripts/gh-upload-attachment.sh" screenshot.png --markdown --alt="Checkout form with the ZIP field overlapping the submit button"
 # ![Checkout form with the ZIP field overlapping the submit button](https://github.com/user-attachments/assets/1ccd36c3-...)
 ```
 

@@ -5,14 +5,27 @@ description: "This skill should be used when users need to expose a local develo
 
 # Cloudflare Tunnel
 
+## Requirements
+
+Bash and `cloudflared`; the helper also uses standard Unix commands (`head`, `cat`, `kill`, `rm`). Quick tunnels need network access but no account; named tunnels need a Cloudflare account and tunnel credentials in `~/.cloudflared/`. Optional installation uses Homebrew, apt with `curl`/`sudo`, yum, or pacman; installation is a separate reviewed setup action.
+
+Resolve `SKILL_DIR` to the absolute directory containing the loaded `SKILL.md`, using the skill location supplied by the agent or locating this file. Set it explicitly (for example, `SKILL_DIR="/path/to/installed/cloudflare-tunnel"`); do not derive it from the project working directory. Run project-relative commands from the working project and use `"$SKILL_DIR/..."` for companions.
+
+## Safety and review
+
+Starting either tunnel exposes the selected local service to the internet. Before starting, a human reviews the port, rendered pages, endpoints, authentication, and whether the data is eligible for public exposure; a random URL is not access control. Prefer a disposable service containing public or synthetic data. Login, tunnel creation, DNS/access changes, and installing packages need review of the exact target and effects. Stop the foreground tunnel with Ctrl+C; use the helper stop command only for a tunnel started by that helper and verify the PID. Review the URL and audience before sharing it. Do not remove existing Cloudflare configuration merely to bypass a quick-tunnel error.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
 Expose any local web service to the internet instantly using Cloudflare Tunnel (`cloudflared`). Supports two modes: **quick tunnels** (zero config, temporary URL) and **named tunnels** (persistent, reusable).
 
 ## Quick Start
 
-For the fastest path to a public URL, run the helper script with the local port:
+After the human exposure review in Safety and review, run the helper with the selected local port:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick <port>
+bash "$SKILL_DIR/scripts/tunnel.sh" quick <port>
 ```
 
 This creates a temporary `*.trycloudflare.com` URL with no authentication required.
@@ -24,13 +37,13 @@ This creates a temporary `*.trycloudflare.com` URL with no authentication requir
 Before starting a tunnel, verify `cloudflared` is installed:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh status
+bash "$SKILL_DIR/scripts/tunnel.sh" status
 ```
 
-If not installed, install it:
+If missing, review the upstream package and installation effects first. Linux installation modifies host package sources with sudo; perform privileged host setup manually, rather than running it unattended. After authorized setup, the helper supports:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh install
+bash "$SKILL_DIR/scripts/tunnel.sh" install
 ```
 
 On macOS this uses Homebrew. On Linux it detects apt/yum/pacman automatically.
@@ -58,35 +71,35 @@ On macOS this uses Homebrew. On Linux it detects apt/yum/pacman automatically.
 To expose a local HTTP service:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick <port>
+bash "$SKILL_DIR/scripts/tunnel.sh" quick <port>
 ```
 
 To expose an HTTPS local service:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick <port> https
+bash "$SKILL_DIR/scripts/tunnel.sh" quick <port> https
 ```
 
-The script outputs a public URL like `https://random-words.trycloudflare.com`. Share this URL for remote access.
+The script outputs a public URL like `https://random-words.trycloudflare.com`. Have a human review the URL and intended audience before sharing.
 
 #### Named Tunnel
 
 First authenticate (one-time):
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh login
+bash "$SKILL_DIR/scripts/tunnel.sh" login
 ```
 
 Create the tunnel (one-time per project):
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh create my-project
+bash "$SKILL_DIR/scripts/tunnel.sh" create my-project
 ```
 
 Run the tunnel:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh named my-project <port>
+bash "$SKILL_DIR/scripts/tunnel.sh" named my-project <port>
 ```
 
 ### 4. Stop the Tunnel
@@ -94,7 +107,7 @@ Run the tunnel:
 Press `Ctrl+C` in the terminal, or:
 
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh stop
+bash "$SKILL_DIR/scripts/tunnel.sh" stop
 ```
 
 ## Script Reference
@@ -116,27 +129,27 @@ The helper script at `scripts/tunnel.sh` supports these commands:
 
 **React dev server (port 3000):**
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick 3000
+bash "$SKILL_DIR/scripts/tunnel.sh" quick 3000
 ```
 
 **Vite dev server (port 5173):**
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick 5173
+bash "$SKILL_DIR/scripts/tunnel.sh" quick 5173
 ```
 
 **Django/Rails/Express (port 8000):**
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick 8000
+bash "$SKILL_DIR/scripts/tunnel.sh" quick 8000
 ```
 
 **PHP built-in server (port 8080):**
 ```bash
-~/.claude/skills/cloudflare-tunnel/scripts/tunnel.sh quick 8080
+bash "$SKILL_DIR/scripts/tunnel.sh" quick 8080
 ```
 
 ## Troubleshooting
 
-- **"config.yaml exists" error with quick tunnels:** Quick tunnels fail if `~/.cloudflared/config.yaml` exists. Temporarily rename or remove it.
+- **"config.yaml exists" error with quick tunnels:** Quick tunnels fail if `~/.cloudflared/config.yaml` exists. Prefer a named tunnel. Only relocate existing configuration after reviewing its purpose and an explicit restoration plan.
 - **HTTP 429 errors:** Quick tunnels cap at 200 concurrent in-flight requests. For higher traffic, use a named tunnel.
 - **SSE not working:** Quick tunnels do not support Server-Sent Events. Use a named tunnel instead.
 - **Tunnel stops when terminal closes:** Run with `nohup` or `screen`/`tmux` to persist across terminal sessions.
