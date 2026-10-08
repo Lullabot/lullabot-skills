@@ -34,6 +34,7 @@ created: 2026-10-08
 | May automated model findings be posted directly on the PR? | User: posting the comment is acceptable as the automatic surface for review feedback intended for the submitter, rather than a handoff to a second human. Label findings automated and advisory. This does not replace author self-review or qualified human approval. |
 | How should fork submissions reach the credentialed advisory review? | User expects maintainer approval before fork CI runs. Verify the repository's approval policy instead of assuming GitHub requires approval for every fork. Approval does not expose secrets to the fork workflow. Use a separate trusted workflow after the approved CI run to call the API and post the comment, verifying its source run, PR, and commit. |
 | Which additional semantic review areas have been approved? | User explicitly approved all five proposed advisory areas: duplicate-purpose and trigger overlap, safety consistency, requirements completeness, semantic portability, and authoring quality. Apply them through the Anthropic API reviewer; retain the existing reviewing-skills rubric and deterministic checks. All model findings remain advisory. |
+| How should implementation tasks be assigned to agents, models, and skills? | User: use a subagent for each task with the appropriate model and skill. Use GPT-6.1 Sol at Low, Medium, or High according to the task's reasoning needs, and GPT-5.6 Luna Low only for truly rote work. Record the selection and rationale during task generation; verify model availability and routing before dispatch rather than silently substituting another model. |
 | Which human review declarations belong in PRs? | User requested “I've read the whole skill and understand it.” and “I've confirmed there's no private information in the skill.” Preserve these statements and add brief evidence-based testing, dependency, and policy review prompts, with separate conditional expert review responsibilities. |
 | Should developer CODEOWNERS review cover every public skill change to capture Markdown code? | User: keep developer CODEOWNERS review tied to separate code files. Add manual declarations: “I understand any code written directly in the skill” and “Code beyond simple examples is kept as a separate file”. Markdown code review is a manual responsibility, not an automatically enforced developer-ownership gate. |
 | Can qualified individuals outside the developers team also approve code? | User requested this option. GitHub permits individual co-owners, but directly listing individuals automatically requests their reviews. The subsequently selected design adds qualified additional people to the dedicated skill-review team instead of listing each person in CODEOWNERS. Additional member usernames remain to be identified. |
@@ -266,6 +267,7 @@ Team existence and live approval/notification enforcement are acceptance checks 
 
 After implementation, collect evidence from the actual repository and PR workflow:
 
+- Inspect task routing and dispatch records to confirm each implementation task used a subagent with the selected available skills and approved model/effort. Check that GPT-5.6 Luna Low assignments were truly mechanical and that unavailable targets or routing deviations were reported. Verify worker evidence before accepting completion.
 - Run the structural validator against the entire bundle and confirm a zero exit status. Inspect representative migrated frontmatter and verify that invalid multiline metadata, missing required files, and invalid discipline values are rejected in isolated temporary fixture copies.
 - Install the locked check dependencies and confirm node_modules is excluded from public skill discovery and spelling. Exercise actual malformed YAML, wrong field types, valid metadata lists, and folded name/description values; confirm incomplete public skill directories still fail validation.
 - Run the dependency and portability checks across every public skill. Use isolated fixtures to confirm failures for missing or empty Requirements sections and known agent-specific runtime dependencies, and success for legitimate agent installation examples and reference quotations.
@@ -301,6 +303,23 @@ No separate documentation site or new submission issue form is required. Any eff
 ### Development Skills
 
 Repository validation and Node.js scripting, GitHub Actions and CODEOWNERS configuration, technical editing, and familiarity with the external tools used by the existing skills. Qualified reviewers must assess migrated executable content and executable examples.
+
+### Task execution and model selection
+
+Delegate each implementation task to a subagent selected for its technical domain, invoking the relevant available skills and following Strikethroo's task-execution hooks. The orchestrator coordinates dependencies, reviews outputs, and verifies acceptance evidence before marking work complete. These model choices govern implementation of this plan; the advisory PR reviewer still uses Anthropic's API.
+
+| Task reasoning needs | Model and reasoning effort | Selection guidance |
+| --- | --- | --- |
+| Truly rote | GPT-5.6 Luna Low | Mechanical edits or already-specified transformations with clear inputs and expected outputs. Do not assign policy interpretation, new dependency decisions, security-sensitive workflow design, or migration judgment to this tier. |
+| Straightforward | GPT-6.1 Sol Low | Small, well-specified changes needing limited local reasoning. |
+| Standard implementation | GPT-6.1 Sol Medium | JavaScript implementation, parser integration, meaningful tests, and migrations requiring decisions within established rules. |
+| Complex or security-sensitive | GPT-6.1 Sol High | Trusted workflow boundaries, credential handling, semantic review criteria, cross-cutting validation, and difficult portability or policy decisions. |
+
+During task generation, select one or two appropriate technical skills per task and record a brief routing rationale in its implementation notes. Invoke matching installed domain skills when available; a technical capability label is not proof that a callable skill exists. A general-purpose worker may supply the necessary technical expertise when no domain-specific skill is installed, while following the applicable repository and Strikethroo instructions.
+
+Use Strikethroo's execution-routing profiles and helpers to assign each task its approved model and effort; do not hand-write execution targets into task frontmatter. Prepare matching local routing configuration before task generation, keeping machine configuration ignored and documenting the policy in this plan. Existing local default profiles do not yet match this selection and must not override it. The current harness exposes GPT-6.1 Sol but does not expose GPT-5.6 Luna; preserve the requested model choice and report unavailable targets before dispatch instead of silently substituting GPT-6 Luna or another model. Do not use effort levels above High for GPT-6.1 Sol.
+
+Give each subagent explicit ownership of its files or responsibility, task inputs, selected skills, and verification requirements. Tell workers they share the codebase and must preserve others' edits. Dispatch independent tasks concurrently only when dependencies and file ownership permit; serialize overlapping edits. Maintain the minimum useful number of tasks instead of splitting every mechanical edit into a separate dispatch.
 
 ### Technical Infrastructure
 
@@ -353,6 +372,7 @@ The entries below record previously resolved planning findings. They are history
 | Spelling and validation evidence | Broad exceptions and service-dependent testing could produce misleading passes. | Medium | Resolved in the requirements: narrow documented exclusions, per-skill evidence, and honest reporting of unavailable tests. |
 | Advisory provider and language | Model review integration and runtime were unspecified. | Medium | Resolved by user: direct Anthropic API, one or two small JavaScript scripts, JSDoc, runtime response validation, and advisory sticky reporting. |
 | Expanded review scope | Duplicate detection and four other semantic areas required explicit scope selection. | Medium | Resolved by user: include all five proposed advisory areas, with catalog comparison, located evidence, and honest coverage limitations. |
+| Task execution | Implementation model, effort, and skill selection need explicit routing. | Medium | Resolved by user: a subagent per task; GPT-6.1 Sol Low through High, with GPT-5.6 Luna Low reserved for truly rote work. Align local routing before generation and report unavailable requested targets before dispatch. |
 
 ### Deferred Administrator Acceptance
 
@@ -368,3 +388,4 @@ Team creation, the exact qualified membership and active assignment pool, write 
 - 2026-10-08: Recorded explicit approval to publish the policy summary and selected short phrases while keeping the raw, verbatim policy out of repository files.
 - 2026-10-08: Recorded approval of Anthropic's API and a small JavaScript advisory reviewer, accepted direct feedback posting for the submitter, specified trusted fork-review execution and bounded structured reporting, and superseded the local-only API recommendation. Additional semantic review categories remain pending user selection.
 - 2026-10-08: User approved all five proposed advisory areas. Added their evidence criteria, duplicate-purpose and trigger-overlap catalog comparison, quality evaluation, and documentation requirements; resolved the earlier pending scope decision.
+- 2026-10-08: Added the user's per-task subagent policy, skill selection, GPT-6.1 Sol Low/Medium/High routing, and GPT-5.6 Luna Low for truly rote work. Recorded local routing alignment and model-availability checks for future execution; no tasks were generated or dispatched.
