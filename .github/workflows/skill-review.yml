@@ -1,13 +1,12 @@
 name: Skill best-practice review
 
-# Keep the existing mechanical sticky comment publishing until the trusted
-# workflow_run reporter lands. The final reporting PR replaces this writer.
+# Advisory local output only. The sole comment writer is the trusted
+# skill-review-report.yml workflow; this PR run receives no model key/write token.
 on:
   pull_request:
 
 permissions:
   contents: read
-  pull-requests: write
 
 concurrency:
   group: skill-review-${{ github.event.pull_request.number }}
@@ -28,44 +27,4 @@ jobs:
           node-version: '22'
       - run: npm ci --ignore-scripts
       - name: Review full public bundle
-        run: |
-          node scripts/review-skill.js > review-output.txt
-          cat review-output.txt
-          {
-            echo '<!-- skill-review-comment -->'
-            echo '## Skill best-practice review (advisory)'
-            echo
-            echo 'Deterministic authoring advice for the full public bundle. Findings never block a merge or replace human review. The trusted Anthropic reporter is added in the final reporting PR.'
-            echo
-            echo '````text'
-            cat review-output.txt
-            echo '````'
-          } > review-comment.md
-
-      - name: Post or update existing sticky comment
-        # Preserve the existing same-repository publishing scope. Fork PRs
-        # have no write token; trusted fork feedback comes with the reporter.
-        if: github.event.pull_request.head.repo.full_name == github.repository
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          current_head="$(gh api "repos/$REPO/pulls/$PR" --jq .head.sha)"
-          if [ "$current_head" != "$HEAD_SHA" ]; then
-            echo 'Head changed; stale mechanical comment suppressed.'
-            exit 0
-          fi
-          existing="$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
-            --jq '.[] | select(.user.type == "Bot" and .user.login == "github-actions[bot]") | select(.body | startswith("<!-- skill-review-comment -->")) | .id' | tail -1)"
-          if [ -n "$existing" ]; then
-            gh api -X PATCH "repos/$REPO/issues/comments/$existing" \
-              -F body=@review-comment.md >/dev/null
-            echo "Updated sticky comment $existing."
-          else
-            gh api "repos/$REPO/issues/$PR/comments" \
-              -F body=@review-comment.md >/dev/null
-            echo 'Created sticky comment.'
-          fi
+        run: node scripts/review-skill.js
