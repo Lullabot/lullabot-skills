@@ -1,0 +1,71 @@
+name: Temporary skill comment preview
+
+# Remove this workflow and its helper before merging PR 45.
+on:
+  pull_request:
+
+permissions: {}
+concurrency:
+  group: skill-review-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Temporary read-only report preview
+    if: github.event.pull_request.number == 45 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: node scripts/preview-review-comment.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: skill-comment-preview-${{ github.run_id }}
+          path: preview-comment.md
+          retention-days: 1
+          if-no-files-found: error
+
+  publish:
+    name: Temporary bot comment publication
+    needs: preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      pull-requests: write
+    steps:
+      # This job checks out no PR code and never executes artifact contents.
+      - uses: actions/download-artifact@v4
+        with:
+          name: skill-comment-preview-${{ github.run_id }}
+      - name: Update bot-owned preview comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          test "$(wc -c < preview-comment.md)" -lt 55000
+          test "$(head -1 preview-comment.md)" = '<!-- skill-review-comment -->'
+          test "$(gh api "repos/$REPO/pulls/$PR" --jq .head.sha)" = "$HEAD_SHA"
+          test "$(gh api "repos/$REPO/pulls/$PR" --jq .base.sha)" = "$BASE_SHA"
+          existing="$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq '.[] | select(.user.type == "Bot" and .user.login == "github-actions[bot]") | select(.body | startswith("<!-- skill-review-comment -->")) | .id' | tail -1)"
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -F body=@preview-comment.md >/dev/null
+          else
+            gh api "repos/$REPO/issues/$PR/comments" -F body=@preview-comment.md >/dev/null
+          fi
