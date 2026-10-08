@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en-US",
+  "description": "Public skill definitions, metadata, first-party companion documentation, and contributor guidance. The pinned upstream authoring rubric and installed tooling are excluded; code fences remain checked.",
+  "files": [
+    "*.md",
+    "*/**/*.{md,yml,yaml,txt}",
+    ".github/**/*.md"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    ".git/**",
+    ".ai/**",
+    ".agents/**",
+    ".claude/**",
+    ".codex/**",
+    "reviewing-skills/references/skill-best-practices.md"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "lullabot",
+      "path": "./cspell-words.txt",
+      "description": "Reviewed project names, CLI names, and technical terms used by the public bundle."
+    }
+  ],
+  "dictionaries": ["lullabot"],
+  "useGitignore": true
+}

@@ -1,0 +1,85 @@
+name: Skill validation
+
+# Always report stable jobs on every PR, including documentation-only changes.
+# These disposable runners have read-only tokens and no model credentials.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  structure:
+    name: Skill structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm run validate
+
+  disclosures:
+    name: Skill disclosure and portability
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm run check:skills
+
+  spelling:
+    name: Skill spelling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm run spellcheck
+
+  tests:
+    name: Skill tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      # Selected tests use only standard libraries, local synthetic fixtures,
+      # and the Ubuntu runner's PHP. No skill dependencies or services installed.
+      - name: Check runner runtimes
+        run: |
+          python3 --version
+          php --version
+      - name: Companion behavior and crawler setup guards
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python3 -m unittest discover -s htmx-expert/tests
+          python3 -m unittest discover -s tugboat-cli/tests
+          python3 -m unittest discover -s drupal-security-review/tests
+          python3 -m unittest discover -s seo-expert/scripts -p test_analyze_eeat.py
+          python3 -m unittest discover -s seo-expert/scripts -p test_crawl_prerequisites.py
