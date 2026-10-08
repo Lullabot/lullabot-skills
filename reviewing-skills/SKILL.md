@@ -130,5 +130,3 @@ Don't refresh silently — show the diff and let the user accept it.
 - **Advisory only.** Do not edit the reviewed skill unless the user asks you to apply a fix.
 - This skill complements, and never replaces, the blocking structural gate in
   `scripts/validate-skills.js`.
-
-Temporary review fixture: example\file.
