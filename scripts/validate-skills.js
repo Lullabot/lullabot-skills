@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const SKIP_DIRS = new Set(['.git', '.github', 'scripts']);
+// Repository tooling is not part of the published skill bundle.
+const SKIP_DIRS = new Set(['.git', '.github', '.agents', '.ai', '.claude', '.codex', 'scripts']);
 const VALID_DISCIPLINES = new Set([
   'development',
   'content-strategy',

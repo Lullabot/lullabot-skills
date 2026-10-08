@@ -83,6 +83,38 @@ node scripts/validate-skills.js
 
 **Before committing, run `scripts/propose-changelog.sh`.** It uses GitHub Models to suggest a `User-Facing-Change:` trailer line for your commit message, which the public site renders as a per-skill changelog entry. Cosmetic / internal commits skip the trailer. See `AGENTS.md` for the full convention.
 
+## Planning repository changes
+
+[Strikethroo](https://strikethroo.canpicasoft.com/) is installed for development
+of this repository, with a shared workspace in `.ai/strikethroo/` and seven
+workflow skills in `.agents/skills/`. Claude Code discovers the same skills
+through links in `.claude/skills/`. These hidden tooling directories are separate
+from the public skill bundle.
+
+Use `st-create-plan` with a work order to prepare a plan. The skill confirms
+scope and compatibility requirements before writing the plan. Review the plan
+before using `st-execute-blueprint` to implement it.
+
+Node.js 22 or later is required. After cloning this repository, initialize the
+ignored local configuration using the installed workspace version:
+
+```bash
+npx strikethroo@4.1.1 init
+```
+
+This uses the saved Codex and Claude harness selection and creates the local
+configuration that is intentionally excluded from version control. Then validate
+the workspace with:
+
+```bash
+npx strikethroo validate
+```
+
+To refresh the workspace, run `npx strikethroo@latest init` (it remembers the
+Codex and Claude harness selection). Reinstall the workflow skills from
+`e0ipso/strikethroo` into `.agents/skills/` using your skill installer; preserve
+the Claude links when updating.
+
 ## License
 
 MIT — see `LICENSE`.
