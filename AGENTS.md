@@ -22,13 +22,7 @@ Companion files (`scripts/`, `references/`, `assets/`, etc.) live alongside `SKI
 
 ## Required workflow when committing
 
-**Before writing your commit message, run:**
-
-```bash
-scripts/propose-changelog.sh
-```
-
-This analyzes your staged changes and uses GitHub Models (via `gh models run`) to suggest a `User-Facing-Change:` trailer line per modified skill. Paste the suggestion into the commit message body, edit as needed, or skip entirely for purely internal/cosmetic changes.
+Before committing, review the staged changes for each modified skill. For substantive changes, write a `User-Facing-Change:` trailer in the commit message body describing the user-observable effect in plain language. Use one scoped trailer per skill for multi-skill commits. Skip trailers for purely internal/cosmetic changes.
 
 **Why:** The prompt-library site auto-builds a per-skill changelog from these trailers (see [its CLAUDE.md](https://github.com/Lullabot/prompt_library/blob/main/CLAUDE.md) for parser details). No trailer = no public changelog entry — which is the right outcome for hygiene commits, but the wrong outcome for substantive changes that users should see in the change history.
 
@@ -62,7 +56,7 @@ Fix typo in pencil-designer SKILL.md
 - Dependency bumps with no behavior change
 - Documentation tweaks that don't add information
 
-When in doubt, run the helper script — its prompt is calibrated to recognize these cases and respond `SKIP`.
+When in doubt, ask whether the change affects what users can do with the skill or the results they receive. If it does, include a trailer.
 
 ## When the trailer is mandatory
 
