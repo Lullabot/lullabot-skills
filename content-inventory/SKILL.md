@@ -1,35 +1,39 @@
 ---
 name: content-inventory
-description: >
-  Transform transform Screaming Frog CSV exports
-  into client-ready audit spreadsheets (CSV or Excel). Use when the user needs to:
-  (1) run a content audit or content inventory from Screaming Frog data,
-  (2) understand what Screaming Frog exports are needed for an audit,
-  (3) validate input CSVs before running the tool,
-  (4) troubleshoot content inventory tool errors,
-  (5) understand the output audit spreadsheet columns and format.
-  Requires Python 3, pandas, and openpyxl.
-allowed-tools: Bash(python *) Bash(pip *)
+description: Transform Screaming Frog CSV exports into content audit spreadsheets (CSV or Excel). Use when asked to validate exports, generate page/file inventories, troubleshoot processing, or explain audit columns.
 ---
 
 # Content Inventory Tool
+
+## Requirements
+
+Python 3.10+ with pandas 2.2+ (the redirect merge uses `include_groups`), openpyxl for Excel, and requests only for `--follow-redirects`. A shell and local filesystem access are needed to run the helpers. Input is four Screaming Frog CSV exports; Screaming Frog and authorized GA4 access are needed only to produce those exports. No service authentication is needed for local processing.
+
+Resolve `SKILL_DIR` to the absolute directory containing the loaded `SKILL.md`, using the skill location supplied by the agent or locating this file. Set it explicitly (for example, `SKILL_DIR="/path/to/installed/content-inventory"`); do not derive it from the project working directory. Run project-relative commands from the working project and use `"$SKILL_DIR/..."` for companions.
+
+## Safety and review
+
+CSV exports and spreadsheets can contain private URLs, page text, analytics, and personal information. Keep processing local by default. Before enabling `--follow-redirects`, a human reviews the full URL set and possible redirect destinations: the helper sends requests to input URLs and redirect targets without an allowlist, so use only trusted public-site exports in an isolated network environment. `--domain` is a reporting flag, not a network boundary. Choose an output directory/prefix that will not overwrite needed files. A human checks row counts, redirect merging, formulas or external links in spreadsheet inputs, and the default FALSE legal-required column before sharing; that default is not a legal determination. Content decisions and client delivery remain with the human auditor.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
 
 Transforms Screaming Frog CSV exports into client-ready audit spreadsheets with two pipelines: pages and files.
 
 ## Setup
 
-The tool is bundled with this skill at `${CLAUDE_SKILL_DIR}/scripts/`. Before first run, install dependencies:
+The tool is bundled with this skill at `"$SKILL_DIR/scripts/"`. Before first run, check existing packages; if setup is authorized, install reviewed packages in a project virtual environment:
 
 ```bash
-pip install pandas openpyxl
+python3 -m pip install pandas openpyxl
 # Only needed if using --follow-redirects:
-pip install requests
+python3 -m pip install requests
 ```
 
 ## Quick Start
 
 ```bash
-python ${CLAUDE_SKILL_DIR}/scripts/run_inventory.py \
+python3 "$SKILL_DIR/scripts/run_inventory.py" \
   --pages <raw-pages.csv> \
   --orphans <orphan-pages.csv> \
   --files <raw-files.csv> \
@@ -104,7 +108,7 @@ For complete column specifications, see [output-columns.md](references/output-co
 Before running the full tool, validate that input CSVs have the expected columns:
 
 ```bash
-python ${CLAUDE_SKILL_DIR}/scripts/check_inputs.py \
+python3 "$SKILL_DIR/scripts/check_inputs.py" \
   --pages <raw-pages.csv> \
   --orphans <orphan-pages.csv> \
   --files <raw-files.csv> \
@@ -118,19 +122,13 @@ This catches the most common error: passing the wrong Screaming Frog export to t
 Common issues:
 
 - **KeyError on a column name** — Wrong SF export passed to wrong flag. Run `check_inputs.py` to diagnose.
-- **ModuleNotFoundError: pandas/openpyxl** — Run `pip install pandas openpyxl`.
+- **ModuleNotFoundError: pandas/openpyxl** — Run `python3 -m pip install pandas openpyxl`.
 - **Output has 0 rows** — All pages were 404, or the wrong file was passed to `--pages`.
 
 For more, see [troubleshooting.md](references/troubleshooting.md).
 
 ## Development
 
-```bash
-# Run all tests
-pytest
+No test suite is bundled here. Validate representative sanitized CSV fixtures and inspect generated rows before client delivery.
 
-# Run a single test
-pytest tests/test_normalize.py::test_strips_https
-```
-
-Source modules in `content_inventory/`: `cli.py` (arg parsing), `pages.py` (pages pipeline), `files.py` (files pipeline), `output.py` (formatting), `normalize.py` (URL normalization), `redirects.py` (redirect resolution), `filetypes.py` (file classification), `readability.py` (Flesch to grade).
+Source modules in `scripts/content_inventory/`: `cli.py` (arg parsing), `pages.py` (pages pipeline), `files.py` (files pipeline), `output.py` (formatting), `normalize.py` (URL normalization), `redirects.py` (redirect resolution), `filetypes.py` (file classification), `readability.py` (Flesch to grade).

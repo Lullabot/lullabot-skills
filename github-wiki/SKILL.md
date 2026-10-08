@@ -5,6 +5,17 @@ description: This skill should be used when creating, editing, or managing GitHu
 
 # GitHub Wiki
 
+## Requirements
+
+Git, a shell, local Markdown/file editing, and authenticated read access to the separate `.wiki.git` repository. Publishing requires wiki write access and network access to GitHub; an initial wiki page may need to be created in the web UI before cloning. Optional browser inspection verifies rendered links. No MCP server or special agent command is required.
+
+## Safety and review
+
+Local drafting does not publish. Before pushing, a human reads all changed pages/assets, verifies sources and links, checks the wiki's visibility and client preferences, and reviews the exact staged diff and remote/branch. Use only the wiki write permission needed; stage specific files so unrelated work is not published. Check images and document metadata for private information. Push publishes immediately, so obtain authorization for the intended destination and scope before it. A human self-review must happen before asking others to review the generated draft or sharing it; disclose relevant AI use when project/client rules require it.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
 ## Overview
 
 GitHub wikis are powered by [Gollum](https://github.com/gollum/gollum),
@@ -44,8 +55,8 @@ git clone https://github.com/OWNER/REPO.wiki.git
 ```
 
 Within a project, the wiki repo is typically at a path like
-`code/REPO.wiki/` or similar. Check the project's CLAUDE.md or
-memory files for the exact location.
+`code/REPO.wiki/` or similar. Check the project's agent instructions or
+documented repository layout for the exact location.
 
 ### Pushing Changes
 
@@ -54,12 +65,12 @@ on GitHub immediately after push — there is no build step or CI.
 
 ```bash
 cd path/to/repo.wiki
-git add -A
+git add -- <reviewed-page-and-asset-paths>
 git commit -m "Description of changes"
-git push origin master
+git push origin <verified-default-branch>
 ```
 
-Note: Wiki repos typically use `master` as the default branch, not `main`.
+Verify the wiki remote's HEAD/default branch; do not assume `master` or `main`.
 
 ## Creating Wiki Pages
 
@@ -155,7 +166,7 @@ controlled dimensions:
 2. **Add internal links** using `[[Display Text|page-name]]` syntax
 3. **Update `_Sidebar.md`** to add navigation links to the new pages
 4. **Update `Home.md`** if the new section should be listed on the landing page
-5. **Commit and push** to make changes live immediately
+5. **Review and publish** — human self-review of the full staged diff, destination, and visibility precedes the authorized commit/push; changes become live immediately
 6. **Verify links** — broken links render as red text with class `internal absent`
 
 ## Troubleshooting
@@ -176,5 +187,5 @@ controlled dimensions:
 
 - Verify the `.md` file is at the repository root (not in a subdirectory
   unless using Gollum subdirectory support)
-- Verify the file was pushed to the remote (`git push origin master`)
+- Verify the file was pushed to the remote (`git push origin <verified-default-branch>`)
 - Check that the file has a `.md` extension

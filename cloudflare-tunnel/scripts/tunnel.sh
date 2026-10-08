@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # tunnel.sh — Helper script for managing Cloudflare Tunnels
-# Part of the Cloudflare Tunnel skill for Claude Code
+# Part of the Cloudflare Tunnel agent-neutral skill
 #
 # Usage:
 #   tunnel.sh <command> [args]
@@ -115,7 +115,7 @@ cmd_quick() {
 
   if [[ -f "$HOME/.cloudflared/config.yaml" ]] || [[ -f "$HOME/.cloudflared/config.yml" ]]; then
     echo "Warning: ~/.cloudflared/config.yaml exists. Quick tunnels may fail."
-    echo "Rename or remove it, or use a named tunnel instead."
+    echo "Prefer a named tunnel; review existing configuration and a restoration plan before relocating it."
   fi
 
   echo "Starting quick tunnel to ${protocol}://localhost:${port}..."

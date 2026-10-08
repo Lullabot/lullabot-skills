@@ -1,5 +1,14 @@
 # Tugboat CLI Command Reference
 
+## Contents
+
+- Global Options
+- Commands
+- Configuration File (.tugboat/config.yml)
+- Environment Variables (Inside Preview Containers)
+- Authentication
+- API Reference
+
 ## Global Options
 
 | Flag | Description |

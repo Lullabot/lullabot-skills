@@ -5,7 +5,18 @@ description: This skill should be used when users need to interact with Google W
 
 # Google Workspace CLI (gws)
 
-Use the `gws` CLI for ALL Google Workspace operations. Do NOT use MCP tools for Gmail, Calendar, Drive, or Sheets -- always prefer `gws`.
+## Requirements
+
+The Google Workspace CLI (`gws`), a shell, network access, and configured Google OAuth or service-account authentication for the selected account, APIs, and scopes. Use `gws --help` and `gws auth --help` for installed-version setup. Optional JSON filtering needs `jq`; uploads/downloads need local filesystem access. Enable only the APIs and scopes needed for the task. No MCP server is required.
+
+## Safety and review
+
+Reading email, calendars, contacts, and files can bring personal or confidential data into the agent. Before retrieval, verify data eligibility and tool settings: personal information requires specifically approved tooling integrated with its source system, confidential data requires approval for that purpose, and non-public data requires no training or retention. An installed CLI or OAuth grant alone does not establish approval. A human reviews exact account/resource IDs, recipients/attendees, attachments, body, scopes, and intended effects before send/reply/forward, draft creation, calendar changes, uploads, sharing, edits, or deletion. Dry-run helps inspect a request but does not replace human review. Bound reads/pagination to relevant data, use read-only scopes for read tasks, and never print access tokens. Human self-review precedes sharing summaries and client communications; retain required AI disclosure and human strategic/budget decisions.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
+Use `gws` for this CLI workflow after verifying its eligibility for the data. Respect the user's explicitly selected approved tooling; if using an MCP alternative, review every data-changing operation.
 
 ## Command Structure
 
@@ -115,7 +126,7 @@ A gws draft and a gws direct-send both show soft breaks (`much lon=` then `ger` 
 
 Two ways to avoid the wrap:
 
-- **Send straight from gws** (`gws gmail +send` / `+reply` with `--cc`/`--to`/`--bcc`), skipping the Gmail Send button entirely. gws transmits the body unwrapped. You lose the in-Gmail review step.
+- **Send straight from gws** (`gws gmail +send` / `+reply` with `--cc`/`--to`/`--bcc`), skipping the Gmail Send button entirely. gws transmits the body unwrapped. Review the exact body and recipient set with a human before direct sending; avoiding wrapping does not waive review.
 - **Build the draft as HTML** (`--html`, using real `<p>...</p>`/`<br>` tags, NOT markdown). An HTML message opens in Gmail's rich-text mode, which doesn't do the plain-text column wrap, so you keep the "review and add Cc in Gmail before sending" workflow without the hard wrap.
 
 There is no clean way to keep composing plain text in Gmail *and* avoid the wrap: the wrap is Gmail's behavior, not gws's.
@@ -332,11 +343,11 @@ gws gmail users messages list --params '{"userId": "me"}' --page-all --page-limi
 
 ## Important Notes
 
-1. **Always use `gws` over MCP tools** for Google Workspace operations
+1. **Use the selected approved tool**; this reference describes `gws` operations
 2. **userId is always "me"** for Gmail operations on the authenticated user
 3. **Use helpers (`+command`) for common tasks** -- they handle encoding, threading, MIME, etc.
 4. **Use raw API for advanced operations** not covered by helpers
-5. **Use `--dry-run`** to validate commands before executing destructive operations
+5. **Use `--dry-run`** to inspect proposed mutations, then obtain human review of the actual request before execution
 6. **Use `--format table`** when output is for human reading
 7. **Pipe JSON to `jq`** for filtering: `gws gmail +triage --format json | jq '.[].subject'`
 8. **Times must be RFC 3339/ISO 8601** for calendar operations (e.g., `2026-06-17T09:00:00-07:00`)
