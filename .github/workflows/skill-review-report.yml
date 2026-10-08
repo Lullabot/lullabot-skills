@@ -1,0 +1,51 @@
+name: Skill advisory report
+
+# Activates only after this file and its trusted scripts reach the default branch.
+# No pull_request_target, PR checkout, submitted artifact, or PR-selected cache.
+on:
+  workflow_run:
+    workflows: ['Skill validation']
+    types: [completed]
+
+permissions: {}
+
+# One reporting authority, serialized across the repository. Before publishing,
+# the script rechecks live PR head/base, canonical run identity/attempt, latest
+# run, and bot-owned sticky metadata. Pending older reports can be superseded.
+concurrency:
+  group: skill-advisory-report-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  report:
+    if: github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      - name: Checkout trusted default-branch event commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install only trusted lockfile dependencies
+        run: npm ci --ignore-scripts
+      - name: Validate provenance and publish combined advisory feedback
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-5-5' }}
+          # Deferred administrator attestation: verify the configured fork-run
+          # approval policy covers the intended outside contributors, THEN set
+          # this variable to true. It is not per-run human approval evidence.
+          # Absent attestation skips privileged fork review; completed success
+          # alone does not prove that the approval policy was configured.
+          SKILL_REVIEW_FORK_APPROVAL_VERIFIED: ${{ vars.SKILL_REVIEW_FORK_APPROVAL_VERIFIED }}
+        run: node scripts/pr-review-report.js

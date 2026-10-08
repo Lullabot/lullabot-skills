@@ -286,7 +286,7 @@ After implementation, collect evidence from the actual repository and PR workflo
 - Inspect the administrator handoff for team creation or verification, qualified membership and write access, assignment exclusions, requested-member notifications, required statuses, and code-owner approval. Mark live checks deferred: GitHub's owner-error report, actual protection settings, notification behavior on a representative PR, and approval from an eligible unassigned member. Keep existing developers team settings unchanged.
 - Open the PR creation screen and verify the Markdown template appears with its submission prompts, including human author self-review before requesting another person's review. Compare every policy row with its enforcement requirement and human review evidence; report unresolved applicability or approval rather than treating CI success as compliance.
 - Inspect representative tool-using and prose-only skills end to end. Confirm review is required before external sharing and MCP data changes; commands outside secure sandboxes require human inspection; data classification and destination eligibility are addressed. Include attachment uploads, external-service writes, destructive repository operations, and dependency installation. Have qualified humans assess code, role-specific content, and the applicable tool-approval evidence.
-- Run the diff whitespace check. If committing implementation, stage the intended changes and run the repository's changelog proposal helper before composing the commit message; verify that substantive skill migrations have appropriate user-facing trailers.
+- Run the diff whitespace check. If committing implementation, stage the intended changes and review each modified skill to write the required user-facing trailers. Main removed the retired GitHub Models proposal helper in PR #44; follow the current manual changelog instructions.
 
 ## Documentation
 
@@ -339,7 +339,7 @@ Add the Anthropic-backed JavaScript review through a separate trusted workflow, 
 
 ## Notes
 
-This document is a requirements plan. It does not generate tasks, execute the CI migration, change repository settings, or approve the resulting implementation. There are no time estimates or task phases.
+The requirements above record the approved planning decisions. Generated tasks, completed execution phases, and validation evidence are recorded below and in the task files. Repository settings and human approval remain outside this implementation.
 
 GitHub capabilities were verified against its [template documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates) and [CODEOWNERS documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners). The spelling tool is [CSpell](https://github.com/streetsidesoftware/cspell).
 
@@ -389,3 +389,132 @@ Team creation, the exact qualified membership and active assignment pool, write 
 - 2026-10-08: Recorded approval of Anthropic's API and a small JavaScript advisory reviewer, accepted direct feedback posting for the submitter, specified trusted fork-review execution and bounded structured reporting, and superseded the local-only API recommendation. Additional semantic review categories remain pending user selection.
 - 2026-10-08: User approved all five proposed advisory areas. Added their evidence criteria, duplicate-purpose and trigger-overlap catalog comparison, quality evaluation, and documentation requirements; resolved the earlier pending scope decision.
 - 2026-10-08: Added the user's per-task subagent policy, skill selection, GPT-6.1 Sol Low/Medium/High routing, and GPT-5.6 Luna Low for truly rote work. Recorded local routing alignment and model-availability checks for future execution; no tasks were generated or dispatched.
+
+## Execution Blueprint
+
+**Validation Gates:** `.ai/strikethroo/config/hooks/POST_PHASE.md`; evidence before phase completion.
+
+### Dependency Diagram
+
+```mermaid
+graph TD
+  T1[Task 001: Deterministic checks] --> T4[Task 004: Anthropic reviewer]
+  T1 --> T5[Task 005: Contributor review contract]
+  T2[Task 002: Operational migration] --> T5
+  T3[Task 003: Remaining migration] --> T5
+  T1 --> T6[Task 006: CI and sticky reporting]
+  T4 --> T6
+  T5 --> T6
+  T1 --> T7[Task 007: Spelling and final baseline]
+  T2 --> T7
+  T3 --> T7
+  T4 --> T7
+  T5 --> T7
+  T6 --> T7
+```
+
+### ✅ Phase 1: Validation foundation and skill migration (completed)
+**Parallel Tasks:**
+- ✔️ Task 001: Build deterministic submission checks (completed)
+- ✔️ Task 002: Migrate operational and code-bearing skills (completed)
+- ✔️ Task 003: Migrate remaining skills and review rubric (completed)
+
+### ✅ Phase 2: Advisory review and contributor contract (completed)
+**Parallel Tasks:**
+- ✔️ Task 004: Implement bounded Anthropic advisory reviewer (depends on: 001; completed)
+- ✔️ Task 005: Document contributor and administrator review contract (depends on: 001, 002, 003; completed)
+
+### ✅ Phase 3: CI and trusted sticky reporting (completed)
+**Parallel Tasks:**
+- ✔️ Task 006: Integrate required CI and trusted sticky reporting (depends on: 001, 004, 005; completed)
+
+### ✅ Phase 4: Spelling baseline and complete evidence (completed)
+**Parallel Tasks:**
+- ✔️ Task 007: Finish spelling baseline and validation evidence (depends on: 001, 002, 003, 004, 005, 006; completed)
+
+### Post-phase Actions
+
+Verify fresh task evidence, update status and phase markers, and commit each completed phase. All implementation tasks require judgment and route to GPT-6.1 Sol High or Medium; the unavailable rote model is not substituted. Push cumulative commits to PR #45 after the full local baseline is green and verify its actual checks. Complete Strikethroo's post-execution and code-review gates and report unavailable live service/admin tests explicitly.
+
+### Execution Summary
+- Total Phases: 4
+- Total Tasks: 7
+
+## Execution Summary
+
+**Status**: ✅ Completed Successfully (implementation and CI; independent review not certified)
+**Completed Date**: 2026-10-08
+**Code Review**: Failed; No reviewer performed a certified review. No reviewer candidate; review gate skipped. codex is excluded as the current harness. claude: Harness exited 0 but did not create the required readiness file with the expected content. stderr: Warning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai Granola, claude.ai Google Drive ⚠ Sandbox disabled: sandbox is enabled but dependencies are missing: bubblewrap (bwrap) not installed · install missing tools (e.g. apt install bubblewrap socat) or see https://code.claude.com/docs/en/sandboxing Commands will run WITHOUT sandboxing. Network and filesystem restrictions will NOT be enforced. stdout: I haven't created the file. Plan mode is active, and it forbids running non-readonly commands. The plan file couldn't be written either, because the Write tool is disabled in this session. I also have no ExitPlanMode tool to request approval with. So the plan is here instead. **Plan** Run this from `/tmp/strikethroo-harness-probe-bZo3Bl` with the Bash tool: ```bash printf 'strikethroo-readiness:06b95061-3c2d-49cb-be6a-fa64f4cc31aa\n' > strikethroo-readiness.txt ``` - `printf` gives exactly one trailing newline. The content is ASCII, so it is also valid UTF-8. - To check it afterwards, run `od -c strikethroo-readiness.txt`. The output should end in `\n` with no extra bytes. - The file will show up as untracked in `git status`. You didn't ask for a commit, so I won't make one. If you approve this or take me out of plan mode, I'll run the command and the check. cursor: Harness executable 'cursor-agent' was not found on PATH. gemini: Harness executable 'gemini' was not found on PATH. copilot: Harness executable 'copilot' was not found on PATH. opencode: Harness executable 'opencode' was not found on PATH.
+
+### Results
+
+All seven tasks completed in four verified and committed phases. Each task used a
+subagent: GPT-6.1 Sol High for tasks 1, 2, 3, 4 and 6; Medium for tasks 5 and 7.
+Workers read PRE_TASK_EXECUTION and relevant project instructions. The migration
+workers applied skill-creator and reviewing-skills; technical labels on other
+tasks did not invent unavailable installed skills. No task was truly rote, so the
+unavailable GPT-5.6 Luna target was not substituted or used.
+
+The repository now has real YAML validation, required dependency and safety
+sections, finite portability checks, spelling, four stable CI jobs, a Markdown PR
+template, prepared separate-code ownership, and all five Anthropic advisory areas
+through one trusted sticky-comment publisher. All 26 existing skills were migrated.
+Only the approved policy summary and selected phrases were published.
+
+Fresh local gates passed: reproducible npm ci --ignore-scripts, 44 Node tests,
+47 selected Python/PHP companion tests, both 26-skill gates, zero spelling issues
+across 88 files, actionlint for every workflow, Strikethroo workspace validation,
+and cumulative diff whitespace. The actual prompt-library parser/page generator
+loaded and rendered all 26 skills in an isolated copy. A mocked pinned-SDK HTTP
+transport also proved the structured request/response path without a network call.
+
+[PR #45](https://github.com/Lullabot/lullabot-skills/pull/45) at `5cedbdd` passed all
+five reported checks: Skill structure, Skill disclosure and portability, Skill
+spelling, Skill tests, and Advisory mechanical authoring review. The Actions test
+job ran on Node 22.23.3 and passed all 44 Node tests and 47 selected companion tests.
+[Validation run](https://github.com/Lullabot/lullabot-skills/actions/runs/37831052929).
+
+Per-skill inspection, exercised commands, and unverified service-dependent cases
+are recorded in the task files and [migration evidence](../../../../scripts/migration-evidence.md).
+These checks do not establish human review, private-data eligibility, live model
+quality, tool approval, or configured organization administration.
+
+### Noteworthy Events
+
+Main's PR #44 retired the GitHub Models changelog proposal helper. Merged main
+before implementation and manually reviewed the staged skill changes to write all
+26 scoped user-facing trailers. The public site's actual YAML loader exposed an
+unknown-tag compatibility gap; a red/green fixture and narrow validator fix now
+reject it while preserving supported string tags.
+
+The review harness was configured read-only instead of using vendored permission
+bypass defaults. That prevented the Claude readiness probe from writing its
+required temporary file. Other external harnesses were unavailable, so the single
+review gate attempt returned continue with a failed, uncertified review. No
+review document or findings were emitted. Findings acted on: none; findings
+ignored: none. This result is not a clean review and the gate was not rerun.
+
+The complete gate JSON line is retained verbatim:
+
+```json
+{"kind":"skipped","reason":"no-reviewer-candidate","detail":"No reviewer candidate; review gate skipped. codex is excluded as the current harness. claude: Harness exited 0 but did not create the required readiness file with the expected content. stderr: Warning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai Granola, claude.ai Google Drive\n\n⚠ Sandbox disabled: sandbox is enabled but dependencies are missing: bubblewrap (bwrap) not installed · install missing tools (e.g. apt install bubblewrap socat) or see https://code.claude.com/docs/en/sandboxing\n  Commands will run WITHOUT sandboxing. Network and filesystem restrictions will NOT be enforced. stdout: I haven't created the file. Plan mode is active, and it forbids running non-readonly commands. The plan file couldn't be written either, because the Write tool is disabled in this session. I also have no ExitPlanMode tool to request approval with. So the plan is here instead.\n\n**Plan**\n\nRun this from `/tmp/strikethroo-harness-probe-bZo3Bl` with the Bash tool:\n\n```bash\nprintf 'strikethroo-readiness:06b95061-3c2d-49cb-be6a-fa64f4cc31aa\\n' > strikethroo-readiness.txt\n```\n\n- `printf` gives exactly one trailing newline. The content is ASCII, so it is also valid UTF-8.\n- To check it afterwards, run `od -c strikethroo-readiness.txt`. The output should end in `\\n` with no extra bytes.\n- The file will show up as untracked in `git status`. You didn't ask for a commit, so I won't make one.\n\nIf you approve this or take me out of plan mode, I'll run the command and the check. cursor: Harness executable 'cursor-agent' was not found on PATH. gemini: Harness executable 'gemini' was not found on PATH. copilot: Harness executable 'copilot' was not found on PATH. opencode: Harness executable 'opencode' was not found on PATH.","action":"continue","codeReview":"Failed; No reviewer performed a certified review. No reviewer candidate; review gate skipped. codex is excluded as the current harness. claude: Harness exited 0 but did not create the required readiness file with the expected content. stderr: Warning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai Granola, claude.ai Google Drive ⚠ Sandbox disabled: sandbox is enabled but dependencies are missing: bubblewrap (bwrap) not installed · install missing tools (e.g. apt install bubblewrap socat) or see https://code.claude.com/docs/en/sandboxing Commands will run WITHOUT sandboxing. Network and filesystem restrictions will NOT be enforced. stdout: I haven't created the file. Plan mode is active, and it forbids running non-readonly commands. The plan file couldn't be written either, because the Write tool is disabled in this session. I also have no ExitPlanMode tool to request approval with. So the plan is here instead. **Plan** Run this from `/tmp/strikethroo-harness-probe-bZo3Bl` with the Bash tool: ```bash printf 'strikethroo-readiness:06b95061-3c2d-49cb-be6a-fa64f4cc31aa\\n' > strikethroo-readiness.txt ``` - `printf` gives exactly one trailing newline. The content is ASCII, so it is also valid UTF-8. - To check it afterwards, run `od -c strikethroo-readiness.txt`. The output should end in `\\n` with no extra bytes. - The file will show up as untracked in `git status`. You didn't ask for a commit, so I won't make one. If you approve this or take me out of plan mode, I'll run the command and the check. cursor: Harness executable 'cursor-agent' was not found on PATH. gemini: Harness executable 'gemini' was not found on PATH. copilot: Harness executable 'copilot' was not found on PATH. opencode: Harness executable 'opencode' was not found on PATH."}
+```
+
+### Necessary follow-ups
+
+- Complete the deferred administrator handoff in README: skill-review team and
+  qualified membership, write access, smaller notification pool, ownership
+  validity, required statuses and code-owner approval.
+- Verify fork workflow approval for intended contributors before setting
+  SKILL_REVIEW_FORK_APPROVAL_VERIFIED. Provision the approved API secret/model and
+  budget. The new trusted reporter only activates after reaching the default
+  branch; live reporting, sticky updates, fork behavior and model quality still
+  require post-merge validation. Private repository settings could not be read
+  with the available token and are unverified, not assumed absent.
+- Verify the PR-template UI after landing on the default branch. Qualified humans
+  must complete the author checklist, inspect code and domain-specific workflows,
+  and assess the applicable private approval evidence before merge/use.
+- Review the local harness configuration and readiness-write/sandbox requirements
+  before a future independent review. This execution produced no certified
+  independent code review. Full site deployment and service-dependent skill
+  workflows remain unverified as detailed in migration evidence.
