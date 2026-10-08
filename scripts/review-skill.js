@@ -18,7 +18,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const { ROOT, parseSimpleYaml, listSkillDirs } = require('./validate-skills.js');
+const { ROOT, parseSimpleYaml, listSkillDirs, splitFrontmatter } = require('./validate-skills.js');
+const { markdownLines } = require('./check-submissions.js');
 
 const RUBRIC_REL = 'reviewing-skills/references/skill-best-practices.md';
 const STALE_DAYS = 30;
@@ -39,19 +40,6 @@ function readFileSafe(filePath) {
   }
 }
 
-// Split a SKILL.md into its YAML frontmatter and the markdown body that
-// follows. Mirrors the delimiter handling in validate-skills.js.
-function splitFrontmatter(raw) {
-  if (!raw.startsWith('---\n')) return { yaml: null, body: raw };
-  const end = raw.indexOf('\n---', 4);
-  if (end === -1) return { yaml: null, body: raw };
-  const yaml = raw.slice(4, end);
-  // Body begins after the closing delimiter line.
-  const afterDelim = raw.indexOf('\n', end + 1);
-  const body = afterDelim === -1 ? '' : raw.slice(afterDelim + 1);
-  return { yaml, body };
-}
-
 function countLines(text) {
   if (!text) return 0;
   return text.replace(/\n$/, '').split('\n').length;
@@ -64,7 +52,7 @@ function localLinks(text) {
   let m;
   while ((m = re.exec(text)) !== null) {
     const target = m[1].trim().split(/\s+/)[0]; // drop optional "title"
-    if (/^(https?:|mailto:|#)/i.test(target)) continue;
+    if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(target)) continue;
     links.push(target);
   }
   return links;
@@ -93,8 +81,8 @@ function isVagueDescription(desc) {
 }
 
 // Review a single skill directory. Returns { name, findings: [{severity, msg}] }.
-function reviewSkill(skillName) {
-  const skillDir = path.join(ROOT, skillName);
+function reviewSkill(skillName, root = ROOT) {
+  const skillDir = path.join(root, skillName);
   const findings = [];
   const add = (severity, msg) => findings.push({ severity, msg });
 
@@ -119,7 +107,8 @@ function reviewSkill(skillName) {
   }
 
   // --- name ---
-  const name = fm.name || '';
+  const name = typeof fm.name === 'string' ? fm.name : '';
+  if (fm.name !== undefined && typeof fm.name !== 'string') add(ISSUE, 'name must be a string (see validate-skills.js).');
   if (name) {
     if (name.length > MAX_NAME_LEN) add(ISSUE, `name is ${name.length} chars (> ${MAX_NAME_LEN}).`);
     if (!/^[a-z0-9-]+$/.test(name)) add(ISSUE, `name "${name}" must be lowercase letters, numbers, and hyphens only.`);
@@ -127,19 +116,36 @@ function reviewSkill(skillName) {
   }
 
   // --- description ---
-  const desc = fm.description || '';
+  const desc = typeof fm.description === 'string' ? fm.description : '';
+  if (fm.description !== undefined && typeof fm.description !== 'string') add(ISSUE, 'description must be a string (see validate-skills.js).');
   if (desc) {
     if (desc.length > MAX_DESC_LEN) add(ISSUE, `description is ${desc.length} chars (> ${MAX_DESC_LEN}).`);
     if (isThirdPersonViolation(desc)) {
       add(ISSUE, 'description should be written in the third person (avoid "I"/"you"/"helps you").');
     }
     if (isVagueDescription(desc)) {
-      add(SUGGEST, 'description looks vague — name the file types, tasks, and triggers so Claude knows when to use it.');
+      add(SUGGEST, 'description looks vague — name the file types, tasks, and triggers so an agent knows when to use it.');
     }
     if (!/\buse when\b|\btriggers?\b|\bwhen the user\b|\bwhen working\b|\bwhen asked\b/i.test(desc)) {
       add(SUGGEST, 'description does not state *when* to use the skill — add trigger conditions ("Use when…").');
     }
   }
+
+  for (const [field, value] of [['name', name], ['description', desc]]) {
+    if (/<\/?[A-Za-z][^>]*>/.test(value)) add(ISSUE, `${field} contains XML tags — remove tags from metadata.`);
+  }
+
+  function checkMissingLinks(text, relative) {
+    for (const target of localLinks(stripCodeFences(text))) {
+      const withoutAnchor = target.split('#')[0];
+      if (!withoutAnchor) continue;
+      let decoded;
+      try { decoded = decodeURIComponent(withoutAnchor); } catch { decoded = withoutAnchor; }
+      const absolute = path.resolve(path.dirname(path.join(skillDir, relative)), decoded);
+      if (!fs.existsSync(absolute)) add(ISSUE, `${relative} links to missing local reference ${target}.`);
+    }
+  }
+  checkMissingLinks(body, 'SKILL.md');
 
   // Naming *style* (gerund vs. noun-phrase) is a judgment call the rubric
   // leaves open — it belongs to the reviewing-skills skill, not this linter.
@@ -155,6 +161,7 @@ function reviewSkill(skillName) {
     const refRaw = readFileSafe(refAbs);
     if (refRaw === null) continue;
 
+    checkMissingLinks(refRaw, refRel);
     const refLines = countLines(refRaw);
     const links = localLinks(refRaw).filter((t) => /\.md(#|$)/i.test(t));
     if (links.length) {
@@ -184,7 +191,7 @@ function safeYaml(yaml) {
 
 // Remove fenced code blocks so prose-level checks don't trip on code.
 function stripCodeFences(text) {
-  return text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+  return markdownLines(text).join('\n').replace(/`[^`]*`/g, '');
 }
 
 function hasTableOfContents(text) {
@@ -249,7 +256,7 @@ function main() {
     targets = listSkillDirs();
   }
 
-  const results = targets.map(reviewSkill);
+  const results = targets.map((name) => reviewSkill(name));
   const stale = checkRubricStaleness();
 
   let issueCount = 0;

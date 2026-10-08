@@ -1,0 +1,20 @@
+{
+  "name": "lullabot-skills",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Deterministic checks and advisory review for the public skill bundle",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "test": "node --test scripts/tests/*.test.js",
+    "validate": "node scripts/validate-skills.js",
+    "check:skills": "node scripts/check-submissions.js",
+    "spellcheck": "cspell --config cspell.json --no-progress"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "0.132.1",
+    "cspell": "10.3.6",
+    "yaml": "2.9.1"
+  }
+}
