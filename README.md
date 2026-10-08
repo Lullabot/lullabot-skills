@@ -81,7 +81,7 @@ Before opening a PR, validate skill structure:
 node scripts/validate-skills.js
 ```
 
-**Before committing, run `scripts/propose-changelog.sh`.** It uses GitHub Models to suggest a `User-Facing-Change:` trailer line for your commit message, which the public site renders as a per-skill changelog entry. Cosmetic / internal commits skip the trailer. See `AGENTS.md` for the full convention.
+**Before committing, review your staged changes and write a `User-Facing-Change:` trailer for substantive skill changes.** Describe the user-observable effect in plain language; the public site renders these trailers as per-skill changelog entries. Cosmetic / internal commits skip the trailer. See `AGENTS.md` for the full convention.
 
 ## Planning repository changes
 
