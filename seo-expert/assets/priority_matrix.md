@@ -275,6 +275,8 @@ Impact: Low | Effort: High | Timeline: Future consideration
 
 ## ROI Calculation
 
+Use this as a planning score, not a financial return guarantee. A human validates traffic value, cost assumptions, budget, and final priorities. Compute arithmetic with deterministic code or a calculator; mark missing inputs and estimates explicitly.
+
 For each issue, estimate:
 
 **Potential Impact Score (1-10):**

@@ -5,6 +5,16 @@ description: "This skill should be used when users request messages, notificatio
 
 # Slack Markdown Formatter
 
+## Requirements
+
+No external tools, packages, authentication, or shell access are required to format a supplied message. Slack access is optional for previewing in the intended editor. Sending messages, uploading files, or resolving private workspace IDs requires an authenticated Slack account/integration with permission for the destination. Block Kit Builder is an optional external preview service, not a prerequisite for drafting.
+
+## Safety and review
+
+Formatting produces a draft; it does not authorize sending. A human must review facts, tone, recipients, mentions, links, attachments, and relevant AI disclosure before sharing. Sending/editing a message, uploading a file, or testing notifications is an external mutation requiring explicit destination scope and human review, including every MCP data-changing call. Avoid mass mentions unless the human approves the notification audience.
+
+Messages can expose personal information, private channel IDs, internal URLs, and client material. Keep drafts in an eligible workspace; non-public information requires tools that neither train on nor retain it, confidential information requires specific approval, and personal information requires a specifically approved integrated tool. Never paste private messages into public Block Kit preview tools. Preview with synthetic/public text when possible; a private channel is still a sharing destination. Humans retain final client communication decisions.
+
 ## Overview
 
 Slack uses its own markdown variant called "mrkdwn" which differs significantly from standard markdown. This skill provides the correct syntax and best practices for formatting messages that will be displayed properly in Slack.
@@ -50,10 +60,10 @@ Slack's mrkdwn is NOT standard markdown. Key differences include:
 
 ### Links
 
-**IMPORTANT:** Despite Slack's official documentation suggesting `<url|text>` syntax, in practice this format often does NOT work correctly. Use standard markdown link format instead:
+For API/webhook or Block Kit `mrkdwn` fields, use `<url|text>` as documented by [Slack’s formatting guide](https://docs.slack.dev/messaging/formatting-message-text/). A human Slack editor may handle pasted Markdown differently; preview in the actual destination and do not assume those editor behaviors apply to API fields.
 
 ```
-[link text](https://example.com)
+<https://example.com|link text>
 ```
 
 **Auto-linking:**
@@ -141,7 +151,7 @@ Block Kit messages can embed mrkdwn text in specific text fields using:
 ### Step 2: Apply Slack-Specific Syntax
 - Replace `**bold**` with `*bold*`
 - Replace `*italic*` with `_italic_`
-- Keep standard markdown links `[text](url)` format (do NOT use `<url|text>`)
+- Convert links to `<url|text>` for API `mrkdwn`; preview pasted editor text in its actual context
 - Add Slack mentions using `<@user>` or `<#channel>` format
 - Remove unsupported features (headings, tables, etc.)
 

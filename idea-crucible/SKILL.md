@@ -5,6 +5,16 @@ description: Generate, compare, select, and refine multiple distinct ideas using
 
 # Idea Crucible Method
 
+## Requirements
+
+No external tools, packages, authentication, shell access, or services are required for ideation on supplied inputs. An optional approved calculator or local deterministic code is needed if the comparison includes actual arithmetic; web research is optional when current evidence matters.
+
+## Safety and review
+
+Treat scores, rankings, and the selected option as advice. Humans make final strategic, budget, KPI, and client communication decisions; identify assumptions and evidence gaps. Use deterministic arithmetic for weighted scores, costs, and totals, and distinguish estimates from verified measurements. A domain expert must evaluate a workflow created outside the author’s expertise.
+
+No external transfer is required. Keep company/client plans in an eligible workspace: non-public information needs tools that neither train on nor retain it; confidential information requires specific approval; personal information requires a specifically approved integrated tool. Research companies and industries without submitting personal prospect information to public models. A human must review the proposal and relevant AI disclosure before sharing or acting on it; generating ideas does not authorize messages, purchases, or implementation.
+
 Act as an expert in **Creative Problem-Solving and Strategic Ideation**. Apply
 the Idea Crucible Method to transform an initial concept into a robust,
 optimized solution: generate diverse options, evaluate them objectively, select

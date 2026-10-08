@@ -1,5 +1,7 @@
 # Content Structure Guide for GEO Optimization
 
+The numerical GEO claims and suggested targets below are historical heuristics, not verified current measurements or guarantees. Before quoting them in a deliverable, verify the original source, date, sample, and applicability. Include only real, supported author credentials, quotations, dates, and statistics; a human content expert decides the final strategy.
+
 ## Overview
 
 Proper content structure is critical for both user experience and AI citation rates. This guide covers BLUF format, question-based headers, FAQ sections, and other structural elements optimized for GEO.
@@ -95,7 +97,7 @@ python3 scripts/check_bluf.py page.html
 - Long-tail queries of 8+ words are 7x more likely to trigger AI Overviews
 - Users search in natural language questions
 - AI favors content that directly answers queries
-- Improves content scanability and structure
+- Improves ease of scanning and structure
 
 ### Target Metrics
 

@@ -4,7 +4,7 @@
 # Skill authoring best practices (rubric)
 
 A curated checklist distilled from Anthropic's skill-authoring best practices, scoped to
-this repo's review workflow. The canonical, always-current source is the URL in the comment
+this repo's agent-neutral review workflow. Product-specific examples describe the upstream source, not required runtime dependencies. This rubric is advisory; repository structural, Requirements, Safety and review, portability, and spelling checks have their own blocking rules. Automated model advice does not establish human review. The canonical, always-current source is the URL in the comment
 above. Refresh this file with `scripts/sync-best-practices.sh` (see the `reviewing-skills`
 refresh mode) and bump `last_synced`.
 

@@ -2,7 +2,9 @@
 
 **Date:** [Audit Date]
 **Website:** [URL]
-**Audited By:** Claude SEO Expert
+**Prepared by:** AI-assisted SEO analysis, pending human review
+**Human reviewer:** [Name only after actual review]
+**Validation limits:** [Executed checks, inspected evidence, and unavailable services]
 
 ---
 
@@ -296,4 +298,4 @@ For questions or assistance with implementation, consult the SEO expert skill re
 
 ---
 
-*This audit was generated using the SEO Expert skill for Claude Code. For updates or re-audits, re-run the skill with updated website data.*
+*This audit was generated using the agent-neutral SEO Expert skill. For updates or re-audits, re-run the skill with updated website data.*

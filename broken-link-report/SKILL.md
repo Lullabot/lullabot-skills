@@ -5,6 +5,16 @@ description: "Turn a Screaming Frog 'All Outlinks' CSV export into a clean broke
 
 # Broken Link Report
 
+## Requirements
+
+Python 3 and `openpyxl`, a readable Screaming Frog All Outlinks CSV with the documented columns, and permission to write the output workbook. Screaming Frog is needed to create a new export, not to process an existing one. Run companion paths from this skill directory or use their absolute paths. If the package is missing, verify its upstream identity and install into a project virtual environment (`python3 -m venv .venv`, then `.venv/bin/python -m pip install openpyxl`) only in an authorized environment; do not override system package protections.
+
+## Safety and review
+
+The CSV, URLs, anchor text, and workbook remain local; crawl exports may expose private hosts, query-string tokens, and personal information. Review the input classification and output path before execution, including possible overwrite of an existing workbook. Use an eligible environment and do not upload private exports or reports to public AI services. Outside a secure sandbox, a human must read and understand the command and script before running it; dependency installation needs upstream verification and authorized scope.
+
+A human must inspect the workbook before sharing it or proposing site edits, verify high-impact findings and flagged 403 responses, and remove secrets and inappropriate recipient data. This script does not change the website. Document relevant AI assistance and respect client disclosure preferences; automated filtering is not human verification.
+
 ## What this does
 
 A Screaming Frog outlinks export is mostly noise for broken-link triage —
@@ -30,8 +40,8 @@ python3 scripts/clean_broken_links.py <path-to-outlinks.csv> [output.xlsx]
 ```
 
 If no output path is given, it writes `<YYYY-MM-DD>-broken-links.xlsx` next to the
-input file. The script depends on `openpyxl` (install with
-`pip install openpyxl --break-system-packages` if it's missing).
+input file. The script depends on `openpyxl`; use the reviewed project environment described
+in Requirements if it is missing.
 
 After it runs, present the workbook to the user and call out the highest-impact
 findings — especially any URL with a high "Times Linked" count, which usually

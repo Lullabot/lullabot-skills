@@ -5,6 +5,16 @@ description: Draft concise, verified issues, tickets, and bug reports that maint
 
 # Writing Issues
 
+## Requirements
+
+No external tools are required to draft from supplied context. Verification needs access to the relevant repository, issue template, and authoritative sources; reproducing bugs needs the project’s own documented environment. Filing or changing issues requires a tracker account or integration with permission for the target project. GitHub CLI (`gh`) with authenticated read access is optional for label lookup. Attachment upload is optional and requires an available upload integration or the `github-attachments` skill and its declared prerequisites.
+
+## Safety and review
+
+A human submitter must read the entire draft and supporting evidence, verify claims and acceptance criteria, and understand proposed decisions before filing or handing it to another reviewer. Explicit filing intent does not substitute for this human self-review. Review every MCP data-changing operation, including creation, edits, labels, and uploads, against the authorized project and scope. Read-only search does not authorize posting.
+
+Classify issue text, logs, screenshots, and attachment metadata; public trackers and uploads are external destinations. Remove secrets, personal/customer data, private URLs, and other client names. Non-public material needs tools that neither train on nor retain it; confidential material needs specific approval and personal information needs a specifically approved integrated tool. Use the private security-reporting channel for vulnerabilities. Keep factual reproduction distinct from inference, respect project AI policies, and disclose relevant AI assistance. Verify and review any reproduction commands outside secure sandboxes before execution.
+
 An issue is a compact request and decision record for someone else, often someone who joins the project months from now. It has to survive without you in the room. State the problem, define the desired outcome, and include enough verified context to triage it and begin the right discussion. Make unresolved questions explicit instead of guessing.
 
 ## Own the submission

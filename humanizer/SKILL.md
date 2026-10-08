@@ -1,17 +1,20 @@
 ---
 name: humanizer
 version: 2.3.0
-description: 'Remove signs of AI-generated writing from text. Use when editing or reviewing text to make it sound more natural and human-written. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, anthropomorphized objects, and chatbot-voice clichés such as "no X, no Y" chains, "sit with that", and "the punchline is".'
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - AskUserQuestion
+description: 'Edit formulaic writing for natural voice and clarity while preserving facts, attribution, and relevant AI-use disclosure. Use when editing or reviewing text for repetitive rhetoric or chatbot phrasing. Based on the comprehensive Wikipedia "Signs of AI writing" guide. Detects and fixes patterns including inflated symbolism, promotional language, superficial -ing analyses, vague attributions, em dash overuse, rule of three, AI vocabulary words, negative parallelisms, excessive conjunctive phrases, and conversational tells like emphatic "real", announcing the rhetorical move, anthropomorphized objects, and chatbot-voice clichés such as "no X, no Y" chains, "sit with that", and "the punchline is".'
 ---
 
 # Humanizer: Remove AI Writing Patterns
+
+## Requirements
+
+No external tools, packages, authentication, shell access, or services are required for editing supplied text. The linked cliché highlighter is optional and is an external website; use it only with eligible public text. Local search or editing tools may help with files, but no particular agent tool names are required.
+
+## Safety and review
+
+Editing improves readability and voice; it must not conceal relevant AI use, evade required disclosure, or promise to defeat detection. Preserve attribution, meaningful uncertainty, and authorship disclosures. Do not invent personal experiences, feelings, quotations, sources, or factual details to make text sound human; examples illustrate style only and require evidence when applied to real work.
+
+No external transfer is required. Keep drafts in an eligible workspace: non-public data requires a tool that neither trains on nor retains it, confidential data requires specific approval, and personal information requires a specifically approved tool integrated where it is stored. Do not paste private text into the linked public highlighter. A human author must verify facts, voice, originality, and relevant disclosures before sharing or publishing. Humans make editorial and final delivery decisions; sales/marketing content must not be substantially AI-created except rare fully disclosed cases.
 
 You are a writing editor that identifies and removes signs of AI-generated text to make writing sound more natural and human. This guide is based on Wikipedia's "Signs of AI writing" page, maintained by WikiProject AI Cleanup.
 
@@ -41,17 +44,17 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ### How to add voice:
 
-**Have opinions.** Don't just report facts - react to them. "I genuinely don't know how to feel about this" is more human than neutrally listing pros and cons.
+**Preserve the author’s opinions.** Use views the author actually supplied; do not manufacture beliefs or personal experiences. "I genuinely don't know how to feel about this" is more human than neutrally listing pros and cons.
 
 **Vary your rhythm.** Short punchy sentences. Then longer ones that take their time getting where they're going. Mix it up.
 
 **Acknowledge complexity.** Real humans have mixed feelings. "This is impressive but also kind of unsettling" beats "This is impressive."
 
-**Use "I" when it fits.** First person isn't unprofessional - it's honest. "I keep coming back to..." or "Here's what gets me..." signals a real person thinking.
+**Use "I" when the author’s supplied perspective supports it.** First person must accurately represent the author. "I keep coming back to..." or "Here's what gets me..." signals a real person thinking.
 
 **Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
 
-**Be specific about feelings.** Not "this is concerning" but "there's something unsettling about agents churning away at 3am while nobody's watching."
+**Be specific about supplied feelings.** Not "this is concerning" but "there's something unsettling about agents churning away at 3am while nobody's watching."
 
 ### Before (clean but soulless):
 > The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
@@ -61,428 +64,9 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-## CONTENT PATTERNS
+## Writing patterns
 
-### 1. Undue Emphasis on Significance, Legacy, and Broader Trends
-
-**Words to watch:** stands/serves as, is a testament/reminder, a vital/significant/crucial/pivotal/key role/moment, underscores/highlights its importance/significance, reflects broader, symbolizing its ongoing/enduring/lasting, contributing to the, setting the stage for, marking/shaping the, represents/marks a shift, key turning point, evolving landscape, focal point, indelible mark, deeply rooted
-
-**Problem:** LLM writing puffs up importance by adding statements about how arbitrary aspects represent or contribute to a broader topic.
-
-**Before:**
-> The Statistical Institute of Catalonia was officially established in 1989, marking a pivotal moment in the evolution of regional statistics in Spain. This initiative was part of a broader movement across Spain to decentralize administrative functions and enhance regional governance.
-
-**After:**
-> The Statistical Institute of Catalonia was established in 1989 to collect and publish regional statistics independently from Spain's national statistics office.
-
----
-
-### 2. Undue Emphasis on Notability and Media Coverage
-
-**Words to watch:** independent coverage, local/regional/national media outlets, written by a leading expert, active social media presence
-
-**Problem:** LLMs hit readers over the head with claims of notability, often listing sources without context.
-
-**Before:**
-> Her views have been cited in The New York Times, BBC, Financial Times, and The Hindu. She maintains an active social media presence with over 500,000 followers.
-
-**After:**
-> In a 2024 New York Times interview, she argued that AI regulation should focus on outcomes rather than methods.
-
----
-
-### 3. Superficial Analyses with -ing Endings
-
-**Words to watch:** highlighting/underscoring/emphasizing..., ensuring..., reflecting/symbolizing..., contributing to..., cultivating/fostering..., encompassing..., showcasing...
-
-**Problem:** AI chatbots tack present participle ("-ing") phrases onto sentences to add fake depth.
-
-**Before:**
-> The temple's color palette of blue, green, and gold resonates with the region's natural beauty, symbolizing Texas bluebonnets, the Gulf of Mexico, and the diverse Texan landscapes, reflecting the community's deep connection to the land.
-
-**After:**
-> The temple uses blue, green, and gold colors. The architect said these were chosen to reference local bluebonnets and the Gulf coast.
-
----
-
-### 4. Promotional and Advertisement-like Language
-
-**Words to watch:** boasts a, vibrant, rich (figurative), profound, enhancing its, showcasing, exemplifies, commitment to, natural beauty, nestled, in the heart of, groundbreaking (figurative), renowned, breathtaking, must-visit, stunning
-
-**Problem:** LLMs have serious problems keeping a neutral tone, especially for "cultural heritage" topics.
-
-**Before:**
-> Nestled within the breathtaking region of Gonder in Ethiopia, Alamata Raya Kobo stands as a vibrant town with a rich cultural heritage and stunning natural beauty.
-
-**After:**
-> Alamata Raya Kobo is a town in the Gonder region of Ethiopia, known for its weekly market and 18th-century church.
-
----
-
-### 5. Vague Attributions and Weasel Words
-
-**Words to watch:** Industry reports, Observers have cited, Experts argue, Some critics argue, several sources/publications (when few cited)
-
-**Problem:** AI chatbots attribute opinions to vague authorities without specific sources.
-
-**Before:**
-> Due to its unique characteristics, the Haolai River is of interest to researchers and conservationists. Experts believe it plays a crucial role in the regional ecosystem.
-
-**After:**
-> The Haolai River supports several endemic fish species, according to a 2019 survey by the Chinese Academy of Sciences.
-
----
-
-### 6. Outline-like "Challenges and Future Prospects" Sections
-
-**Words to watch:** Despite its... faces several challenges..., Despite these challenges, Challenges and Legacy, Future Outlook
-
-**Problem:** Many LLM-generated articles include formulaic "Challenges" sections.
-
-**Before:**
-> Despite its industrial prosperity, Korattur faces challenges typical of urban areas, including traffic congestion and water scarcity. Despite these challenges, with its strategic location and ongoing initiatives, Korattur continues to thrive as an integral part of Chennai's growth.
-
-**After:**
-> Traffic congestion increased after 2015 when three new IT parks opened. The municipal corporation began a stormwater drainage project in 2022 to address recurring floods.
-
----
-
-## LANGUAGE AND GRAMMAR PATTERNS
-
-### 7. Overused "AI Vocabulary" Words
-
-**High-frequency AI words:** Additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract noun), pivotal, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
-
-**Problem:** These words appear far more frequently in post-2023 text. They often co-occur.
-
-**Before:**
-> Additionally, a distinctive feature of Somali cuisine is the incorporation of camel meat. An enduring testament to Italian colonial influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes have integrated into the traditional diet.
-
-**After:**
-> Somali cuisine also includes camel meat, which is considered a delicacy. Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
-
----
-
-### 8. Avoidance of "is"/"are" (Copula Avoidance)
-
-**Words to watch:** serves as/stands as/marks/represents [a], boasts/features/offers [a]
-
-**Problem:** LLMs substitute elaborate constructions for simple copulas.
-
-**Before:**
-> Gallery 825 serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces and boasts over 3,000 square feet.
-
-**After:**
-> Gallery 825 is LAAA's exhibition space for contemporary art. The gallery has four rooms totaling 3,000 square feet.
-
----
-
-### 9. Negative Parallelisms
-
-**Problem:** Constructions like "Not only...but..." or "It's not just about..., it's..." are overused.
-
-**Before:**
-> It's not just about the beat riding under the vocals; it's part of the aggression and atmosphere. It's not merely a song, it's a statement.
-
-**After:**
-> The heavy beat adds to the aggressive tone.
-
----
-
-### 10. Rule of Three Overuse
-
-**Problem:** LLMs force ideas into groups of three to appear comprehensive.
-
-**Before:**
-> The event features keynote sessions, panel discussions, and networking opportunities. Attendees can expect innovation, inspiration, and industry insights.
-
-**After:**
-> The event includes talks and panels. There's also time for informal networking between sessions.
-
----
-
-### 11. Elegant Variation (Synonym Cycling)
-
-**Problem:** AI has repetition-penalty code causing excessive synonym substitution.
-
-**Before:**
-> The protagonist faces many challenges. The main character must overcome obstacles. The central figure eventually triumphs. The hero returns home.
-
-**After:**
-> The protagonist faces many challenges but eventually triumphs and returns home.
-
----
-
-### 12. False Ranges
-
-**Problem:** LLMs use "from X to Y" constructions where X and Y aren't on a meaningful scale.
-
-**Before:**
-> Our journey through the universe has taken us from the singularity of the Big Bang to the grand cosmic web, from the birth and death of stars to the enigmatic dance of dark matter.
-
-**After:**
-> The book covers the Big Bang, star formation, and current theories about dark matter.
-
----
-
-## STYLE PATTERNS
-
-### 13. Em Dash Overuse (HIGH PRIORITY)
-
-**IMPORTANT: This is one of the most persistent AI tells. Every em dash (—) in the output must be consciously justified or replaced.** Most of the time, a comma, period, colon, or parentheses works better. Em dashes should be rare in the final output. More than one in a short message usually means AI artifacts are still in there.
-
-**Problem:** LLMs default to em dashes constantly, using them for asides, lists, emphasis, parentheticals, and clause separation. Humans use them sparingly. A text with 3+ em dashes in a few paragraphs reads as AI-generated.
-
-**Rule:** Replace every em dash with the simplest alternative:
-- Aside or parenthetical → comma or parentheses
-- Emphasis or contrast → period (start a new sentence)
-- List intro → colon
-- Only keep an em dash if removing it makes the sentence genuinely worse AND no other punctuation works
-
-**Before:**
-> The term is primarily promoted by Dutch institutions—not by the people themselves. You don't say "Netherlands, Europe" as an address—yet this mislabeling continues—even in official documents.
-
-**After:**
-> The term is primarily promoted by Dutch institutions, not by the people themselves. You don't say "Netherlands, Europe" as an address, yet this mislabeling continues in official documents.
-
-**More examples:**
-
-> She's been moving fast — 10-15 pages a day — and the reviewer suggested...
-
-Rewrite as:
-> She's been moving fast (10-15 pages a day), and the reviewer suggested...
-
-> The launch slipped by about a month — the old CMS is being retired.
-
-Rewrite as:
-> The launch slipped by about a month. The old CMS is being retired.
-
----
-
-### 14. Overuse of Boldface
-
-**Problem:** AI chatbots emphasize phrases in boldface mechanically.
-
-**Before:**
-> It blends **OKRs (Objectives and Key Results)**, **KPIs (Key Performance Indicators)**, and visual strategy tools such as the **Business Model Canvas (BMC)** and **Balanced Scorecard (BSC)**.
-
-**After:**
-> It blends OKRs, KPIs, and visual strategy tools like the Business Model Canvas and Balanced Scorecard.
-
----
-
-### 15. Inline-Header Vertical Lists
-
-**Problem:** AI outputs lists where items start with bolded headers followed by colons.
-
-**Before:**
-> - **User Experience:** The user experience has been significantly improved with a new interface.
-> - **Performance:** Performance has been enhanced through optimized algorithms.
-> - **Security:** Security has been strengthened with end-to-end encryption.
-
-**After:**
-> The update improves the interface, speeds up load times through optimized algorithms, and adds end-to-end encryption.
-
----
-
-### 16. Title Case in Headings
-
-**Problem:** AI chatbots capitalize all main words in headings.
-
-**Before:**
-> ## Strategic Negotiations And Global Partnerships
-
-**After:**
-> ## Strategic negotiations and global partnerships
-
----
-
-### 17. Emojis
-
-**Problem:** AI chatbots often decorate headings or bullet points with emojis.
-
-**Before:**
-> 🚀 **Launch Phase:** The product launches in Q3
-> 💡 **Key Insight:** Users prefer simplicity
-> ✅ **Next Steps:** Schedule follow-up meeting
-
-**After:**
-> The product launches in Q3. User research showed a preference for simplicity. Next step: schedule a follow-up meeting.
-
----
-
-### 18. Curly Quotation Marks
-
-**Problem:** ChatGPT uses curly quotes ("...") instead of straight quotes ("...").
-
-**Before:**
-> He said "the project is on track" but others disagreed.
-
-**After:**
-> He said "the project is on track" but others disagreed.
-
----
-
-## COMMUNICATION PATTERNS
-
-### 19. Collaborative Communication Artifacts
-
-**Words to watch:** I hope this helps, Of course!, Certainly!, You're absolutely right!, Would you like..., let me know, here is a...
-
-**Problem:** Text meant as chatbot correspondence gets pasted as content.
-
-**Before:**
-> Here is an overview of the French Revolution. I hope this helps! Let me know if you'd like me to expand on any section.
-
-**After:**
-> The French Revolution began in 1789 when financial crisis and food shortages led to widespread unrest.
-
----
-
-### 20. Knowledge-Cutoff Disclaimers
-
-**Words to watch:** as of [date], Up to my last training update, While specific details are limited/scarce..., based on available information...
-
-**Problem:** AI disclaimers about incomplete information get left in text.
-
-**Before:**
-> While specific details about the company's founding are not extensively documented in readily available sources, it appears to have been established sometime in the 1990s.
-
-**After:**
-> The company was founded in 1994, according to its registration documents.
-
----
-
-### 21. Sycophantic/Servile Tone
-
-**Problem:** Overly positive, people-pleasing language.
-
-**Before:**
-> Great question! You're absolutely right that this is a complex topic. That's an excellent point about the economic factors.
-
-**After:**
-> The economic factors you mentioned are relevant here.
-
----
-
-## FILLER AND HEDGING
-
-### 22. Filler Phrases
-
-**Before → After:**
-- "In order to achieve this goal" → "To achieve this"
-- "Due to the fact that it was raining" → "Because it was raining"
-- "At this point in time" → "Now"
-- "In the event that you need help" → "If you need help"
-- "The system has the ability to process" → "The system can process"
-- "It is important to note that the data shows" → "The data shows"
-
----
-
-### 23. Excessive Hedging
-
-**Problem:** Over-qualifying statements.
-
-**Before:**
-> It could potentially possibly be argued that the policy might have some effect on outcomes.
-
-**After:**
-> The policy may affect outcomes.
-
----
-
-### 24. Generic Positive Conclusions
-
-**Problem:** Vague upbeat endings.
-
-**Before:**
-> The future looks bright for the company. Exciting times lie ahead as they continue their journey toward excellence. This represents a major step in the right direction.
-
-**After:**
-> The company plans to open two more locations next year.
-
----
-
-## CONVERSATIONAL AND ARGUMENT PATTERNS
-
-These show up in chat replies, code reviews, PR comments, and Slack, not just articles. They're the tells that survive even after the "Wikipedia-slop" patterns above are gone.
-
-### 25. Emphatic "real" (and other empty intensifiers)
-
-**Words to watch:** a real bug, the real problem, real value, genuinely, actually, truly, the thing that really matters
-
-**Problem:** "Real" gets bolted onto a noun to manufacture stakes. The noun is almost always stronger alone. Same for "genuinely," "actually," and "truly" used as flavor rather than contrast.
-
-**Before:**
-> The nano-banana one caught a real bug a linter never could.
-> This is a genuinely useful pattern that actually solves the problem.
-
-**After:**
-> The nano-banana one caught a bug a linter never could.
-> This pattern solves the problem.
-
-Keep the intensifier only when it draws a true contrast ("not a styling nit, a logic bug").
-
-### 26. Announcing the rhetorical move
-
-**Words to watch:** One honest caveat:, The thing I'd push back on:, Here's what gets me:, To be fair:, I'll be honest:, What's interesting is:, The key insight is:, that's the X doing the thing Y can't
-
-**Problem:** Labeling your move before making it is throat-clearing. Just make the point. State the caveat as a caveat; state the disagreement as the disagreement. The meta-framing reads as performance, not thought.
-
-**Before:**
-> One honest caveat on encouraging local use: opt-in tools get forgotten.
-> The thing I'd push back on gently: "run it locally" is really two decisions.
-
-**After:**
-> On encouraging local use: opt-in tools get forgotten.
-> "Run it locally" feels like one decision but it's really two.
-
-Note the related "that's the X doing the thing Y can't" construction. It restates a point you already made in a self-congratulatory frame. Cut it and let the example carry it.
-
-### 27. Cute metaphors and anthropomorphized objects
-
-**Words to watch:** wants to live in, they want opposite homes, the natural home for, the obvious citizen, X is happiest when, lives where it belongs, earning its keep
-
-**Problem:** Giving tools, files, or code human desires ("the script wants to run in CI," "these two want opposite homes") is a stylistic tic that trades precision for charm. Say what's actually true: it's cheaper, it's faster, it fits better.
-
-**Before:**
-> There are two tools and they want opposite homes.
-> The deterministic script is the obvious CI citizen.
-
-**After:**
-> There are two tools, and they split cleanly.
-> The deterministic script belongs in CI: it's cheap and produces the same result every time.
-
-### 28. Chatbot-voice clichés
-
-**Words to watch:** No X, no Y, no Z; Didn't flinch, didn't blink; That's the whole point/game/thing; X is the entire point/game/business model; The entire pitch is; Don't call it X, call it Y; Sit with that; You already know the answer; The improvement is real, and it's not subtle; The punchline is; That loss is worth naming; That's not nothing
-
-**Problem:** A dozen constructions show up so often in chat replies that they read as a signature. Most are closing-line tics: the model has finished the substance and reaches for a beat of manufactured gravity. Several also break the rules above (the "no X, no Y" chain is the rule of three wearing a negation; "the improvement is real" is the emphatic "real" from #25). They cluster, so finding one usually means finding four.
-
-**The twelve, and what to do instead:**
-
-- **"No X, no Y, no Z"** chains. Say what the thing does. "No signups, no downloads, no hassle" becomes "Paste your text and go."
-- **"Didn't flinch, didn't blink, didn't reach for the red pen."** Same chain with a negated verb. Keep one clause, drop the rhythm.
-- **"That's the whole point / the whole game / the whole thing."** Almost always deletable. If the point needs stating, state it.
-- **"X is the entire point / the entire business model."** Flipped twin of the above, including "The entire pitch is one sentence." Cut "entire."
-- **"Don't call it a rewrite. Call it a rescue."** The negate-then-restate. Just use the second word.
-- **"Sit with that."** Also "sit with the discomfort," "sit with it for a moment." Instructing the reader how to feel. Delete.
-- **"You already know the answer."** Flattery dressed as insight. If they know, don't say it. If they don't, say the thing.
-- **"The improvement is real, and it's not subtle."** See #25. "The improvement is real" adds nothing to "it improved."
-- **"The punchline is..."** Also "The punchline:" and "The punchline?" A close cousin of #26, announcing the move before making it. Deliver the line.
-- **"That loss is worth naming."** Therapist voice. Name it or don't.
-- **"That's not nothing."** Also "which is not nothing." A hedge pretending to be a concession. Give the actual size.
-- **Stacking any of the above.** Two in one paragraph is a tell even when each is individually defensible.
-
-**Before:**
-> No meetings, no status reports, no overhead. Don't call it a process change, call it a reset. The time savings are real, and they're not subtle. Sit with that for a moment. The punchline is that nobody asked for it. That's not nothing.
-
-**After:**
-> The team dropped the weekly status meeting and the written report that went with it. That's about three hours a week back, and nobody has asked for either one since.
-
-**How to check:** Simon Willison's [LLM cliché highlighter](https://tools.simonwillison.net/llm-cliche-highlighter) flags all twelve in pasted text or at a URL. Useful as a second pass once the patterns above are handled.
-
----
+Before editing, read [references/writing-patterns.md](references/writing-patterns.md) for the 28 pattern definitions and concrete before/after examples. Focus on patterns the text actually exhibits; avoid mechanically changing every sentence. The examples are stylistic illustrations and do not authorize inventing facts or removing disclosures.
 
 ## Process
 
@@ -496,7 +80,7 @@ Note the related "that's the X doing the thing Y can't" construction. It restate
    - Uses specific details over vague claims
    - Maintains appropriate tone for context
    - Uses simple constructions (is/are/has) where appropriate
-6. Present the humanized version
+6. Present the revision with any unresolved factual gaps and preserved disclosure. Do not use the stylistic pass as evidence of human authorship.
 
 ## Output Format
 
@@ -522,7 +106,7 @@ Provide:
 - Removed "It's not just...it's..." (negative parallelism)
 - Removed "Industry experts believe" (vague attribution)
 - Removed "pivotal role" and "evolving landscape" (AI vocabulary)
-- Added specific features and concrete feedback
+- Used illustrative features and feedback; in real work, include these only when supplied or verified
 
 ---
 
