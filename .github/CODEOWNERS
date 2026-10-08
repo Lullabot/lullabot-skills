@@ -1,0 +1,15 @@
+# Prepared ownership: team creation, qualified membership, repository write access,
+# notification routing, and required code-owner approval are deferred admin work.
+# Ordinary public skill Markdown is intentionally not developer-owned.
+# Extension-only patterns match separate code at any depth, including installed tooling.
+*.js @Lullabot/skill-review
+*.cjs @Lullabot/skill-review
+*.mjs @Lullabot/skill-review
+*.py @Lullabot/skill-review
+*.php @Lullabot/skill-review
+*.sh @Lullabot/skill-review
+*.bash @Lullabot/skill-review
+
+# Workflow changes and ownership changes require the same qualified review.
+/.github/workflows/ @Lullabot/skill-review
+/.github/CODEOWNERS @Lullabot/skill-review

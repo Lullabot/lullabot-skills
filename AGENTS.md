@@ -4,9 +4,9 @@ Conventions for any AI agent (Claude Code, Cursor, Copilot Chat, etc.) editing t
 
 ## What this repo is
 
-A bundle of Claude Code skills published to two surfaces:
+A bundle of agent-neutral skills published to two surfaces:
 
-1. **Direct install:** `git clone https://github.com/Lullabot/lullabot-skills.git .claude/skills` — every skill in this repo immediately becomes available in Claude Code.
+1. **Direct install:** `git clone https://github.com/Lullabot/lullabot-skills.git .claude/skills` — this Claude Code installation example makes each public skill available in that agent; the skill instructions use declared tools independently of the agent.
 2. **Public site:** [Lullabot/prompt_library](https://github.com/Lullabot/prompt_library) consumes this repo as a git submodule and renders each skill as a browsable page at `https://lullabot.github.io/prompt_library/`. Pushes to `main` here trigger an automatic submodule bump there via `repository_dispatch`.
 
 Edits ship to both surfaces as soon as they hit `main`. Treat every commit as a release.
@@ -15,7 +15,7 @@ Edits ship to both surfaces as soon as they hit `main`. Treat every commit as a 
 
 Each skill folder must contain:
 
-- `SKILL.md` — the Claude Code skill definition. Frontmatter must declare `name` and `description`. Both fields must be on a single line each (multi-line YAML breaks the prompt-library generator).
+- `SKILL.md` — the agent-neutral skill definition. Frontmatter must declare `name` and `description`. Both fields must be on a single line each (multi-line YAML breaks the prompt-library generator).
 - `meta.yml` — prompt-library metadata: `title`, `discipline` (one of `development`, `content-strategy`, `design`, `project-management`, `quality-assurance`, `sales-marketing`), `date`, optional `tags`, optional manual `version` / `lastUpdated` / `changelog`.
 
 Companion files (`scripts/`, `references/`, `assets/`, etc.) live alongside `SKILL.md` and are copied to the public site verbatim.
@@ -76,31 +76,79 @@ When in doubt, ask whether the change affects what users can do with the skill o
 
 ## Validating changes locally before pushing
 
-Validate the skill bundle structure:
+Use Node.js 22.18 or later and the lockfile-pinned dependencies:
 
 ```bash
-node scripts/validate-skills.js
+npm ci
+npm run validate
+npm run check:skills
+npm run spellcheck
 ```
 
-This checks that each top-level skill directory has `SKILL.md` and `meta.yml`, that `SKILL.md` declares `name` and `description`, that the declared `name` matches the directory name, and that `meta.yml` has valid prompt-library metadata.
+Run `npm test` for the Node.js checker fixtures and meaningful companion behavior
+tests for executable changes. The structure validator checks every public
+skill's required files, real YAML metadata, matching name, and single-line name
+and description. Submission checks require substantive `## Requirements` and
+`## Safety and review` sections and enforce finite known portability rules.
+Resolve companions from the loaded skill location, not an agent-specific runtime
+path. Preserve names, purposes and triggers while migrating; do not grandfather
+existing violations. Structure, disclosure/portability and spelling checks do not
+execute companions. Separate read-only CI tests use synthetic inputs and standard
+Python/PHP tooling to exercise selected htmx, Tugboat, Drupal cleanup, SEO and
+crawler behavior without live services or installing skill dependencies. This is
+bounded behavior coverage, not full workflow verification. See [README.md](README.md#contributing) for the complete
+contributor and deferred administrator contract.
 
-## Skill authoring best practices
+CSpell checks public prose, metadata and companion documentation, including code
+fences, using [cspell.json](cspell.json). Fix real errors and review additions to
+[cspell-words.txt](cspell-words.txt); do not use broad spelling exclusions. Hidden
+tooling and the pinned upstream rubric are excluded from public submission scope.
 
-Separate from the validator above (which is a **hard gate**), this repo carries an
-**advisory** layer that surfaces Anthropic's skill-authoring best practices. It is
-non-blocking by design — it suggests, it never fails a commit.
+## Authoring advice and human review
 
-- **Rubric:** [`reviewing-skills/references/skill-best-practices.md`](reviewing-skills/references/skill-best-practices.md) — a vendored, version-pinned copy of the [upstream best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
-- **Quick check (run before adding or changing a skill):**
+Run `node scripts/review-skill.js <skill-dir>` before changing a skill, or omit the
+argument to review the public bundle. It always exits zero. The
+[reviewing-skills rubric](reviewing-skills/references/skill-best-practices.md) and
+local `reviewing-skills` judgment remain advisory. Use
+`scripts/sync-best-practices.sh` to inspect rubric age and reachability before a
+reviewed refresh.
 
-  ```bash
-  node scripts/review-skill.js <skill-dir>   # or omit the arg to review every skill
-  ```
+The trusted advisory reporter combines mechanical findings with an optional
+Anthropic review of duplicate purpose and trigger overlap, safety consistency,
+requirements completeness, semantic portability, and authoring quality. PR data
+is untrusted: never execute submitted companions or load PR-modified reviewer
+code, prompts, dependencies, or policy as trusted instructions. Reports and model
+errors are advisory, identify coverage limits, and cannot certify policy
+compliance. The `workflow_run` reporter activates only after its workflow reaches
+the default branch; fork-run approval does not grant that run secrets. Fork
+advisory reporting requires the repository variable
+`SKILL_REVIEW_FORK_APPROVAL_VERIFIED=true`, set only after an administrator verifies
+the approval policy for intended outside contributors. A completed run alone does
+not establish that policy; without this attestation the reporter declines fork
+advisory review.
 
-  Reports mechanical findings (body length, `name`/`description` rules, Windows-style paths, nested references, missing tables of contents) as suggestions/issues and **always exits 0**.
-- **Deeper review:** the `reviewing-skills` skill adds the judgment the script can't — description specificity, conciseness, progressive disclosure, concrete examples — and produces a prioritized report. It triggers when you're authoring or reviewing a skill in Claude Code.
-- **CI:** the `.github/workflows/skill-review.yml` workflow runs `scripts/review-skill.js` automatically on any PR that touches a skill and posts the findings as a single sticky comment. It is advisory and never sets a failing status. The deeper `reviewing-skills` pass stays local — CI only runs the deterministic checker. (PRs from forks get a read-only token, so the comment is skipped for them.)
-- **Monthly sync:** the rubric carries a `last_synced` date. `scripts/review-skill.js` warns once it's >30 days old; run `scripts/sync-best-practices.sh` (reports age + URL reachability), then ask the `reviewing-skills` skill to run its refresh mode (WebFetches the doc, proposes rubric edits, bumps `last_synced`).
+Review the complete skill and companions before requesting human review. Keep
+private information and raw private policy out of the repository; only the
+approved public policy summary and selected short phrases may be published.
+Require human review at external-sharing transitions, before data-changing MCP
+operations, and before commands outside secure sandboxes. Verify data eligibility
+and tool approval rather than assuming them. Qualified code and domain review,
+role-specific obligations, and applicable disclosures remain human work; passing
+checks or author declarations do not prove compliance.
+
+Separate code files, workflows and CODEOWNERS are assigned to the planned
+`@Lullabot/skill-review` team. Ordinary public skill Markdown is not developer-owned;
+embedded commands and code examples need manual understanding and review. Team
+creation, membership, notification routing, write permissions, merge enforcement,
+fork approval settings, and API/model secret and budget setup are deferred. Do not
+claim those controls are active until an administrator verifies them. The exact
+statuses to require are `Skill structure`, `Skill disclosure and portability`,
+`Skill spelling`, and `Skill tests`.
+
+Installed Strikethroo tooling remains outside public migration. Before host
+execution, inspect its ignored local configuration and permission defaults,
+including bypass modes and sandbox assumptions. Do not treat vendored settings as
+policy approval or enable unattended privileged host execution.
 
 If the prompt_library checkout is available as a sibling directory, you can preview the rendered page:
 
