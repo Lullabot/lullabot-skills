@@ -12,7 +12,7 @@ PAGES_CATEGORY_ROW = [
     "Page information (pulled and provided)", "", "", "", "", "",
     "Review criteria", "", "", "", "",
     "Decisions & comments", "", "",
-    "Responsbilities", "",
+    "Responsibilities", "",
     "For Lullabot",
 ]
 
@@ -41,7 +41,7 @@ FILES_CATEGORY_ROW = [
     "File information (pulled and provided)", "", "", "", "", "", "", "",
     "Review criteria", "", "", "", "",
     "Decisions & comments", "", "",
-    "Responsbilities", "",
+    "Responsibilities", "",
     "For Lullabot",
 ]
 

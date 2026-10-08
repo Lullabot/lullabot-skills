@@ -5,6 +5,19 @@ description: "This skill should be used when users need help with htmx developme
 
 # htmx Expert
 
+## Requirements
+
+For guidance, source read/edit access and a browser are sufficient. Running an application needs htmx and its project's backend, HTTP server, and dependency manager; Flask examples require Flask only if used. The bundled development server needs Python 3 and uses only its standard library. Extension loading needs the selected extension and network access unless served locally. No authentication or MCP server is needed for the local prototype.
+
+Resolve `SKILL_DIR` to the absolute directory containing the loaded `SKILL.md`, using the skill location supplied by the agent or locating this file. Set it explicitly (for example, `SKILL_DIR="/path/to/installed/htmx-expert"`); do not derive it from the project working directory. Run project-relative commands from the working project and use `"$SKILL_DIR/..."` for companions.
+
+## Safety and review
+
+Review generated server code and shell commands before execution outside a verified secure sandbox. Serve only a dedicated prototype directory with public/synthetic fixtures on loopback; the helper is a development server, not a production deployment. Browser requests can mutate the backend: test POST/PUT/PATCH/DELETE only on authorized disposable data, retaining server-side authorization, escaping, and CSRF validation. `hx-confirm` is a user prompt, not authorization. Keep request origins restricted and script processing disabled unless a reviewed feature needs them. History snapshots and logs may contain personal data; disable history caching on sensitive views and avoid shipping debug logging. A human reviews accessibility, security behavior, examples, and any deployment or sharing destination before delivery.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
 This skill provides comprehensive guidance for htmx development, the library that extends HTML to access modern browser features directly without JavaScript.
 
 ## Core Philosophy
@@ -270,9 +283,9 @@ htmx.config.timeout = 0; // Request timeout (0 = none)
 htmx.config.historyCacheSize = 10;
 htmx.config.globalViewTransitions = false;
 htmx.config.scrollBehavior = 'instant'; // or 'smooth', 'auto'
-htmx.config.selfRequestsOnly = false;
-htmx.config.allowScriptTags = true;
-htmx.config.allowEval = true;
+htmx.config.selfRequestsOnly = true;
+htmx.config.allowScriptTags = false;
+htmx.config.allowEval = false; // Enable only for reviewed features that require evaluation
 ```
 
 Or via meta tag:
@@ -365,7 +378,7 @@ htmx will NOT work when opening HTML files directly from the filesystem (`file:/
 
 ```bash
 # Simple Python server (recommended for development)
-python3 -m http.server 8000
+python3 -m http.server 8000 --bind 127.0.0.1 --directory ./prototype
 
 # Or create a custom server with API endpoints
 python3 server.py
@@ -377,140 +390,17 @@ For htmx examples and prototypes, create a simple Python server that:
 1. Serves static files (HTML, CSS, JS)
 2. Provides API endpoints that return HTML fragments
 
-```python
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+Run the bundled companion from the working project after code/command review:
 
-class HtmxHandler(SimpleHTTPRequestHandler):
-    def do_GET(self):
-        path = urlparse(self.path).path
-
-        if path.startswith("/api/"):
-            # Return HTML fragment
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html")
-            self.end_headers()
-            self.wfile.write(b"<div>Response HTML</div>")
-        else:
-            # Serve static files
-            super().do_GET()
-
-HTTPServer(("", 8000), HtmxHandler).serve_forever()
+```bash
+python3 "$SKILL_DIR/scripts/dev_server.py" --directory ./prototype --port 8000
 ```
+
+It binds only to `127.0.0.1`, serves the selected dedicated directory, and returns a sample HTML fragment for `/api/*`. Keep private files and symlinks out of that directory. Read [scripts/dev_server.py](scripts/dev_server.py) to adapt the handler; this example is not a production server. Verify it with `python3 -m unittest discover -s "$SKILL_DIR/tests"`.
 
 ## Practical Implementation Lessons
 
-### Loading Indicators with CSS Spinner
-
-Use CSS-only spinners instead of image files for better performance:
-
-```html
-<button hx-get="/api/slow"
-        hx-indicator="#spinner">
-    Load
-    <span id="spinner" class="spinner htmx-indicator"></span>
-</button>
-
-<style>
-.htmx-indicator { display: none; }
-.htmx-request .htmx-indicator { display: inline-block; }
-
-.spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #3d72d7;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
-```
-
-### Input Search with Proper Trigger
-
-Use `input changed` instead of `keyup changed` for better UX (catches paste, autofill):
-
-```html
-<input type="search"
-       name="q"
-       hx-get="/api/search"
-       hx-trigger="input changed delay:300ms, search"
-       hx-target="#results">
-```
-
-The `search` trigger handles the search input's clear button (X).
-
-### Self-Targeting with Polling
-
-For elements that replace themselves (polling), use `hx-target="this"`:
-
-```html
-<div hx-get="/api/time"
-     hx-trigger="load, every 2s"
-     hx-target="this"
-     hx-swap="innerHTML">
-    Loading...
-</div>
-```
-
-### Row Updates with closest
-
-For list items where each row has its own update button:
-
-```html
-<li id="item-1">
-    <span>Item 1</span>
-    <button hx-get="/api/update-item/1"
-            hx-target="closest li"
-            hx-swap="outerHTML">
-        Update
-    </button>
-</li>
-```
-
-Server returns complete `<li>` element with new htmx attributes intact.
-
-### Event Attribute Syntax
-
-The `hx-on::` syntax uses double colons for htmx events:
-
-```html
-<!-- Correct -->
-<button hx-on::before-request="console.log('starting')">
-
-<!-- Also correct (older syntax) -->
-<button hx-on:htmx:before-request="console.log('starting')">
-```
-
-### Combining Multiple Triggers
-
-Separate triggers with commas:
-
-```html
-<div hx-get="/api/data"
-     hx-trigger="load, every 5s, click from:#refresh-btn">
-```
-
-### Form POST with Loading State
-
-Combine `hx-indicator` and `hx-disabled-elt` for complete UX:
-
-```html
-<form hx-post="/api/submit"
-      hx-target="#result"
-      hx-indicator="#spinner"
-      hx-disabled-elt="find button">
-    <input name="email" required>
-    <button type="submit">
-        Submit
-        <span id="spinner" class="spinner htmx-indicator"></span>
-    </button>
-</form>
-```
+See [references/practical-patterns.md](references/practical-patterns.md) for concrete spinner, search, polling, row, event, and form examples. Event-handler examples require a reviewed evaluation configuration.
 
 ## Additional Resources
 

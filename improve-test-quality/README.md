@@ -1,6 +1,23 @@
 # Improve Test Quality Skill
 
-A Claude Code slash command skill that automates mutation testing analysis and test quality improvement.
+## Contents
+
+- What It Does
+- Prerequisites
+- Usage
+- Workflow
+- What Gets Improved
+- Example Session
+- Benefits
+- Limitations
+- Tips
+- Troubleshooting
+- Configuration
+- Files Modified
+- Future Enhancements
+- See Also
+
+An agent-neutral skill that automates mutation testing analysis and test quality improvement.
 
 ## What It Does
 
@@ -16,7 +33,7 @@ This skill helps you improve test quality by:
 
 - Stryker mutation testing must be configured (`stryker.config.mjs`)
 - The file you want to test must have existing tests
-- JSON reporter must be enabled in Stryker config (already configured)
+- JSON reporter must be enabled in the working project's Stryker config
 
 ## Usage
 
@@ -39,7 +56,7 @@ This will:
 /improve-test-quality server/routes/projects.js --auto
 ```
 
-Automatically implements improvements without asking for approval at each step.
+Automatically implements the requested local test edits; command review, data eligibility, and sharing gates in SKILL.md still apply.
 
 ### Custom Target Score
 
@@ -216,7 +233,7 @@ Make sure your test file follows conventions:
 Ensure all tests pass first: `npm test`
 
 ### "JSON report not found"
-The skill configuration should have already added the JSON reporter to `stryker.config.mjs`.
+Confirm the working project has a JSON reporter enabled in `stryker.config.mjs`; this skill does not configure it automatically.
 
 ## Configuration
 

@@ -1,14 +1,25 @@
 ---
 name: ddev-xhgui-analyze
-description: Analyze an xhgui/xhprof profile run from a DDEV environment. Provide one run ID for standalone analysis, or two for before/after comparison.
+description: Analyze an xhgui/xhprof profile run from a DDEV environment. Use when given one run ID for standalone performance analysis, or two for before/after comparison.
 argument-hint: "<run_id> [compare_run_id]"
 disable-model-invocation: true
 ---
 # Analyze xhgui Profile Run
 
+## Requirements
+
+DDEV with a working container runtime, a running project with the xhgui add-on and captured profiles, and MySQL client plus PHP in its containers. Use the project's read-only database account where available; `db`/`db` below is only the DDEV development default. Local file search and source read access support cross-referencing.
+
+## Safety and review
+
+Profiles and SQL output may expose private request URLs, parameters, source paths, or credentials. Keep raw exports local or inside the authorized container; redact sensitive URLs before including them in a report. Accept only the observed database ID format (for example hexadecimal IDs); validate IDs before placing them in SQL or filenames, or use parameterized queries. Fetch only selected runs with read-only SQL. Do not change profiling settings, restart services, or optimize production data as part of analysis. Calculate units and before/after deltas in code; a human verifies comparable workloads, recommendations, and report contents before sharing.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
+
 You are a performance analysis specialist. Your job is to fetch xhprof profile data from the xhgui service in a DDEV environment, analyze it, and present a clear summary of where time is being spent.
 
-## Prerequisites
+## Project setup
 
 This skill requires:
 
@@ -23,7 +34,9 @@ If any prerequisite is not met, inform the user and point them to the DDEV docs 
 
 ## Arguments
 
-The user provides: $ARGUMENTS
+Read the run IDs from the user's request.
+
+Validate each ID against the observed schema before interpolation; reject quotes, whitespace, separators, and path characters.
 
 Parse the arguments:
 - If one ID is provided: perform a **standalone analysis** of that run.
@@ -83,7 +96,7 @@ For the top time-consuming leaf functions (functions where most time is actually
 
 ## Step 4: Cross-reference with codebase
 
-For the most expensive custom (non-vendor) functions found in the profile, use Grep/Glob to find them in the codebase and understand what the code is actually doing. This provides context for the recommendations.
+For the most expensive custom (non-vendor) functions found in the profile, use local file search to find them in the codebase and understand what the code is actually doing. This provides context for the recommendations.
 
 ## Step 5: Report
 
