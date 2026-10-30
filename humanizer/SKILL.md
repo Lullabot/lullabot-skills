@@ -25,8 +25,6 @@ When given text to humanize:
 4. **Maintain voice** - Match the intended tone (formal, casual, technical, etc.)
 5. **Add soul** - Don't just remove bad patterns; inject actual personality
 
----
-
 ## PERSONALITY AND SOUL
 
 Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as obvious as slop. Good writing has a human behind it.
@@ -59,8 +57,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 ### After (has a pulse):
 > I genuinely don't know how to feel about this one. 3 million lines of code, generated while the humans presumably slept. Half the dev community is losing their minds, half are explaining why it doesn't count. The truth is probably somewhere boring in the middle - but I keep thinking about those agents working through the night.
 
----
-
 ## CONTENT PATTERNS
 
 ### 1. Undue Emphasis on Significance, Legacy, and Broader Trends
@@ -75,8 +71,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > The Statistical Institute of Catalonia was established in 1989 to collect and publish regional statistics independently from Spain's national statistics office.
 
----
-
 ### 2. Undue Emphasis on Notability and Media Coverage
 
 **Words to watch:** independent coverage, local/regional/national media outlets, written by a leading expert, active social media presence
@@ -88,8 +82,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > In a 2024 New York Times interview, she argued that AI regulation should focus on outcomes rather than methods.
-
----
 
 ### 3. Superficial Analyses with -ing Endings
 
@@ -103,8 +95,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > The temple uses blue, green, and gold colors. The architect said these were chosen to reference local bluebonnets and the Gulf coast.
 
----
-
 ### 4. Promotional and Advertisement-like Language
 
 **Words to watch:** boasts a, vibrant, rich (figurative), profound, enhancing its, showcasing, exemplifies, commitment to, natural beauty, nestled, in the heart of, groundbreaking (figurative), renowned, breathtaking, must-visit, stunning
@@ -116,8 +106,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > Alamata Raya Kobo is a town in the Gonder region of Ethiopia, known for its weekly market and 18th-century church.
-
----
 
 ### 5. Vague Attributions and Weasel Words
 
@@ -131,8 +119,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > The Haolai River supports several endemic fish species, according to a 2019 survey by the Chinese Academy of Sciences.
 
----
-
 ### 6. Outline-like "Challenges and Future Prospects" Sections
 
 **Words to watch:** Despite its... faces several challenges..., Despite these challenges, Challenges and Legacy, Future Outlook
@@ -144,8 +130,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > Traffic congestion increased after 2015 when three new IT parks opened. The municipal corporation began a stormwater drainage project in 2022 to address recurring floods.
-
----
 
 ## LANGUAGE AND GRAMMAR PATTERNS
 
@@ -161,8 +145,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > Somali cuisine also includes camel meat, which is considered a delicacy. Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
 
----
-
 ### 8. Avoidance of "is"/"are" (Copula Avoidance)
 
 **Words to watch:** serves as/stands as/marks/represents [a], boasts/features/offers [a]
@@ -175,8 +157,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > Gallery 825 is LAAA's exhibition space for contemporary art. The gallery has four rooms totaling 3,000 square feet.
 
----
-
 ### 9. Negative Parallelisms
 
 **Problem:** Constructions like "Not only...but..." or "It's not just about..., it's..." are overused.
@@ -186,8 +166,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > The heavy beat adds to the aggressive tone.
-
----
 
 ### 10. Rule of Three Overuse
 
@@ -199,8 +177,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > The event includes talks and panels. There's also time for informal networking between sessions.
 
----
-
 ### 11. Elegant Variation (Synonym Cycling)
 
 **Problem:** AI has repetition-penalty code causing excessive synonym substitution.
@@ -211,8 +187,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **After:**
 > The protagonist faces many challenges but eventually triumphs and returns home.
 
----
-
 ### 12. False Ranges
 
 **Problem:** LLMs use "from X to Y" constructions where X and Y aren't on a meaningful scale.
@@ -222,8 +196,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > The book covers the Big Bang, star formation, and current theories about dark matter.
-
----
 
 ## STYLE PATTERNS
 
@@ -257,8 +229,6 @@ Rewrite as:
 Rewrite as:
 > The launch slipped by about a month. The old CMS is being retired.
 
----
-
 ### 14. Overuse of Boldface
 
 **Problem:** AI chatbots emphasize phrases in boldface mechanically.
@@ -268,8 +238,6 @@ Rewrite as:
 
 **After:**
 > It blends OKRs, KPIs, and visual strategy tools like the Business Model Canvas and Balanced Scorecard.
-
----
 
 ### 15. Inline-Header Vertical Lists
 
@@ -283,8 +251,6 @@ Rewrite as:
 **After:**
 > The update improves the interface, speeds up load times through optimized algorithms, and adds end-to-end encryption.
 
----
-
 ### 16. Title Case in Headings
 
 **Problem:** AI chatbots capitalize all main words in headings.
@@ -294,8 +260,6 @@ Rewrite as:
 
 **After:**
 > ## Strategic negotiations and global partnerships
-
----
 
 ### 17. Emojis
 
@@ -309,19 +273,15 @@ Rewrite as:
 **After:**
 > The product launches in Q3. User research showed a preference for simplicity. Next step: schedule a follow-up meeting.
 
----
-
 ### 18. Curly Quotation Marks
 
-**Problem:** ChatGPT uses curly quotes ("...") instead of straight quotes ("...").
+**Problem:** ChatGPT uses curly quotes (“...”) instead of straight quotes ("...").
 
 **Before:**
-> He said "the project is on track" but others disagreed.
+> He said “the project is on track” but others disagreed.
 
 **After:**
 > He said "the project is on track" but others disagreed.
-
----
 
 ## COMMUNICATION PATTERNS
 
@@ -337,8 +297,6 @@ Rewrite as:
 **After:**
 > The French Revolution began in 1789 when financial crisis and food shortages led to widespread unrest.
 
----
-
 ### 20. Knowledge-Cutoff Disclaimers
 
 **Words to watch:** as of [date], Up to my last training update, While specific details are limited/scarce..., based on available information...
@@ -351,8 +309,6 @@ Rewrite as:
 **After:**
 > The company was founded in 1994, according to its registration documents.
 
----
-
 ### 21. Sycophantic/Servile Tone
 
 **Problem:** Overly positive, people-pleasing language.
@@ -362,8 +318,6 @@ Rewrite as:
 
 **After:**
 > The economic factors you mentioned are relevant here.
-
----
 
 ## FILLER AND HEDGING
 
@@ -377,8 +331,6 @@ Rewrite as:
 - "The system has the ability to process" → "The system can process"
 - "It is important to note that the data shows" → "The data shows"
 
----
-
 ### 23. Excessive Hedging
 
 **Problem:** Over-qualifying statements.
@@ -389,8 +341,6 @@ Rewrite as:
 **After:**
 > The policy may affect outcomes.
 
----
-
 ### 24. Generic Positive Conclusions
 
 **Problem:** Vague upbeat endings.
@@ -400,8 +350,6 @@ Rewrite as:
 
 **After:**
 > The company plans to open two more locations next year.
-
----
 
 ## CONVERSATIONAL AND ARGUMENT PATTERNS
 
@@ -498,8 +446,6 @@ Extends #7 (AI Vocabulary). Where #7 covers words that sound inflated, these sou
 
 If a technical term is needed, explain it in plain words the first time it appears. Keep a term only when the reader uses it themselves, for example "nit" in a code review between developers. Messages between agents (prompts, briefs) are exempt.
 
----
-
 ## Process
 
 1. Read the input text carefully
@@ -520,8 +466,6 @@ Provide:
 1. The rewritten text
 2. A brief summary of changes made (optional, if helpful)
 
----
-
 ## Full Example
 
 **Before (AI-sounding):**
@@ -539,8 +483,6 @@ Provide:
 - Removed "Industry experts believe" (vague attribution)
 - Removed "pivotal role" and "evolving landscape" (AI vocabulary)
 - Added specific features and concrete feedback
-
----
 
 ## Reference
 
