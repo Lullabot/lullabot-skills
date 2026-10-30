@@ -482,6 +482,22 @@ Note the related "that's the X doing the thing Y can't" construction. It restate
 
 **How to check:** Simon Willison's [LLM cliché highlighter](https://tools.simonwillison.net/llm-cliche-highlighter) flags all twelve in pasted text or at a URL. Useful as a second pass once the patterns above are handled.
 
+### 29. Agent and engineering slang
+
+Extends #7 (AI Vocabulary). Where #7 covers words that sound inflated, these sound like an engineering team talking to itself.
+
+**Words to watch, with plain replacements:** load-bearing (important, needed), cutover (switch, move), surface as a verb (show, raise), land / ship (merge, release), gate / gated (check, needs approval first), park (pause, stop), plumbing (connecting code), wire up (connect), blast radius (what it affects), footgun (easy mistake), nit (small point), punt (postpone), de-risk (make safer), sanity check (quick check), spin up (start), fan out (send to several), happy path (normal case), thread through (pass along), first-class (fully supported), orthogonal (unrelated), bespoke (custom), net-new (new), TL;DR (summary)
+
+**Problem:** Coding agents pick this vocabulary up from engineering chat and use it everywhere, including replies, reports, and client email. A non-native reader, or anyone outside the team, has to translate it. The target is plain English that reads correctly the first time.
+
+**Before:**
+> TL;DR: we'll punt the cutover to next sprint. The plumbing is wired up, but the blast radius is bigger than we thought, so I'd like to de-risk it and keep the new feed gated behind a flag.
+
+**After:**
+> Summary: we'll move the switch to next sprint. The connecting code works, but the change affects more pages than we expected. To make it safer, the new feed stays off until someone turns it on.
+
+If a technical term is needed, explain it in plain words the first time it appears. Keep a term only when the reader uses it themselves, for example "nit" in a code review between developers. Messages between agents (prompts, briefs) are exempt.
+
 ---
 
 ## Process
