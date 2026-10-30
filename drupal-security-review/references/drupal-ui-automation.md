@@ -1,5 +1,14 @@
 # Driving Drupal's admin UI for exploit demos
 
+## Contents
+
+- Logging in — don't fight the login form
+- The standard XSS demo payload
+- Node/block form gotchas
+- Who can actually plant the payload (the severity question)
+- DB-reset caveat
+
+
 These are the things that break naive form automation on a real Drupal site.
 All were learned the hard way; check each against the live site via `recon.php`
 and `snapshot`.
@@ -21,10 +30,10 @@ Then in the recording: `playwright-cli goto "<that URL>"`. It logs the user in
 and lands on their account page. The link is single-use — mint a fresh one per
 recording, and never commit it.
 
-Create the throwaway users first:
+After human review of the planned mutations, create the throwaway users and track their IDs/usernames for cleanup. Supply unique throwaway credentials through approved secret handling; never retain them in reports or recordings:
 
 ```bash
-ddev drush user:create secdemo_editor --mail=secdemo_editor@example.com --password='SecDemoPass123!'
+ddev drush user:create secdemo_editor --mail=secdemo_editor@example.com --password="<unique-throwaway-secret>"
 ddev drush user:role:add editor secdemo_editor
 ```
 

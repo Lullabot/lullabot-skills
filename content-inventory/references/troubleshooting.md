@@ -40,7 +40,7 @@ cut -d',' -f<status-code-column> raw-pages.csv | sort | uniq -c
 
 ## Unexpected Row Counts
 
-**Too many rows**: Orphan pages can contribute thousands of URLs. The MEA sample has 22,385 orphan pages vs 258 raw pages. After dedup the count drops significantly, but orphans often dominate.
+**Too many rows**: Orphan pages can contribute thousands of URLs. After deduplication the count drops significantly, but orphans can outnumber the crawled pages.
 
 **Too few rows**: Deduplication merges rows on normalized URL. Multiple URLs that differ only in protocol, www prefix, trailing slashes, query params, or fragments collapse to one row. Redirect merging further reduces count when multiple URLs redirect to the same destination.
 
