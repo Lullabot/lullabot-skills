@@ -25,7 +25,6 @@ Decide whether to include Lullabot's ADRs:
 - `lullabot` or `project` argument: do what it says.
 - An adoption ADR exists: include them, minus its exceptions.
 - No adoption ADR, but `README.md`, `AGENTS.md` or other docs say the project follows Lullabot's ADRs: include them, minus any exclusions stated there. Before scanning, offer to record that as the adoption ADR, carrying over the exclusions and their reasons as exceptions (ask for any missing reason), and then to replace the original text with a link to the ADR so there's one source of truth. A section that already points to an adoption ADR, such as the one from step 10, doesn't count.
-- The project is Lullabot's architecture repository itself (`git remote -v` points at `Lullabot/architecture`): its ADRs are Lullabot's. Review them once, as project ADRs.
 - Otherwise: before scanning, ask whether the project will follow Lullabot's ADRs. If it will and it has an ADR directory, write "Follow Lullabot's architecture decisions" from [assets/follow-lullabot-adrs.md](assets/follow-lullabot-adrs.md), with no exceptions yet: step 7 adds them from the review's results. Include Lullabot's ADRs. If the user opts out, review only the project's ADRs.
 
 Show each new ADR before writing it. If the project ends up with no ADRs and doesn't follow Lullabot's, there's nothing to review: say so and stop.
@@ -51,11 +50,11 @@ Detect the project's stack from cheap signals before reading ADRs in full:
 - Front end: `package.json`, themes (`web/themes/custom`), `*.ts`, `*.css`, `*.twig`.
 - Local and CI: `.ddev/`, `.github/workflows/`, `.gitlab-ci.yml`, `.tugboat/`, `Taskfile.yml`, `renovate.json`.
 
-Use each Lullabot ADR's title, tags and context to mark it **Not applicable** when it clearly doesn't fit the stack (e.g. a Gatsby ADR on a Drupal-only site), with a one-line reason. Don't fetch or read the full text of those. The project's own ADRs apply unless they say otherwise. ADRs about recording decisions themselves, such as "Record architecture decisions" or "Use Markdown Architecture Decision Records", are **Follows** when the ADR directory exists and its ADRs use the format they name.
+Use each ADR's title, tags and context, the project's own included, to mark it **Not applicable** when it clearly doesn't fit the stack (e.g. a Gatsby ADR on a Drupal-only site), with a one-line reason. Don't fetch or read the full text of those. ADRs about recording decisions themselves, such as "Record architecture decisions" or "Use Markdown Architecture Decision Records", are **Follows** when the ADR directory exists and its ADRs use the format they name.
 
 ## 4. Check each applicable ADR
 
-For each remaining ADR, read its Decision section ("Decision Outcome" in MADR) and turn it into concrete checks: a file that should exist, a config value, a dependency, a code pattern to search for, or a sample of the relevant code. Gather evidence as `path:line`. When a project ADR and a Lullabot ADR cover the same thing, the project's wins: mark the Lullabot ADR **Overridden** by it.
+For each remaining ADR, read its Decision section ("Decision Outcome" in MADR), including any exceptions or scope it states (e.g. "new code only", or a threshold), and turn it into concrete checks: a file that should exist, a config value, a dependency, a code pattern to search for, or a sample of the relevant code. Gather evidence as `path:line`. When a project ADR and a Lullabot ADR cover the same thing, the project's wins: mark the Lullabot ADR **Overridden** by it.
 
 For large codebases, check the ADRs in groups by tag (e.g. `drupal`, `php`, `front-end`, `ci`), using subagents if your tool supports them.
 
@@ -84,7 +83,7 @@ Write the report to the path from the arguments, or `docs/adr-review-YYYY-MM-DD.
 # ADR review: <project name>
 
 - Date: YYYY-MM-DD
-- Project commit: <git rev-parse --short HEAD>
+- Project commit: <git rev-parse --short HEAD> (add "plus uncommitted changes" if `git status --porcelain` shows any)
 - Project ADRs: `<ADR directory>` (<n> accepted), adoption ADR: `<path>` (or none)
 - Lullabot ADRs: Lullabot/architecture@<sha> (or architecture.lullabot.com, <date>, or not included)
 - Results: <n> follow, <n> partial, <n> deviate, <n> overridden, <n> not applicable, <n> unable to verify
@@ -136,11 +135,11 @@ To resolve:
 - <ID>: <title>, <what a person should check, and where>.
 ```
 
-Keep the IDs stable so a later review can be compared with this one, and issues can link back to it. If an earlier report exists in the same directory, add a short "Changes since <date>" section listing deviations that were resolved and new ones.
+Keep the IDs stable so a later review can be compared with this one, and issues can link back to it. If an earlier report exists in the same directory or in `docs/`, add a short "Changes since <date>" section listing deviations that were resolved and new ones.
 
 ## 6. Summarize in the chat
 
-Print the result counts, the top five deviations (ID, title, one line each), the Lullabot ADRs new since adoption, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft.
+Print the result counts, the top five deviations in the report's order (ID, title, one line each), the Lullabot ADRs new since adoption, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft.
 
 ## 7. Help record decisions
 
