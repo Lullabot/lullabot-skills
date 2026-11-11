@@ -20,6 +20,10 @@ Each skill folder must contain:
 
 Companion files (`scripts/`, `references/`, `assets/`, etc.) live alongside `SKILL.md` and are copied to the public site verbatim.
 
+## Pull request titles
+
+Title PRs in [Conventional Commits](https://www.conventionalcommits.org/) form: `<type>(<scope>): <summary>`, e.g. `feat(skills): add adr-review skill`, `fix(humanizer): …`, `docs: …`, `chore: …`. Use `feat` for a new skill or new skill behavior, `fix` for corrected output, and `docs`/`chore` for hygiene changes. Commit messages don't need this format.
+
 ## Required workflow when committing
 
 Before committing, review the staged changes for each modified skill. For substantive changes, write a `User-Facing-Change:` trailer in the commit message body describing the user-observable effect in plain language. Use one scoped trailer per skill for multi-skill commits. Skip trailers for purely internal/cosmetic changes.
