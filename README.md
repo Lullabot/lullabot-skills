@@ -23,7 +23,7 @@ Claude Code will pick up every skill automatically on the next session.
 ## Skills included
 
 <!-- skills-start -->
-- **adr-review** — Review a project against Lullabot's ADRs and report deviations with fixes.
+- **adr-review** — Review a project against its ADRs and Lullabot's, and help record new ones.
 - **cloudflare-tunnel** — Expose a local dev server via Cloudflare Tunnel.
 - **ddev-xhgui-analyze** — Analyze xhprof/xhgui profile runs from a DDEV environment.
 - **github-attachments** — Upload screenshots and files to GitHub so they render in issues, PRs, and comments.
