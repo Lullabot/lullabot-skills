@@ -1,6 +1,6 @@
 ---
 name: adr-review
-description: Review a codebase against Lullabot's ADRs and report deviations and fixes
+description: Review code against Lullabot's ADRs. Use when asked for an ADR review or audit.
 ---
 
 # ADR review
@@ -151,3 +151,27 @@ If one is found, offer to create issues for the **Partial** and **Deviates** fin
 - Body: the deviation's section from the report, a link to the ADR, and the report's path (and the Google Doc's link, if you created one). If the `issue-writing` skill is available, follow it for the body.
 
 After creating them, add each issue's link under its deviation in the report.
+
+## 9. Offer an AGENTS.md section
+
+Offer to add a short section to the project's root `AGENTS.md`, so agents check new code and code reviews against the ADRs that apply. Use `CLAUDE.md` if the project has no `AGENTS.md`. If the section already exists, offer to update it from this review instead. Show the section and ask before writing it.
+
+List only the ADRs marked **Follows**, **Partial** or **Deviates**, plus the **Overridden** ones under accepted deviations. Link to each ADR rather than copying its text: the file loads into every session.
+
+```markdown
+## Lullabot ADRs
+
+This project follows Lullabot's [Architecture Decision Records](https://architecture.lullabot.com). When writing or reviewing code, check changes against the ADRs below, and flag any deviation that isn't listed as accepted.
+
+Applicable ADRs:
+
+- [<ADR title>](https://architecture.lullabot.com/adr/<ID>/)
+
+Accepted deviations:
+
+- [<ADR title>](https://architecture.lullabot.com/adr/<ID>/): <reason>, see `<path to project ADR>`.
+
+Last reviewed: YYYY-MM-DD (`<report path>`). Run the `adr-review` skill again to refresh this list.
+```
+
+Leave out "Accepted deviations" if there are none.
