@@ -40,7 +40,9 @@ Show each new ADR before writing it. If the project ends up with no ADRs and doe
 
 Skip this if they aren't included. Use a temporary directory outside the project (`mktemp -d`) for anything you download, and delete it when you're done.
 
-`https://architecture.lullabot.com/rss.xml` lists every published ADR with its title, link, context (`description`), tags (`category`) and date. Fetch each ADR's page from its link when you need its full text. Pages of deprecated ADRs say so and link to the ADR that replaces them; skip those.
+`https://architecture.lullabot.com/rss.xml` lists every published ADR with its title, link, context (`description`), tags (`category`) and date. Fetch each ADR's page from its link when you need its full text.
+
+Skip deprecated ADRs. If an item's categories include a `status:` entry (e.g. `status:deprecated`), keep only `status:accepted` ones, and don't count `status:` as a tag. Older feeds have no status: then check each ADR's page when you fetch it, since pages of deprecated ADRs say so and link to the ADR that replaces them.
 
 Each Lullabot ADR's ID is the last part of its URL (e.g. `20260320-use-phpstan`), and its URL is `https://architecture.lullabot.com/adr/<ID>/`.
 
