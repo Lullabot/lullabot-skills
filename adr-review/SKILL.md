@@ -63,7 +63,7 @@ Use each ADR's title, tags and context, the project's own included, to mark it *
 
 For each remaining ADR, read its Decision section ("Decision Outcome" in MADR), including any exceptions or scope it states (e.g. "new code only", or a threshold), and turn it into concrete checks: a file that should exist, a config value, a dependency, a code pattern to search for, or a sample of the relevant code. Gather evidence as `path:line`. When a project ADR and a Lullabot ADR cover the same thing, the project's wins: mark the Lullabot ADR **Overridden** by it.
 
-For large codebases, check the ADRs in groups by tag (e.g. `drupal`, `php`, `front-end`, `ci`), using subagents if your tool supports them.
+If more than about 20 ADRs need checking, or the codebase is large, split them into groups by tag (e.g. `drupal`, `php`, `front-end`, `ci`) and check each group in a subagent if your tool supports them. Give each the stack summary and its ADRs, and have it return one line per ADR: ID, verdict, evidence, effort. Fetch ADR pages yourself, in parallel, not in subagents.
 
 Give each ADR one verdict:
 
