@@ -187,9 +187,9 @@ Then ask which next steps to take, in one question rather than one per step. Lis
 - Update the adoption ADR's exceptions (step 7), if the project follows Lullabot's ADRs.
 - Copy the report to a Google Doc (step 8), if you can write to Google Drive.
 - Publish the report as an issue, or file one per deviation (step 9), if an issue tracker was found.
-- Add or update the `AGENTS.md` section (step 10).
+- Add the `AGENTS.md` section (step 10).
 - Fix deviations (step 11), if there are any.
-- Delete the report when done. Do this last. If it's chosen, leave the report's path out of issues and the `AGENTS.md` section (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
+- Delete the report when done. Do this last. If it's chosen, leave the report's path out of issues (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
 
 Ask as a multi-select. Run the chosen steps in the order above: exceptions first, so no issues are filed for deliberate deviations, and issues before fixes, so a fix can refer to its issue. Choosing a step answers its offer, but still confirm the details the step asks for, such as showing an ADR before writing it or the issue titles before creating them.
 
@@ -236,21 +236,9 @@ If one is found, read [references/filing-issues.md](references/filing-issues.md)
 
 ## 10. Offer an AGENTS.md section
 
-Offer to add a short section to the project's root `AGENTS.md`, so agents check new code and code reviews against the ADRs. Use `CLAUDE.md` if the project has no `AGENTS.md`. If the section already exists, offer to update it from this review instead. Show the section and ask before writing it.
+If the project has an ADR directory, offer to add [assets/agents-section.md](assets/agents-section.md) to its root `AGENTS.md`, so agents check code against the ADRs and draft new ones for new decisions. Use `CLAUDE.md` if the project has no `AGENTS.md`. Skip this if either file already says the same.
 
-The ADRs themselves stay the source of truth. List the Lullabot ADRs marked **Follows**, **Partial** or **Deviates** so agents don't have to fetch them all, and link to them rather than copying their text: the file loads into every session. Leave out the Lullabot part if they aren't included. If the project has no ADR directory, leave out the first paragraph, and since there's no adoption ADR, list the Lullabot ADRs the project doesn't follow in the section itself, each with its reason, under "Except:".
-
-```markdown
-## Architecture decisions
-
-This project records its architecture decisions in `<ADR directory>`. When writing or reviewing code, check changes against its accepted ADRs, and flag any deviation from them.
-
-The project also follows Lullabot's [ADRs](https://architecture.lullabot.com), except those listed in `<path to adoption ADR>`. These apply:
-
-- [<ADR title>](https://architecture.lullabot.com/adr/<ID>/)
-
-Last reviewed: YYYY-MM-DD (`<report path>`). Run the `adr-review` skill again to refresh this list.
-```
+Keep the change minimal: the file loads into every session and belongs to the project. Add only that section, filled in, with no list of ADRs or review results, and leave out the Lullabot clause if the project doesn't follow Lullabot's ADRs. Show it and ask before writing it.
 
 ## 11. Offer to fix deviations
 
