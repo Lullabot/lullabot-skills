@@ -46,7 +46,7 @@ Skip this if they aren't included. Use a temporary directory outside the project
 
 Each Lullabot ADR's ID is the last part of its URL, which matches its file name without `.md` (e.g. `20260320-use-phpstan`), and its URL is `https://architecture.lullabot.com/adr/<ID>/`.
 
-Mark the adoption ADR's exceptions **Overridden**, with its reason. List the Lullabot ADRs dated after the adoption ADR last changed (`git log -1 --format=%cs -- <adoption ADR>`) as **new since adoption**: check them like the rest, so the team can follow each one or add it to the exceptions.
+Mark the adoption ADR's exceptions **Overridden**, with its reason. List the Lullabot ADRs dated after the adoption ADR's "Reviewed against Lullabot's ADRs through" date as **new since adoption**. If it has no such line, use the date it last changed (`git log -1 --format=%cs -- <adoption ADR>`). Check them like the rest, so the team can follow each one or add it to the exceptions.
 
 ## 3. Decide which ADRs apply
 
@@ -103,7 +103,7 @@ Write the report to the path from the arguments, or `docs/adr-review-YYYY-MM-DD.
 
 ## New since adoption
 
-<!-- Lullabot ADRs dated after the adoption ADR last changed. Leave out if none. -->
+<!-- Lullabot ADRs dated after the adoption ADR's "reviewed through" date. Leave out if none. -->
 
 - lullabot:<ID>: <title>, <verdict>. Follow it, or add it to the adoption ADR's exceptions.
 
@@ -151,6 +151,8 @@ Print the result counts, the top five deviations in the report's order (ID, titl
 ## 7. Help record decisions
 
 If the project follows Lullabot's ADRs, offer to update the adoption ADR's exceptions from the review, showing the change before writing it. Draft them from **Not applicable** Lullabot ADRs with their reasons, each **Partial** or **Deviates** one the user confirms is deliberate, and each new-since-adoption ADR they decide not to follow. Ask the user for the reason behind each deliberate deviation; don't invent one. Deviations they want to fix stay out of the list. If there are no exceptions, keep the section and say "None."
+
+Once the user has decided on every new-since-adoption ADR, set the adoption ADR's "Reviewed against Lullabot's ADRs through" line to today's date, even if no exceptions changed, so the next review doesn't list them again. Add the line if it's missing.
 
 Update the report's verdicts to match, e.g. deviations now listed as exceptions become **Overridden**.
 
@@ -216,7 +218,7 @@ Last reviewed: YYYY-MM-DD (`<report path>`). Run the `adr-review` skill again to
 
 ## 11. Offer to fix deviations
 
-Offer to help fix the **Partial** and **Deviates** findings, suggesting the small-effort ones first. Fix only the ones the user picks, one at a time:
+Offer to help fix the **Partial** and **Deviates** findings, suggesting the small-effort ones first. For ADRs new since adoption, offer fixes only for the ones the user decided to follow in step 7. Fix only the ones the user picks, one at a time:
 
 - Follow the deviation's "To resolve" steps and the ADR's Decision. Ask before installing dependencies or running commands that change files, as in the boundaries above.
 - Show what changed, and tick the step's checkbox in the report.
