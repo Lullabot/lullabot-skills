@@ -17,7 +17,7 @@ Arguments (optional):
 Required:
 
 - A git checkout of the project, and `git`.
-- For Lullabot's ADRs: network access to `architecture.lullabot.com`, and for `scripts/fetch-lullabot-adrs.sh`, a POSIX shell, `curl` 7.68 or later (for `--etag-compare`), and `unzip` or `python3`. Without them, the skill falls back to fetching the RSS feed and ADR pages with your tool's web fetch, or reviews only the project's ADRs.
+- For Lullabot's ADRs: network access to `architecture.lullabot.com`, and for `scripts/fetch-lullabot-adrs.sh`, a POSIX shell, `curl` 7.68 or later (for `--etag-compare`), and `unzip` or `python3`. Without them, the skill reviews only the project's ADRs.
 - Write access to the project for the report, and to a cache or temporary directory outside it for the download.
 
 The `assets/`, `references/` and `scripts/` paths are in this skill's own directory, not the project's.
@@ -66,7 +66,7 @@ Run `sh <this skill's directory>/scripts/fetch-lullabot-adrs.sh` (from any worki
 
 Skip deprecated ADRs: keep only those whose `status` is `accepted`. Deprecated ADRs link to the ADR that replaces them.
 
-If the script fails, or you can't run shell commands, fall back to `https://architecture.lullabot.com/rss.xml`, which lists each ADR's title, link, context (`description`) and tags (`category`). Fetch an ADR's page from its link when you need its full text. If an item has a `<category domain="status">` element, keep only items where it's `accepted`; otherwise check each ADR's page when you fetch it, since pages of deprecated ADRs say so.
+If the script fails, or you can't run shell commands, tell the user Lullabot's ADRs couldn't be downloaded, with the script's error and the likely fix (e.g. allow `architecture.lullabot.com` in the tool's sandbox, or run the script outside it). Offer to continue with only the project's ADRs, and if the user agrees, say so in the report's summary.
 
 Each Lullabot ADR's ID is the last part of its URL (e.g. `20260320-use-phpstan`), and its URL is `https://architecture.lullabot.com/adr/<ID>/`.
 
