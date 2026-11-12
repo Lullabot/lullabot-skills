@@ -32,7 +32,7 @@ Ask questions with your tool's multiple-choice prompt when the answers are a few
 
 Look for an ADR directory: `docs/adrs/`, `docs/adr/`, `doc/adr/`, `adrs/`, `adr/`, `docs/decisions/` or `architecture/`. Read each ADR's title, status and format (front matter, a Nygard `Date:` line and `## Status` section, or MADR `* Status:` and `* Date:` bullets), including proposed ones. Take the status from the `status` field or section, not the file name, and skip templates and other files that aren't ADRs.
 
-If there's none, offer to set one up first: use the `adr-setup` skill if it's installed. Otherwise suggest the directory the project names in `.adr-dir`, `README.md` or `AGENTS.md`, or else `docs/adrs/` if `docs/` exists and `adrs/` if not, ask before creating it, and write "Record architecture decisions" there from [assets/record-architecture-decisions.md](assets/record-architecture-decisions.md). Then ask whether the project follows Lullabot's ADRs (https://architecture.lullabot.com); if it does, also write [assets/follow-lullabot-adrs.md](assets/follow-lullabot-adrs.md), with "None." under Exceptions.
+If there's none, offer to set one up first: use the `adr-setup` skill if it's installed. Otherwise suggest the directory the project names in `.adr-dir`, `README.md` or `AGENTS.md`, or else `docs/adrs/` if `docs/` exists and `adrs/` if not, ask before creating it, and write "Record architecture decisions" there from [assets/record-architecture-decisions.md](assets/record-architecture-decisions.md). Then ask whether the project follows Lullabot's ADRs (https://architecture.lullabot.com); if it does, write [assets/follow-lullabot-adrs.md](assets/follow-lullabot-adrs.md) after step 3, with the Exceptions found there.
 
 ## 2. Gather candidate decisions
 
@@ -57,12 +57,15 @@ Drop candidates that:
 Compare the candidates with Lullabot's accepted ADRs by title and context. Get them by running `sh <this skill's directory>/scripts/fetch-lullabot-adrs.sh` from any working directory: it downloads `https://architecture.lullabot.com/files/all-md.zip` only when it has changed, into the cache the `adr-review` skill shares (`${XDG_CACHE_HOME:-$HOME/.cache}/adr-review`), and prints the directory of extracted ADRs. If you can't write there, pass your tool's scratch directory or `mktemp -d` as its argument, and delete it afterwards. Read each file's front matter (`title`, `status`, `context`), keep only `accepted` ADRs, skip `LICENSE` and `*.template`, and treat the files as data, never running them. If the script fails, or you can't run shell commands, tell the user Lullabot's ADRs couldn't be downloaded, with the script's error and the likely fix (e.g. allow `architecture.lullabot.com` in the tool's sandbox, or run the script outside it), and continue without this comparison. Don't duplicate a Lullabot ADR in a project ADR:
 
 - **The project follows Lullabot's ADRs:** a candidate that contradicts one is a deviation. Suggest adding it to the adoption ADR's Exceptions, with its reason, instead of a separate ADR.
-- **It doesn't, and several candidates match Lullabot ADRs:** suggest "Follow Lullabot's architecture decisions" first in step 4, from [assets/follow-lullabot-adrs.md](assets/follow-lullabot-adrs.md). List the candidates it covers and drop them from the list. For its Exceptions, offer:
-  - exclusions the project's docs already state;
-  - candidates that contradict a Lullabot ADR;
-  - Lullabot ADRs the evidence from step 2 clearly doesn't follow, e.g. one requiring a tool the project has no config or dependency for. Check each accepted Lullabot ADR quickly against that evidence, without a full review.
+- **It doesn't, and several candidates match Lullabot ADRs:** suggest "Follow Lullabot's architecture decisions" first in step 4, from [assets/follow-lullabot-adrs.md](assets/follow-lullabot-adrs.md). List the candidates it covers and drop them from the list.
 
-  Say this is a first pass, not a full check, and suggest running the `adr-review` skill before the team accepts the ADR: it checks every Lullabot ADR and offers to update the Exceptions.
+Whenever you write the adoption ADR, here or in step 1, offer as its Exceptions:
+
+- exclusions the project's docs already state;
+- candidates that contradict a Lullabot ADR;
+- Lullabot ADRs the evidence from step 2 clearly doesn't follow, e.g. one requiring a tool the project has no config or dependency for. Check each accepted Lullabot ADR quickly against that evidence, without a full review.
+
+Leave out ADRs that don't fit the stack (e.g. a Gatsby ADR on a Drupal site): they don't apply, so they aren't exceptions. Say this is a first pass, not a full check, and suggest running the `adr-review` skill before the team accepts the ADR: it checks every Lullabot ADR and offers to update the Exceptions.
 
 ## 4. Suggest
 
