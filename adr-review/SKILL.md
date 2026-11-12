@@ -200,7 +200,7 @@ After creating them, add each issue's link under its deviation in the report.
 
 Offer to add a short section to the project's root `AGENTS.md`, so agents check new code and code reviews against the ADRs. Use `CLAUDE.md` if the project has no `AGENTS.md`. If the section already exists, offer to update it from this review instead. Show the section and ask before writing it.
 
-The ADRs themselves stay the source of truth. List the Lullabot ADRs marked **Follows**, **Partial** or **Deviates** so agents don't have to fetch them all, and link to them rather than copying their text: the file loads into every session. Leave out the Lullabot part if they aren't included.
+The ADRs themselves stay the source of truth. List the Lullabot ADRs marked **Follows**, **Partial** or **Deviates** so agents don't have to fetch them all, and link to them rather than copying their text: the file loads into every session. Leave out the Lullabot part if they aren't included. If the project has no ADR directory, leave out the first paragraph, and since there's no adoption ADR, list the Lullabot ADRs the project doesn't follow in the section itself, each with its reason, under "Except:".
 
 ```markdown
 ## Architecture decisions
