@@ -19,7 +19,7 @@ When one of this project's own ADRs covers the same thing as a Lullabot ADR, our
 ### Exceptions
 
 <!-- One line per Lullabot ADR we don't follow:
-- [<ADR title>](https://architecture.lullabot.com/adr/<ID>/): <why it doesn't apply, or why we deviate from it>.
+- [<ADR title>](https://architecture.lullabot.com/adr/<ID>/): <why we deviate from it>.
 -->
 
 None.

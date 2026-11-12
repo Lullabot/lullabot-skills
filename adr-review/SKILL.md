@@ -167,7 +167,7 @@ Use your tool's multiple-choice prompt if it has one that fits every option, or 
 
 ## 7. Help record decisions
 
-If the project follows Lullabot's ADRs, offer to update the adoption ADR's exceptions from the review, showing the change before writing it. Draft them from **Not applicable** Lullabot ADRs with their reasons, and each **Partial** or **Deviates** one the user confirms is deliberate. Ask the user for the reason behind each deliberate deviation; don't invent one. Deviations they want to fix stay out of the list. If there are no exceptions, keep the section and say "None."
+If the project follows Lullabot's ADRs, offer to update the adoption ADR's exceptions from the review, showing the change before writing it. Draft them from each **Partial** or **Deviates** Lullabot ADR the user confirms is deliberate. Leave out **Not applicable** ones: the review decides those again each time. Ask the user for the reason behind each deliberate deviation; don't invent one. Deviations they want to fix stay out of the list. If there are no exceptions, keep the section and say "None."
 
 Update the report's verdicts to match, e.g. deviations now listed as exceptions become **Overridden**.
 
