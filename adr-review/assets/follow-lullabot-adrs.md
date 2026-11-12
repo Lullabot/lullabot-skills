@@ -24,8 +24,6 @@ When one of this project's own ADRs covers the same thing as a Lullabot ADR, our
 
 None.
 
-Reviewed against Lullabot's ADRs through: YYYY-MM-DD
-
 ## Consequences
 
-Each new Lullabot ADR needs a decision: follow it, or add it to the exceptions with a reason. The `adr-review` skill lists new ones and checks that the project still follows the rest.
+New Lullabot ADRs apply to this project as they're published. The `adr-review` skill reports any we deviate from, so we can follow them or add them to the exceptions with a reason.
