@@ -207,6 +207,13 @@ Also search for a report issue from an earlier review by its title, `ADR review:
 
 Then ask which to file, showing the issue titles and the existing issues you found: one issue with the full report (recommend this by default: one place to track the review), one issue per remaining deviation, or both. Create or change nothing without an explicit yes.
 
+Start every issue body and comment you write, after its `<!-- adr-review… -->` marker if it has one, with a note that an AI skill generated it and a person should review the verdicts. The marker stays first so the next review finds the issue. On trackers that don't render GitHub alerts, such as Jira, use a plain sentence instead.
+
+```markdown
+> [!NOTE]
+> Generated with the `adr-review` AI skill. Verdicts may include false positives.
+```
+
 **The report as an issue:**
 
 - Title: `ADR review: <project name>`. Body: the report, starting with `<!-- adr-review -->` so the next review finds it, with each deviation's issue linked if you filed them.
