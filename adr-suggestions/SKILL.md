@@ -24,6 +24,10 @@ The `assets/` and `scripts/` paths are in this skill's own directory, not the pr
 - Never invent the reasoning behind a decision. The evidence shows what was decided and when; only people know why.
 - Keep the templates' "Drafted with the `<skill name>` AI skill." line, with `adr-suggestions` as the name, and add it to every ADR you draft: under the date, or under the title if there's no date line. If the project has its own guidance on AI disclosure (e.g. in `AGENTS.md` or `CONTRIBUTING.md`), follow that instead.
 
+## Asking the user
+
+Ask questions with your tool's multiple-choice prompt when the answers are a few known options (yes or no, or a pick from a list), or as a numbered list if it has none. Split a list too long for one question across several. Leave room for free text when you need a reason or a name.
+
 ## 1. Find existing ADRs
 
 Look for an ADR directory: `docs/adrs/`, `docs/adr/`, `doc/adr/`, `adrs/`, `adr/`, `docs/decisions/` or `architecture/`. Read each ADR's title, status and format (front matter, a Nygard `Date:` line and `## Status` section, or MADR `* Status:` and `* Date:` bullets), including proposed ones. Take the status from the `status` field or section, not the file name, and skip templates and other files that aren't ADRs.
@@ -57,7 +61,7 @@ Compare the candidates with Lullabot's accepted ADRs by title and context. Get t
 
 ## 4. Suggest
 
-List up to twelve candidates, ranked by how costly the decision would be to reverse and how many people it affects: title (as a decision, e.g. "Use Vite to build front-end assets"), one line on what was decided and when, and the evidence. Then ask which to draft with your tool's multiple-choice prompt, as a multi-select, if it has one; if it limits the options per question, split the candidates across questions in ranked order, four per question. Otherwise ask for numbers from the list. Drafting none is fine.
+List up to twelve candidates, ranked by how costly the decision would be to reverse and how many people it affects: title (as a decision, e.g. "Use Vite to build front-end assets"), one line on what was decided and when, and the evidence. Then ask which to draft, as a multi-select. If the prompt limits the options per question, split the candidates across questions in ranked order, four per question. Drafting none is fine.
 
 ## 5. Draft the chosen ADRs
 
@@ -70,7 +74,7 @@ For each one the user picks:
 - Follow the project's existing ADRs for file names, using the next free number or date (e.g. `0003-use-vite.md` or `20261111-use-vite.md`).
 - Follow their format too; Nygard's (Title, Date, Status, Context, Decision, Consequences) is the default. For MADR, that's `* Status:` and `* Date:` bullets, "Context and Problem Statement", "Decision Outcome", and "Positive Consequences" and "Negative Consequences". Fill in `Deciders` only with names the user gives you.
 - Date it with today's date, and set the status to Proposed.
-- Show it, and ask with choices: write it, change it, or skip it. Write it only after the user approves.
+- Show it, and ask whether to write it, change it, or skip it. Write it only after the user approves.
 
 ## 6. Wrap up
 

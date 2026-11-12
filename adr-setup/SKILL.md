@@ -21,6 +21,10 @@ The `assets/` paths are in this skill's own directory, not the project's.
 - New ADRs are Proposed: the team accepts them, not you.
 - Keep the templates' "Drafted with the `<skill name>` AI skill." line, with `adr-setup` as the name, also when rewriting them in the project's format: under the date, or under the title if there's no date line. If the project has its own guidance on AI disclosure (e.g. in `AGENTS.md` or `CONTRIBUTING.md`), follow that instead.
 
+## Asking the user
+
+Ask questions with your tool's multiple-choice prompt when the answers are a few known options (yes or no, or a pick from a list), or as a numbered list if it has none. Split a list too long for one question across several. Leave room for free text when you need a reason or a name.
+
 ## Writing ADRs
 
 These rules apply to every ADR in steps 2 and 3:
