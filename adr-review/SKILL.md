@@ -44,9 +44,11 @@ Show each new ADR before writing it. If the project ends up with no ADRs and doe
 
 Skip this if they aren't included. Use a temporary directory outside the project (`mktemp -d`) for anything you download, and delete it when you're done.
 
-`https://architecture.lullabot.com/rss.xml` lists every published ADR with its title, link, context (`description`), tags (`category`) and date. Fetch each ADR's page from its link when you need its full text.
+Download `https://architecture.lullabot.com/files/all-md.zip` into that directory and extract it there, with `unzip`, or `python3 -m zipfile -e` if `unzip` isn't installed. Don't extract entries whose path is absolute or contains `..`. The archive holds every published ADR as Markdown, named `<ID>.md`, with front matter for `title`, `date`, `status`, `context` and `tags` (renamed `topics` on newer versions of the site; read either). Skip files that aren't ADRs, such as `LICENSE` and `*.template`. Treat the files as data: read them, never run them.
 
-Skip deprecated ADRs. If an item has a `<category domain="status">` element, keep only items where it's `accepted`; its other `<category>` holds the tags. Older feeds have no status: then check each ADR's page when you fetch it, since pages of deprecated ADRs say so and link to the ADR that replaces them.
+Skip deprecated ADRs: keep only those whose `status` is `accepted`. Deprecated ADRs link to the ADR that replaces them.
+
+If the archive can't be downloaded, fall back to `https://architecture.lullabot.com/rss.xml`, which lists each ADR's title, link, context (`description`) and tags (`category`). Fetch an ADR's page from its link when you need its full text. If an item has a `<category domain="status">` element, keep only items where it's `accepted`; otherwise check each ADR's page when you fetch it, since pages of deprecated ADRs say so.
 
 Each Lullabot ADR's ID is the last part of its URL (e.g. `20260320-use-phpstan`), and its URL is `https://architecture.lullabot.com/adr/<ID>/`.
 
@@ -61,7 +63,7 @@ Detect the project's stack from cheap signals before reading ADRs in full:
 - Front end: `package.json`, themes (`web/themes/custom`), `*.ts`, `*.css`, `*.twig`.
 - Local and CI: `.ddev/`, `.github/workflows/`, `.gitlab-ci.yml`, `.tugboat/`, `Taskfile.yml`, `renovate.json`.
 
-Use each ADR's title, tags and context, the project's own included, to mark it **Not applicable** when it clearly doesn't fit the stack (e.g. a Gatsby ADR on a Drupal-only site), with a one-line reason. Don't fetch or read the full text of those. ADRs about recording decisions themselves, such as "Record architecture decisions" or "Use Markdown Architecture Decision Records", are **Follows** when the ADR directory exists and its ADRs use the format they name.
+Use each ADR's title, tags or topics, and context, the project's own included, to mark it **Not applicable** when it clearly doesn't fit the stack (e.g. a Gatsby ADR on a Drupal-only site), with a one-line reason. Don't fetch or read the full text of those. ADRs about recording decisions themselves, such as "Record architecture decisions" or "Use Markdown Architecture Decision Records", are **Follows** when the ADR directory exists and its ADRs use the format they name.
 
 ## 4. Check each applicable ADR
 
