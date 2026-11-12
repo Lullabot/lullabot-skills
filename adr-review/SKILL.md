@@ -41,6 +41,10 @@ Optional, each for one step, which is skipped when it's missing:
 - Before filing issues in a public repository, say it's public and ask whether any deviation is security-sensitive enough to leave out. A report issue exposes every deviation at once.
 - Only edit report issues from an earlier review, and only comment on deviation issues an earlier review filed (step 9). Leave every other issue alone, and never close issues.
 
+## Asking the user
+
+Ask questions with your tool's multiple-choice prompt when the answers are a few known options (yes or no, or a pick from a list), or as a numbered list if it has none. Split a list too long for one question across several. Leave room for free text when you need a reason or a name.
+
 ## 1. Find the project's ADRs
 
 Look for an ADR directory: `docs/adrs/`, `docs/adr/`, `doc/adr/`, `adrs/`, `adr/`, `docs/decisions/` or `architecture/`. Read each ADR's title, date and status from wherever its format keeps them: front matter (`title`, `date`, `status`), a `Date:` line and `## Status` section ([Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)), or `* Status:` and `* Date:` bullets under the title ([MADR](https://adr.github.io/madr/)). Check only accepted ADRs. Skip deprecated and superseded ones and templates such as `*.template`. List proposed ones in the report without checking them, but count them when looking for the adoption ADR and a "Record architecture decisions" ADR below, so a later run doesn't write them again.
@@ -187,7 +191,7 @@ Then ask which next steps to take, in one question rather than one per step. Lis
 - Fix deviations (step 11), if there are any.
 - Delete the report when done. Do this last. If it's chosen, leave the report's path out of issues and the `AGENTS.md` section (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
 
-Use your tool's multiple-choice prompt if it has one that fits every option, or a numbered list otherwise. Run the chosen steps in the order above: exceptions first, so no issues are filed for deliberate deviations, and issues before fixes, so a fix can refer to its issue. Choosing a step answers its offer, but still confirm the details the step asks for, such as showing an ADR before writing it or the issue titles before creating them.
+Ask as a multi-select. Run the chosen steps in the order above: exceptions first, so no issues are filed for deliberate deviations, and issues before fixes, so a fix can refer to its issue. Choosing a step answers its offer, but still confirm the details the step asks for, such as showing an ADR before writing it or the issue titles before creating them.
 
 ## 7. Help record decisions
 
