@@ -2,7 +2,7 @@
 
 Date: YYYY-MM-DD
 
-Drafted with the `adr-review` AI skill.
+Drafted with the `<skill name>` AI skill.
 
 ## Status
 

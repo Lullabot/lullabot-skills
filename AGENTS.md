@@ -20,6 +20,12 @@ Each skill folder must contain:
 
 Companion files (`scripts/`, `references/`, `assets/`, etc.) live alongside `SKILL.md` and are copied to the public site verbatim.
 
+### Shared files
+
+Skills can be installed one at a time, so a skill can't rely on another skill's files. When several skills need the same file, each keeps an identical copy. Change every copy together, and check they still match:
+
+- ADR templates in `adr-review/assets/`, `adr-setup/assets/` and `adr-suggestions/assets/`: `diff -r adr-review/assets adr-setup/assets && diff -r adr-review/assets adr-suggestions/assets`
+
 ## Pull request titles
 
 Title PRs in [Conventional Commits](https://www.conventionalcommits.org/) form: `<type>(<scope>): <summary>`, e.g. `feat(skills): add adr-review skill`, `fix(humanizer): …`, `docs: …`, `chore: …`. Use `feat` for a new skill or new skill behavior, `fix` for corrected output, and `docs`/`chore` for hygiene changes. Commit messages don't need this format.
