@@ -146,7 +146,7 @@ Keep the IDs stable so a later review can be compared with this one, and issues 
 
 ## 6. Summarize in the chat
 
-Print the result counts, the top five deviations in the report's order (ID, title, one line each), the Lullabot ADRs new since adoption, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft.
+Print the result counts, the top five deviations in the report's order (ID, title, one line each), the Lullabot ADRs new since adoption, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft. Say it isn't committed: committing it keeps a history the next review can compare against.
 
 Then ask which next steps to take, in one question rather than one per step. List only the ones that apply, and let the user pick several or none:
 
@@ -155,6 +155,7 @@ Then ask which next steps to take, in one question rather than one per step. Lis
 - File issues for the deviations (step 9), if an issue tracker was found.
 - Add or update the `AGENTS.md` section (step 10).
 - Fix deviations (step 11), if there are any.
+- Delete the report when done. Do this last. If it's chosen, leave the report's path out of issues and the `AGENTS.md` section (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
 
 Use your tool's multiple-choice prompt if it has one that fits every option, or a numbered list otherwise. Run the chosen steps in the order above: exceptions first, so no issues are filed for deliberate deviations, and issues before fixes, so a fix can refer to its issue. Choosing a step answers its offer, but still confirm the details the step asks for, such as showing an ADR before writing it or the issue titles before creating them.
 
