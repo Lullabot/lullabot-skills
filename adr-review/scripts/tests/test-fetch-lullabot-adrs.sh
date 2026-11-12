@@ -1,6 +1,6 @@
 #!/bin/sh
 # Tests fetch-lullabot-adrs.sh against local archives, without the network.
-# Usage: sh adr-review/scripts/tests/test-fetch-lullabot-adrs.sh
+# Usage: sh <skill directory>/scripts/tests/test-fetch-lullabot-adrs.sh
 
 set -eu
 

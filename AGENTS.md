@@ -25,6 +25,7 @@ Companion files (`scripts/`, `references/`, `assets/`, etc.) live alongside `SKI
 Skills can be installed one at a time, so a skill can't rely on another skill's files. When several skills need the same file, each keeps an identical copy. Change every copy together, and check they still match:
 
 - ADR templates in `adr-review/assets/`, `adr-setup/assets/` and `adr-suggestions/assets/`: `diff -r adr-review/assets adr-setup/assets && diff -r adr-review/assets adr-suggestions/assets`
+- The Lullabot ADR download script and its test in `adr-review/scripts/` and `adr-suggestions/scripts/`: `diff -r adr-review/scripts adr-suggestions/scripts`
 
 ## Pull request titles
 
