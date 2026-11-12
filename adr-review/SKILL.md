@@ -198,8 +198,8 @@ The Markdown report stays the source of truth. If the review is run again, creat
 
 Detect where the project tracks issues:
 
-- **GitHub:** `git remote -v` points at github.com and `gh auth status` succeeds.
-- **GitLab:** the remote points at a GitLab host and `glab auth status` succeeds.
+- **GitHub:** `git remote -v` points at github.com or a GitHub Enterprise host (e.g. `<org>.ghe.com`), and `gh auth status --hostname <host>` succeeds for that host.
+- **GitLab:** the remote points at gitlab.com or a self-hosted GitLab, and `glab auth status --hostname <host>` succeeds for that host.
 - **Jira:** a Jira or Atlassian tool is available to you, or the project uses Jira keys (e.g. `ABC-123` in branch names, recent commit messages or docs). Ask the user for the project key if it isn't clear, and use that tool, or the `jira` or `acli` CLI if installed.
 
 If none is found, say so and point to the report's checklists. Don't ask for one.
