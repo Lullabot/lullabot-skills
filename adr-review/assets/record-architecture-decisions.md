@@ -2,7 +2,7 @@
 
 Date: YYYY-MM-DD
 
-Drafted with the `adr-review` AI skill.
+_Drafted with the `adr-review` AI skill._
 
 ## Status
 
