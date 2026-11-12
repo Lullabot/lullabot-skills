@@ -85,6 +85,7 @@ Give each ADR one verdict:
 Rules:
 
 - Every verdict needs evidence: a `path:line`, a command and its result, or the reason it doesn't apply. Don't guess. If you're not sure, say so and use **Unable to verify**.
+- Check every part of an ADR you can, and use **Unable to verify** only for the parts you can't. When an ADR refers to something outside the code, such as a design, look for a stand-in in the code first (e.g. a Drupal entity's `full` or `default` view display, or its template, for the page design) and say which one you used.
 - Cite paths, never quote secrets, credentials or values from `.env` or `settings.local.php` files.
 - Existing code in an inherited codebase may predate an ADR. Note that in the deviation, but still report it.
 
