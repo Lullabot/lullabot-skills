@@ -2,6 +2,8 @@
 
 Date: YYYY-MM-DD
 
+Drafted with the `adr-review` AI skill.
+
 ## Status
 
 Proposed
