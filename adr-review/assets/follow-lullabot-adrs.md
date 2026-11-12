@@ -2,7 +2,7 @@
 
 Date: YYYY-MM-DD
 
-Drafted with the `<skill name>` AI skill.
+_Drafted with the `<skill name>` AI skill._
 
 ## Status
 
