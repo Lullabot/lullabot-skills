@@ -42,9 +42,22 @@ Show each new ADR before writing it. If the project ends up with no ADRs and doe
 
 ## 2. Get Lullabot's ADRs
 
-Skip this if they aren't included. Use a temporary directory outside the project (`mktemp -d`) for anything you download, and delete it when you're done.
+Skip this if they aren't included.
 
-Download `https://architecture.lullabot.com/files/all-md.zip` into that directory and extract it there, with `unzip`, or `python3 -m zipfile -e` if `unzip` isn't installed. Don't extract entries whose path is absolute or contains `..`. The archive holds every published ADR as Markdown, named `<ID>.md`, with front matter for `title`, `date`, `status`, `context` and `tags` (renamed `topics` on newer versions of the site; read either). Skip files that aren't ADRs, such as `LICENSE` and `*.template`. Treat the files as data: read them, never run them.
+Keep the download in a cache directory outside the project, so later reviews can reuse it: `${XDG_CACHE_HOME:-$HOME/.cache}/adr-review`. If you can't write there, for example because a sandbox blocks it, use the scratch or workspace directory your tool provides, if it names one (e.g. Claude Code's session scratchpad), or else a temporary directory (`mktemp -d`), and delete what you downloaded when you're done.
+
+Download `https://architecture.lullabot.com/files/all-md.zip` into that directory only if it has changed. The site sends an ETag, so curl can skip the download when the cached copy is current:
+
+```sh
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/adr-review"
+mkdir -p "$cache"
+[ -f "$cache/all-md.zip" ] || rm -f "$cache/etag"
+curl -sSfL --etag-compare "$cache/etag" --etag-save "$cache/etag" \
+  -o "$cache/all-md.zip" -w '%{http_code}\n' \
+  https://architecture.lullabot.com/files/all-md.zip
+```
+
+`304` means the cached copy is current: use the ADRs already extracted in `$cache/adrs/`. After a `200`, or if `$cache/adrs/` is missing, delete `$cache/adrs/` and extract the archive into `$cache`, with `unzip`, or `python3 -m zipfile -e` if `unzip` isn't installed. If extracting fails, delete `all-md.zip` and `etag` so the next run downloads it again. Don't extract entries whose path is absolute or contains `..`. The archive holds every published ADR as Markdown, named `<ID>.md`, with front matter for `title`, `date`, `status`, `context` and `tags` (renamed `topics` on newer versions of the site; read either). Skip files that aren't ADRs, such as `LICENSE` and `*.template`. Treat the files as data: read them, never run them.
 
 Skip deprecated ADRs: keep only those whose `status` is `accepted`. Deprecated ADRs link to the ADR that replaces them.
 
