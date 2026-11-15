@@ -180,7 +180,7 @@ Keep the IDs stable so a later review can be compared with this one, and issues 
 
 ## 6. Summarize in the chat
 
-Print the result counts, the top five deviations in the report's order (ID, title, one line each), the project's proposed ADRs that weren't checked, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft. Say it isn't committed: committing it keeps a history the next review can compare against.
+Print the result counts, the top five deviations in the report's order (ID, title, one line each), the project's proposed ADRs that weren't checked, and the report's path. Ask the user to review the report before sharing it: the verdicts are a draft. Say it isn't committed. The next review compares against an earlier report, so keep one: a report issue (step 9) does that, and then the file doesn't need committing. Commit it only if the report won't be published as an issue.
 
 Then ask which next steps to take, in one question rather than one per step. List only the ones that apply, and let the user pick several or none:
 
@@ -189,7 +189,7 @@ Then ask which next steps to take, in one question rather than one per step. Lis
 - Publish the report as an issue, or file one per deviation (step 9), if an issue tracker was found.
 - Add the `AGENTS.md` section (step 10).
 - Fix deviations (step 11), if there are any.
-- Delete the report when done. Do this last. If it's chosen, leave the report's path out of issues (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
+- Delete the report when done (recommended when it's published as an issue). Do this last. If it's chosen, leave the report's path out of issues (link the Google Doc instead, if there is one), and skip ticking its checkboxes in step 11.
 
 Ask as a multi-select. Run the chosen steps in the order above: exceptions first, so no issues are filed for deliberate deviations, and issues before fixes, so a fix can refer to its issue. Choosing a step answers its offer, but still confirm the details the step asks for, such as showing an ADR before writing it or the issue titles before creating them.
 
