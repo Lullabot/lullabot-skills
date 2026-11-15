@@ -67,7 +67,7 @@ If the project has a pull or merge request template (e.g. `.github/pull_request_
 
 ## 5. Next steps
 
-List what was written, and say nothing is committed. When the ADRs go into a pull or merge request, add a remaining task to its description, so they aren't merged while still Proposed: `- [ ] Change the ADRs' status from Proposed to Accepted once the team agrees, before merging`. Then suggest, if they're installed:
+List what was written, and say nothing is committed. When the ADRs go into a pull or merge request, add a remaining task to its description, so they aren't merged while still Proposed: `- [ ] Change the ADRs' status from Proposed to Accepted once the team agrees, before merging`. If the project builds its release notes from commit or pull request titles (e.g. release-please or semantic-release), suggest a title whose type the notes show, so contributors learn the project now records ADRs: check the tool's changelog sections, since release-please hides `docs` by default. Then suggest, if they're installed:
 
 - `adr-suggestions`, to draft ADRs for decisions the project has already made;
 - `adr-review`, to check the code against the ADRs once they're accepted.
