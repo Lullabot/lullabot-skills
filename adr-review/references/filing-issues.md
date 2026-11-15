@@ -18,7 +18,8 @@ Start every issue body and comment you write, after its `<!-- adr-review… -->`
 
 **The report as an issue:**
 
-- Title: `ADR review: <project name>`. Body: the report, starting with `<!-- adr-review -->` so the next review finds it, with each deviation's issue linked if you filed them.
+- Title: `ADR review: <project name>`. Body: the report, starting with `<!-- adr-review -->` so the next review finds it.
+- When a deviation has its own issue, filed now or found by the search, shorten its section in the report issue to the heading, the verdict, one line on what the project does, and the issue's link. Its details and "To resolve" steps stay in that issue, so they aren't tracked in two places. Keep the full section for deviations without their own issue. When filing both kinds, create the deviation issues first, so the report issue can link them.
 - If an open report issue exists, offer to update it instead of creating another. Replace its body with the new report, keeping ticked checkboxes for steps that are still in it, and add a comment with the "Changes since" summary so watchers are notified. Show the new body and the comment before posting. The tracker keeps the old body in its history.
 
 **One issue per deviation:**
