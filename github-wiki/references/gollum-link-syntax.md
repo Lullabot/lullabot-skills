@@ -1,5 +1,15 @@
 # Gollum Link Syntax Reference
 
+## Contents
+
+- Link Formats
+- Link Resolution Rules
+- Pipe Syntax Details
+- Page Naming Conventions
+- Images
+- Special Pages
+- Wiki Repository Structure
+
 GitHub wikis are powered by Gollum. This reference covers link
 resolution, page naming, and image handling.
 

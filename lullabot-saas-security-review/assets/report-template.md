@@ -11,6 +11,8 @@
 | Data the service will access | <Lullabot-owned and/or client-owned data> |
 | Reviewed by | Unreviewed, AI generated |
 
+This AI-generated draft supports an authorized human decision; its recommendation does not grant approval. State whether the guidance was actually inspected and identify unavailable evidence.
+
 This review is based on Lullabot's SaaS service evaluation guidance ([security.lullabot.com/communications/cloud.html](https://security.lullabot.com/communications/cloud.html)).
 
 ## Initial Recommendation

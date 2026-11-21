@@ -1,11 +1,24 @@
 ---
 name: improve-test-quality
-description: Improve test quality using mutation testing analysis. Runs Stryker, analyzes survived mutants, suggests improvements, and iteratively strengthens tests.
+description: Improve test quality using mutation testing analysis. Use when asked to analyze Stryker survivors, suggest improvements, or iteratively strengthen tests for a specific file.
 disable-model-invocation: true
 argument-hint: "<file-path> [--auto] [--target N] [--max-iterations N]"
 ---
 
 # Mutation Testing Quality Improvement Skill
+
+## Requirements
+
+Node.js and npm, project-installed Stryker (`@stryker-mutator/core`) and its configured test runner/plugins, existing passing tests, and a JSON mutation reporter in `stryker.config.mjs`. The analysis utility uses Node's standard library and reads `reports/mutation/mutation.json` from the working project, or `MUTATION_REPORT`. A shell and file read/edit/search access are required. No external service or MCP authentication is needed.
+
+Resolve `SKILL_DIR` to the absolute directory containing the loaded `SKILL.md`, using the skill location supplied by the agent or locating this file. Set it explicitly (for example, `SKILL_DIR="/path/to/installed/improve-test-quality"`); do not derive it from the project working directory. Run project-relative commands from the working project and use `"$SKILL_DIR/..."` for companions.
+
+## Safety and review
+
+Tests and Stryker run project code with filesystem/network access; they are not intrinsically a secure sandbox. A human reviews the commands, test setup/teardown, dependencies, and destructive or service side effects before host execution. Use isolated fixtures and read-only service credentials where possible. `--auto` permits the requested local test edits only; it does not waive command review, authorize package installation, production writes, or commit/publish. Use the installed Stryker binary rather than allowing `npx` to download a missing package. Keep source code and reports in eligible tooling, remove private fixture data, and have a human review assertions and results before sharing or requesting code review. Stop at the iteration limit and explain remaining mutants instead of changing production behavior to inflate the score.
+
+Outside a verified secure sandbox, a human must read and understand unreviewed shell commands and generated code before execution. Always review MCP data-changing operations if an MCP alternative is used. Use least privilege; tool installation requires Security Team review and verification of upstream identity. Personal information requires approved tooling integrated with its source system; confidential information requires specifically approved tools; non-public information requires tools that neither train on nor retain it. Never send sensitive non-public data to public AI models. Stop when eligibility is unknown. An AI check does not replace human self-review before sharing, publishing, or handing work to another reviewer.
+
 
 You are a mutation testing specialist helping improve test quality by analyzing mutation testing results and implementing targeted test improvements.
 
@@ -27,7 +40,7 @@ This skill includes a helper script for analyzing large mutation JSON reports ef
 **Location**: `utils/analyze-mutations.js`
 
 **When to use**:
-- The mutation report JSON file is too large for the Read tool (>256KB)
+- The mutation report JSON file is too large for the file-reading facility (>256KB)
 - You need to extract specific file data from a multi-file report
 - You want clean, parseable JSON output for further analysis
 
@@ -40,8 +53,8 @@ This skill includes a helper script for analyzing large mutation JSON reports ef
 
 **Example usage**:
 ```bash
-node .claude/skills/improve-test-quality/utils/analyze-mutations.js summary server/services/googleSheetsApi.js
-node .claude/skills/improve-test-quality/utils/analyze-mutations.js high-priority server/routes/projects.js
+node "$SKILL_DIR/utils/analyze-mutations.js" summary server/services/googleSheetsApi.js
+node "$SKILL_DIR/utils/analyze-mutations.js" high-priority server/routes/projects.js
 ```
 
 See `utils/README.md` for complete documentation.
@@ -56,7 +69,7 @@ Parse the arguments provided after the command:
 - `<file-path>`: Path to the source file to improve tests for (e.g., `server/routes/projects.js`)
 
 **Optional flags:**
-- `--auto`: Automatically implement improvements without asking for approval
+- `--auto`: Implement the requested local test improvements without repeated edit questions; retain command, mutation, and sharing review gates
 - `--target N`: Target mutation score percentage (default: 85)
 - `--max-iterations N`: Maximum improvement cycles (default: 3)
 - `--dry-run`: Show recommendations without making changes
@@ -72,22 +85,22 @@ Parse the arguments provided after the command:
 
 ### Phase 1: Setup and Validation
 
-1. **Parse arguments** from $ARGUMENTS
+1. **Parse arguments** from the user's request arguments
    - Extract file path (required, first positional argument)
    - Extract optional flags (--auto, --target, --max-iterations, --dry-run)
    - Set defaults: target=85, maxIterations=3, auto=false
 
 2. **Validate the file**
-   - Check that the source file exists using Read tool
+   - Check that the source file exists using file-reading facility
    - Read `stryker.config.mjs` to verify file is in the `mutate` array
    - If not in mutate array: inform user and ask if they want to add it
 
 3. **Detect test file**
    - Auto-detect test file based on common patterns:
      - `server/routes/projects.js` → `server/__tests__/routes/projects.test.js`
-     - Use Glob to find: `**/*{filename}*.test.js` or `**/*{filename}*.spec.js`
+     - Use file search to find: `**/*{filename}*.test.js` or `**/*{filename}*.spec.js`
    - If multiple candidates found, ask user which one to use
-   - Verify test file exists using Read tool
+   - Verify test file exists using file-reading facility
 
 4. **Display initial status**
    ```
@@ -103,17 +116,17 @@ Parse the arguments provided after the command:
 
 1. **Run mutation testing for the specific file only**
    - **IMPORTANT**: Use the `--mutate` flag to only run mutations for the target file
-   - Execute: `npx stryker run --mutate "{file-path}"`
-   - Example: `npx stryker run --mutate "server/routes/slack.js"`
+   - Execute: `./node_modules/.bin/stryker run --mutate "{file-path}"`
+   - Example: `./node_modules/.bin/stryker run --mutate "server/routes/slack.js"`
    - This is much faster than running all mutations (typically 30-60 seconds vs 10+ minutes)
    - Inform user: "Running mutation testing for {file-path}... (this may take 30-60 seconds)"
    - Wait for completion
 
 2. **Parse mutation report using the analyze-mutations.js utility**
-   - The JSON report at `reports/mutation/mutation.json` is typically too large for the Read tool
+   - The JSON report at `reports/mutation/mutation.json` is typically too large for the file-reading facility
    - Use the utility script to extract data:
      ```bash
-     node .claude/skills/improve-test-quality/utils/analyze-mutations.js summary {file-path}
+     node "$SKILL_DIR/utils/analyze-mutations.js" summary {file-path}
      ```
    - This returns:
      ```json
@@ -142,7 +155,7 @@ Parse the arguments provided after the command:
 
 1. **Get categorized survived mutants using the utility**
    ```bash
-   node .claude/skills/improve-test-quality/utils/analyze-mutations.js high-priority {file-path}
+   node "$SKILL_DIR/utils/analyze-mutations.js" high-priority {file-path}
    ```
    This returns mutants organized by priority level with counts and line numbers.
 
@@ -153,7 +166,7 @@ Parse the arguments provided after the command:
 
 3. **Get detailed mutant list by type (if needed)**
    ```bash
-   node .claude/skills/improve-test-quality/utils/analyze-mutations.js by-type {file-path}
+   node "$SKILL_DIR/utils/analyze-mutations.js" by-type {file-path}
    ```
    Use this to see exact line numbers and replacements for each mutator type.
 
@@ -212,7 +225,7 @@ Parse the arguments provided after the command:
 
    Your choice (1-4):
    ```
-   Use the AskUserQuestion tool to get user's choice.
+   Use the the available question interface or plain conversation tool to get user's choice.
 
 4. **Auto mode (--auto flag)** - Skip to implementation:
    ```
@@ -228,7 +241,7 @@ Parse the arguments provided after the command:
 ### Phase 5: Implementation
 
 1. **Read the test file** to understand existing test structure
-   - Use Read tool on test file path
+   - Use file-reading facility on test file path
    - Analyze existing test patterns, describe blocks, assertion styles
    - Identify where to add new tests
 
@@ -290,7 +303,7 @@ Parse the arguments provided after the command:
      });
      ```
 
-3. **Use Edit tool to add improvements**
+3. **Use file editing to add improvements**
    - Add new test cases in appropriate describe blocks
    - Modify existing tests to strengthen assertions
    - Follow existing code style and patterns
@@ -305,12 +318,12 @@ Parse the arguments provided after the command:
 
 1. **Re-run mutation testing for the specific file only**
    - **IMPORTANT**: Use the `--mutate` flag to only run mutations for the target file
-   - Execute: `npx stryker run --mutate "{file-path}"`
+   - Execute: `./node_modules/.bin/stryker run --mutate "{file-path}"`
    - Wait for completion
 
 2. **Parse new results using the utility**
    ```bash
-   node .claude/skills/improve-test-quality/utils/analyze-mutations.js summary {file-path}
+   node "$SKILL_DIR/utils/analyze-mutations.js" summary {file-path}
    ```
    - Get new metrics (killed, survived, score)
    - Compare with baseline stored in Phase 2
@@ -337,7 +350,7 @@ Parse the arguments provided after the command:
    ```
    Continue to iteration {N}/{maxIterations}? (y/n):
    ```
-   Use AskUserQuestion tool (unless --auto mode)
+   Ask in conversation or with the available question interface (unless --auto mode)
 
 3. **Repeat from Phase 3** with remaining survived mutants
 
@@ -372,7 +385,7 @@ Parse the arguments provided after the command:
    2. Accept current score ({finalScore}% is excellent!)
    3. Review remaining mutants manually
    ```
-   Use AskUserQuestion tool
+   Ask in conversation or with the available question interface
 
 3. **List remaining survived mutants** with analysis:
    - Show line numbers and mutator types
@@ -428,8 +441,8 @@ Parse the arguments provided after the command:
    - Explain what's happening at each step
 
 2. **Ask for confirmation when uncertain**
-   - Use AskUserQuestion for choices
-   - Don't make destructive changes without approval (unless --auto)
+   - Use conversation or the available question interface for choices
+   - Do not make destructive changes without specific authorization; --auto does not waive review
    - Explain trade-offs clearly
 
 3. **Provide actionable feedback**
@@ -439,67 +452,13 @@ Parse the arguments provided after the command:
 
 ## Error Handling
 
-1. **File not found**
-   ```
-   ❌ Error: File '{file-path}' not found.
-   Please check the path and try again.
-   ```
-
-2. **File not in mutate array**
-   ```
-   ⚠️ Warning: {file-path} is not in stryker.config.mjs mutate array.
-
-   Would you like me to add it? (y/n):
-   ```
-
-3. **Test file not found**
-   ```
-   ❌ Error: Could not find test file for {file-path}.
-
-   Looked for: {pattern}
-
-   Please specify test file path manually or create tests first.
-   ```
-
-4. **Mutation testing failed**
-   ```
-   ❌ Error: Mutation testing failed.
-
-   Command: npm run test:mutation
-   Exit code: {code}
-
-   Please check that:
-   - All tests pass: npm test
-   - Stryker is properly configured
-   - Dependencies are installed: npm ci
-   ```
-
-5. **JSON report not found**
-   ```
-   ❌ Error: Could not find mutation report at reports/mutation/mutation.json
-
-   This may be because:
-   - Mutation testing didn't complete successfully
-   - JSON reporter not configured in stryker.config.mjs
-
-   Please verify stryker.config.mjs has 'json' in reporters array.
-   ```
-
-6. **Tests fail after improvements**
-   ```
-   ❌ Error: Tests are failing after improvements.
-
-   Command: npm test {test-file}
-
-   Will analyze error and fix...
-   ```
-   Then analyze the error output and fix the test code.
+See [references/error-handling.md](references/error-handling.md) for concrete missing-file, runner, and report errors. Stop on missing prerequisites; preserve test changes and report actual failure evidence.
 
 ## Constraints
 
-- **Do NOT use TodoWrite tool** (this skill manages its own workflow)
+- **Keep a concise phase/iteration record**
 - **Always run tests before re-running mutation testing** to ensure changes are valid
-- **Use Edit tool for test modifications** (not Write, since tests already exist)
+- **Use file editing for test modifications** (preserving unrelated changes in existing tests)
 - **Use the analyze-mutations.js utility** - Do NOT write custom `node -e` one-liners to parse JSON
 - **Parse JSON report, not HTML** for programmatic analysis
 - **Be conservative with iterations** - 3 is usually enough
@@ -507,86 +466,10 @@ Parse the arguments provided after the command:
 
 ## Example Session
 
-```
-User: /improve-test-quality server/routes/projects.js
-
-🔍 Analyzing test quality for server/routes/projects.js...
-
-Current status:
-- Test file: server/__tests__/routes/projects.test.js
-- Target mutation score: 85%
-- Max iterations: 3
-
-Running mutation testing... (this may take 2-3 minutes)
-✓ Mutation testing complete
-
-Current mutation score: 76.84% (126 killed, 38 survived)
-
-📊 Analysis Results:
-
-Found 38 survived mutants across 4 categories:
-
-High Priority (14 mutants):
-  • Conditional boundaries (8 mutants)
-    Lines: 145, 178, 203, 234, 267, 289, 312, 345
-    Issue: Tests don't verify exact boundary conditions
-
-  • Boolean operators (6 mutants)
-    Lines: 156, 189, 221, 298
-    Issue: Tests don't cover both true/false combinations
-
-Medium Priority (12 mutants):
-  • Arithmetic operations (5 mutants)
-  • Return value mutations (7 mutants)
-
-Low Priority (12 mutants):
-  • String mutations (acceptable edge cases)
-
-💡 Recommendations:
-
-I can improve your test quality by:
-1. Adding 8 boundary condition test cases
-2. Adding 6 boolean combination tests
-3. Strengthening 7 response assertions
-4. Adding 5 arithmetic verification tests
-
-Expected improvement: 76.84% → ~89% mutation score
-
-Would you like me to:
-1. Automatically implement all improvements
-2. Implement only high-priority improvements
-3. Let me review each category separately
-4. Show me the specific changes first
-
-Your choice (1-4): [User chooses 1]
-
-Implementing improvements...
-✓ Added 8 boundary condition tests
-✓ Added 6 boolean combination tests
-✓ Strengthened 7 assertions
-✓ Added 5 arithmetic tests
-
-Running tests to verify...
-✓ All tests pass (40 tests, 0 failures)
-
-Re-running mutation testing...
-✓ Mutation testing complete
-
-✅ Target reached! Final score: 89.47%
-
-📈 Summary:
-- Killed 22 additional mutants (76.84% → 89.47%)
-- Added 26 new test assertions
-- 12 mutants still surviving (low priority string mutations)
-
-Changes made to: server/__tests__/routes/projects.test.js
-Run `npm test` to verify all tests still pass.
-```
+See [references/example-session.md](references/example-session.md) for an illustrative analysis and improvement report.
 
 ---
 
 ## Start Here
 
-When invoked, begin with Phase 1: Setup and Validation using the arguments from $ARGUMENTS.
-
-Good luck improving test quality! 🎯
+When invoked, begin with Phase 1: Setup and Validation using the arguments from the user's request arguments.

@@ -5,6 +5,16 @@ description: Produces a downloadable Markdown security review report evaluating 
 
 # Lullabot SaaS Security Review
 
+## Requirements
+
+Live web search and page retrieval are required to verify current vendor claims. Supply the service identity, intended use, and a data-category description for intake. Access to Lullabot’s SaaS evaluation guidance is required to assert alignment with it; if unavailable, identify that limitation and request an eligible copy rather than inventing its contents. Local file writing is optional for the downloadable Markdown report; no vendor login, trial installation, production integration, or admin credentials are required for public-source research.
+
+## Safety and review
+
+Use public vendor facts and a minimal description of data categories for research, not actual customer records, credentials, personal requester details, or private intake documents in public searches/models. Non-public material requires a tool that neither trains on nor retains it; confidential information needs specific approval; personal information needs a specifically approved tool integrated where it is stored. An internal report may contain sensitive findings and must remain in an eligible local/internal destination.
+
+The report is an AI-assisted recommendation, not procurement approval or completed human security review. Retain `Unreviewed, AI generated` until an actual qualified human reviews it; never replace that marker with an invented reviewer. A human author must check facts, links, scope, and disclosures before sharing the draft; an authorized Security Team reviewer makes the final approval decision and verifies tool eligibility. New tools need Security Team review. Do not install trials, grant consent, connect production integrations, or upload evidence as part of research. Such actions require separate authorization, least privilege, and human review of MCP mutations or commands outside secure sandboxes.
+
 This skill produces a professional, internal-use security review of a SaaS application or product being considered for use at Lullabot. The single deliverable is a downloadable Markdown report, ready to import into another tool, modeled on Lullabot's SaaS service evaluation guidance at https://security.lullabot.com/communications/cloud.html.
 
 The whole point of the review is to help a human reviewer make a sound approval decision. That means the value is in *verified, claim-level facts about a real vendor* — not a plausible-sounding template filled with assumptions. Favor honest "this could not be confirmed" over invented reassurance every time.
@@ -57,9 +67,9 @@ When you can't find a source for something, say so plainly in the relevant secti
 
 ## Step 3: How to treat certifications and assurance
 
-Lullabot does **not** require SOC 2 Type II, ISO 27001, or any certification for approval. This is a firm policy, not a soft preference: the presence or absence of a certification must never be a factor in the recommendation itself. A service with no certifications can be fully approved, and a service with every certification can still be denied for other reasons. Document certifications, assurance reports, DPAs, and trust-center materials when they exist, purely as factual information for the reviewer — but do not phrase the recommendation or its conditions as depending on them, and never imply that a missing certificate weakens the case for approval.
+Do not invent a blanket certification requirement or a blanket exemption from assurance review. Check the accessible, current Lullabot guidance and applicable use-case obligations. If the guidance is unavailable, label policy alignment unverified and leave that judgment to the authorized Security Team reviewer.
 
-The one legitimate use of assurance evidence as a *condition*: when the service will handle sensitive, confidential, regulated, client-owned, or broad internal data, it is reasonable to suggest obtaining the actual SOC 2 report, ISO certificate, or DPA as defense-in-depth before broader rollout — but only when such evidence already exists or is claimed by the vendor, and framed as "worth collecting," not "required to approve." If the vendor claims SOC 2 or similar but the report isn't public, noting "review the actual report if Lullabot wants the extra assurance" is fine; do not treat the claim itself as suspect or as a barrier.
+Document SOC 2, ISO 27001, DPAs, and trust-center material as evidence with their scope, date, and limitations. A certification alone does not establish approval or safety; its absence alone does not establish unacceptable risk. Distinguish vendor claims from reports actually inspected. Recommend collecting available assurance when relevant to planned data exposure, and explain the specific risk/control it helps evaluate.
 
 ## Step 4: Evaluate the key areas in depth
 
@@ -79,9 +89,9 @@ The recommendation must be evidence-based and proportional to the data exposure 
 
 - **Conditional approval** fits when important evidence is missing but risk can be bounded through mitigations: limiting use to low-risk data, disabling sensitive integrations, obtaining a DPA or security report, verifying audit logs, confirming subprocessors, requiring SSO/MFA, restricting admin access, or testing export/deletion workflows.
 - **Denial** fits when the service presents unacceptable risk, can't meet required controls for the planned data exposure, has materially concerning unresolved incidents, or demands excessive permissions without adequate safeguards.
-- **Approval** fits when the evidence supports it for the intended use.
+- **Recommended approval** fits when evidence supports the intended use, with the final decision reserved for an authorized human reviewer.
 
-Avoid overstating confidence. Clearly identify unknowns and vendor ambiguity rather than smoothing over them.
+All three outcomes are recommendations, not actual approval or denial. Avoid overstating confidence. Clearly identify unknowns and vendor ambiguity rather than smoothing over them.
 
 ## Report structure
 

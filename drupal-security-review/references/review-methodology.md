@@ -1,5 +1,15 @@
 # Review methodology, findings schema, and the demo feedback loop
 
+## Contents
+
+- [Scope](#scope)
+- [Deep multi-agent sweep](#deep-multi-agent-sweep)
+- [Complete the sink's source set](#complete-the-sinks-source-set--grade-by-the-lowest-privilege-source)
+- [Severity rule of thumb](#severity-rule-of-thumb)
+- [Findings document schema](#findings-document-schema-security-review-custom-codemd)
+- [Demo feedback loop](#the-demo-feedback-loop-phase-4--record-changes-in-both-directions)
+
+
 ## Scope
 
 All custom code under the project's custom module and theme dirs (default
@@ -9,9 +19,7 @@ modules, and test code — they are out of scope and reviewed upstream.
 ## Deep multi-agent sweep
 
 Fan out independent reviewers along **two axes**, then verify each candidate
-adversarially. If the `Workflow` tool is available, use it (pipeline: find →
-adversarially verify each finding); otherwise spawn parallel `Agent` subagents
-and a verification pass.
+adversarially. Use available agent delegation for independent sweeps and verification; when unavailable, carry out both axes and verification sequentially and disclose that limitation.
 
 **Axis 1 — by vulnerability class** (the six classes below). Good at applying a
 consistent sink taxonomy across the whole codebase.
@@ -127,7 +135,7 @@ resulting video is the evidence of refutation.
 ## The demo feedback loop (Phase 4) — record changes in BOTH directions
 
 Every finding **and** every refuted candidate is demonstrated on camera in
-Phase 3, regardless of severity and without asking the user — that complete set
+Phase 3, regardless of severity and within the human-reviewed demonstration scope — that complete set
 of recordings is what makes this loop trustworthy. Demonstrating is adversarial
 verification with the real access system in the loop, so it frequently revises
 severity:

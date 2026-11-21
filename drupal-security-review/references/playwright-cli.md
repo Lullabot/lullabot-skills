@@ -9,13 +9,13 @@ required, which is why this works on codebases that have never set up Playwright
 
 ```bash
 ddev exec playwright-cli --version        # is it available?
-# if not:
+# after human review of upstream identity, project changes, and restart:
 ddev add-on get e0ipso/ddev-playwright-cli
 ddev restart
 ```
 
 The add-on ships `.ddev/playwright-cli/cli.config.json` (chromium, headless,
-`ignoreHTTPSErrors: true`) and auto-installs its own Claude skills on start.
+`ignoreHTTPSErrors: true`) and may install agent-specific skill wrappers on start; this workflow uses the CLI directly and does not depend on those wrappers.
 
 ## State model
 

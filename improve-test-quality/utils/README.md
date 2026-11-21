@@ -1,5 +1,11 @@
 # Mutation Testing Analysis Utilities
 
+## Contents
+
+- analyze-mutations.js
+- Benefits
+- Examples in the Wild
+
 Helper scripts for analyzing Stryker mutation testing reports.
 
 ## analyze-mutations.js
@@ -8,8 +14,10 @@ Efficiently extracts and analyzes data from large mutation JSON reports.
 
 ### Usage
 
+Resolve `SKILL_DIR` to the loaded `improve-test-quality` directory as described in SKILL.md, and run from the working project so report paths resolve correctly.
+
 ```bash
-node analyze-mutations.js <command> <file> [options]
+node "$SKILL_DIR/utils/analyze-mutations.js" <command> <file> [options]
 ```
 
 ### Commands
@@ -18,7 +26,7 @@ node analyze-mutations.js <command> <file> [options]
 Get overall mutation metrics for a file.
 
 ```bash
-node analyze-mutations.js summary server/services/googleSheetsApi.js
+node "$SKILL_DIR/utils/analyze-mutations.js" summary server/services/googleSheetsApi.js
 ```
 
 Output:
@@ -37,7 +45,7 @@ Output:
 List all survived mutants with line numbers.
 
 ```bash
-node analyze-mutations.js survived server/routes/projects.js
+node "$SKILL_DIR/utils/analyze-mutations.js" survived server/routes/projects.js
 ```
 
 Output:
@@ -58,7 +66,7 @@ Output:
 Group survived mutants by mutator type.
 
 ```bash
-node analyze-mutations.js by-type server/utils/dateUtils.js
+node "$SKILL_DIR/utils/analyze-mutations.js" by-type server/utils/dateUtils.js
 ```
 
 Output:
@@ -78,7 +86,7 @@ Output:
 Get all mutants at a specific line number.
 
 ```bash
-node analyze-mutations.js by-line server/services/cacheService.js 45
+node "$SKILL_DIR/utils/analyze-mutations.js" by-line server/services/cacheService.js 45
 ```
 
 Output:
@@ -99,7 +107,7 @@ Output:
 Categorize survived mutants by priority (high/medium/low).
 
 ```bash
-node analyze-mutations.js high-priority server/services/googleSheetsApi.js
+node "$SKILL_DIR/utils/analyze-mutations.js" high-priority server/services/googleSheetsApi.js
 ```
 
 Output:
@@ -133,7 +141,7 @@ Output:
 - `MUTATION_REPORT`: Custom path to mutation.json (default: `reports/mutation/mutation.json`)
 
 ```bash
-MUTATION_REPORT=custom/path/report.json node analyze-mutations.js summary myfile.js
+MUTATION_REPORT=custom/path/report.json node "$SKILL_DIR/utils/analyze-mutations.js" summary myfile.js
 ```
 
 ### Using as a Module
@@ -152,7 +160,7 @@ const grouped = groupByType(data);
 - **Fast**: Loads entire report once, filters efficiently
 - **Clean output**: JSON format for easy parsing
 - **Reusable**: Use standalone or import as module
-- **Handles large files**: Processes 640KB+ reports that exceed Read tool limits
+- **Handles large files**: Processes 640KB+ reports that exceed file-reading facility limits
 - **Flexible matching**: Finds files by partial path match
 
 ## Examples in the Wild
